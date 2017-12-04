@@ -76,7 +76,7 @@ void UstawieniaForm::showEvent(QShowEvent *e) {
 	if (db->lastConnectionError == true) {
 		ui->labelError->setVisible(true);
 	} else {
-		ui->labelError->setText("Połączono");// Visible(true);
+		ui->labelError->setText("Połączono");
 		ui->labelError->setStyleSheet("background-color: green; color: white");
 	}
 }

@@ -1,15 +1,16 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-
 #include <QtWidgets/QMainWindow>
 #include <QDebug>
 #include <QString>
 #include <QTableView>
 #include <QHeaderView>
 
+#include "WybKlientaDialog.h"
 #include "BazaDanychManager.h"
 #include "ustawieniaform.h"
+#include "noweZamowienieDialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -37,6 +38,8 @@ class MainWindow : public QMainWindow {
 		Ui::MainWindow *ui;
 		BazaDanychManager *dbManager;
 		UstawieniaForm *dialog;
+		WybKlientaDialog *dialogWybKlienta;
+		noweZamowienieDialog *dialogNoweZamowienie;
 };
 
 #endif // MAINWINDOW_H

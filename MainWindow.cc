@@ -6,7 +6,6 @@
 
 #include "nowyKlientDialog.h"
 #include "Klient.h"
-#include "noweZamowienieDialog.h"
 
 void MainWindow::setTables()
 {
@@ -22,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	dbManager = new BazaDanychManager();
 	dialog = new UstawieniaForm(dbManager, this);
+	dialogWybKlienta = new WybKlientaDialog(dbManager, this);
+	dialogNoweZamowienie = new noweZamowienieDialog(dialogWybKlienta, this);
 	if (!dbManager->polacz()) {
 		ustawieniaBazy();
 	}
@@ -30,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::ustawieniaBazy() {
-	if ( dialog->exec() == QDialog::Accepted ) {//dialog->exec();
+	if (dialog->exec() == QDialog::Accepted ) {
 		setTables();
 	}
 }
@@ -51,11 +52,12 @@ void MainWindow::on_pushButton_2_clicked() {
 		dbManager->zachowajKlienta(klient);
 	}
 }
+
 void MainWindow::on_pushButton_clicked() {
-	noweZamowienieDialog dialog(this);
-	if ( dialog.exec() == QDialog::Accepted ) {
-		dbManager->zamowienie();//dialog.getKlient()
-	}
+	dialogNoweZamowienie->exec(); //może tak gdy
+	//if ( dialog.exec() == QDialog::Accepted ) {
+	//	dbManager->zamowienie();//dialog.getKlient()
+	//}
 }
 
 void MainWindow::rozciagnijWiersze(QTableView *m) {

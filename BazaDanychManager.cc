@@ -15,7 +15,6 @@ void BazaDanychManager::removeSqlModels() {
 	if (mKlienci) {
 		delete  mKlienci;
 		mKlienci = 0;
-
 	}
 }
 
@@ -27,7 +26,6 @@ bool BazaDanychManager::polacz() {
 	db.setPassword(s.getPassword());
 	if (!db.open()) {
 		lastConnectionError = true;
-		qDebug() << "Błąd: nie można się połączyć z bazą!";
 		if (!firstRun) {
 			removeSqlModels();
 		}
@@ -35,10 +33,8 @@ bool BazaDanychManager::polacz() {
 		return false;
 	} else {
 		lastConnectionError = false;
-		//QSqlQuery vStrictMode("SET sql_mode = 'STRICT_ALL_TABLES'", db);
-
+		QSqlQuery vStrictMode("SET sql_mode = 'STRICT_ALL_TABLES'", db);
 		updateTabele();
-		qDebug() << "Nawiązano połączenie z bazą danych.";
 		firstRun = false;
 		return true;
 	}
@@ -55,7 +51,7 @@ void BazaDanychManager::setZamowienia() {
 	QStringList listaZamowieniaEnd;
 	listaZamowieniaEnd << "SUMA" << "ZDJECIE" << "SK1" <<	"SK2" <<	"SK3" <<
 			   "UWAGI 1" << "UWAGI 2" << "DATA WPROWADZENIA" << "DATA REALIZACJI";
-	setHeaders(listaZamowienia, mZamowienia);
+	//	setHeaders(listaZamowienia, mZamowienia);
 }
 
 QSqlTableModel *BazaDanychManager::getModelZamowienia() {

@@ -31,7 +31,8 @@ SOURCES += \
     Klient.cc \
     Delegate.cc \
     BazaDanychManager.cc \
-    CSettings.cc
+    CSettings.cc \
+    WybKlientaDialog.cc
 
 HEADERS += \
         MainWindow.h \
@@ -41,13 +42,15 @@ HEADERS += \
     Klient.h \
     Delegate.h \
     BazaDanychManager.h \
-    CSettings.h
+    CSettings.h \
+    WybKlientaDialog.h
 
 FORMS += \
         MainWindow.ui \
     ustawieniaform.ui \
     nowyKlientDialog.ui \
-    noweZamowienieDialog.ui
+    noweZamowienieDialog.ui \
+    WybKlientaDialog.ui
 
 RESOURCES += \
     zasoby.qrc
