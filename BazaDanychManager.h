@@ -24,6 +24,7 @@ class BazaDanychManager {
 		void zamowienie();
 		QSqlTableModel *getModelZamowienia();
 		QSqlTableModel *getModelKlienci();
+		QSqlTableModel *getModelKlienciWyb();
 
 
 	private:
@@ -31,11 +32,13 @@ class BazaDanychManager {
 		void updateTabele();
 		void setZamowienia();
 		void setKlienci();
+		void setKlienciWyb();
 		void setHeaders(QStringList lista, QSqlTableModel *model);
 
 		QSqlDatabase db;
 		QSqlTableModel *mZamowienia;
 		QSqlTableModel *mKlienci;
+		QSqlTableModel *mKlienciWyb;
 		bool firstRun;
 };
 

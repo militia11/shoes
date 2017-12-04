@@ -16,6 +16,10 @@ void BazaDanychManager::removeSqlModels() {
 		delete  mKlienci;
 		mKlienci = 0;
 	}
+	if (mKlienciWyb) {
+		delete  mKlienciWyb;
+		mKlienciWyb = 0;
+	}
 }
 
 bool BazaDanychManager::polacz() {
@@ -62,10 +66,16 @@ QSqlTableModel *BazaDanychManager::getModelKlienci() {
 	return mKlienci;
 }
 
+QSqlTableModel *BazaDanychManager::getModelKlienciWyb()
+{
+	return  mKlienciWyb;
+}
+
 void BazaDanychManager::updateTabele()
 {
 	setZamowienia();
 	setKlienci();
+	setKlienciWyb();
 }
 
 void BazaDanychManager::setHeaders(QStringList lista, QSqlTableModel *model) {
@@ -84,6 +94,18 @@ void BazaDanychManager::setKlienci() {
 		     << "TEL KOM 2" << "FAX" << "E-MAIL" << "UWAGI" << "ZAMÓWIONE" << "ODEBRANE" <<
 		     "NIEODEBRANE";
 	setHeaders(listaKlienci, mKlienci);
+}
+
+void BazaDanychManager::setKlienciWyb() {
+	mKlienciWyb = new QSqlTableModel();
+	mKlienciWyb->setTable("klienci");
+	mKlienciWyb->select();
+	QStringList listaKlienci;
+	listaKlienci << "NAZWA FIRMY" << "SKRÓT NAZWY" << "MIASTO" << "KOD" << "ULICA"
+		     << "NUMER" << "TELEFON" << "TEL KOM 1"
+		     << "TEL KOM 2" << "FAX" << "E-MAIL" << "UWAGI" << "ZAMÓWIONE" << "ODEBRANE" <<
+		     "NIEODEBRANE";
+	setHeaders(listaKlienci, mKlienciWyb);
 }
 
 void BazaDanychManager::zachowajKlienta(const Klient &klient) {

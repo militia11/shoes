@@ -14,6 +14,9 @@ class WybKlientaDialog : public QDialog
 	public:
 		explicit WybKlientaDialog(BazaDanychManager *db, QWidget *parent = 0);
 		~WybKlientaDialog();
+
+		void setTable();
+
 	private:
 		void showEvent(QShowEvent *e);
 

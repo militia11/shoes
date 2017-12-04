@@ -13,6 +13,7 @@ void MainWindow::setTables()
 	ui->tableViewKlienci->setModel(dbManager->getModelKlienci());
 	rozciagnijWiersze(ui->tableViewKlienci);
 	rozciagnijWiersze(ui->tableViewZam);
+	dialogWybKlienta->setTable();
 }
 
 MainWindow::MainWindow(QWidget *parent) :
