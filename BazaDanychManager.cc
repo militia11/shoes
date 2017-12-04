@@ -3,32 +3,49 @@
 
 BazaDanychManager::BazaDanychManager() {
 	lastConnectionError = false;
-	mKlienci = new QSqlTableModel();
-	mZamowienia = new QSqlTableModel();
+	firstRun = true;
+	db = QSqlDatabase::addDatabase("QMYSQL");
+}
+
+void BazaDanychManager::removeSqlModels() {
+	if (mZamowienia) {
+		delete mZamowienia;
+		mZamowienia = 0;
+	}
+	if (mKlienci) {
+		delete  mKlienci;
+		mKlienci = 0;
+
+	}
 }
 
 bool BazaDanychManager::polacz() {
 	CSettings s;
-	QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
 	db.setHostName(s.getHost());
 	db.setDatabaseName(s.getDatabaseName());
 	db.setUserName(s.getUser());
 	db.setPassword(s.getPassword());
-	updateTabele();
 	if (!db.open()) {
 		lastConnectionError = true;
 		qDebug() << "Błąd: nie można się połączyć z bazą!";
+		if (!firstRun) {
+			removeSqlModels();
+		}
+		firstRun = false;
 		return false;
 	} else {
 		lastConnectionError = false;
 		//QSqlQuery vStrictMode("SET sql_mode = 'STRICT_ALL_TABLES'", db);
+
 		updateTabele();
 		qDebug() << "Nawiązano połączenie z bazą danych.";
+		firstRun = false;
 		return true;
 	}
 }
 
 void BazaDanychManager::setZamowienia() {
+	mZamowienia = new QSqlTableModel();
 	mZamowienia->setTable("zamowienia");
 	mZamowienia->select();
 
@@ -62,6 +79,7 @@ void BazaDanychManager::setHeaders(QStringList lista, QSqlTableModel *model) {
 }
 
 void BazaDanychManager::setKlienci() {
+	mKlienci = new QSqlTableModel();
 	mKlienci->setTable("klienci");
 	mKlienci->select();
 	QStringList listaKlienci;
@@ -101,18 +119,14 @@ void BazaDanychManager::zamowienie() {
 }
 
 void BazaDanychManager::rozlacz() {
-	if (QSqlDatabase::contains("obuwie_db")) {
-		QSqlDatabase vDatabase = QSqlDatabase::database("obuwie_db", false);
-		if (vDatabase.isOpen()) {
-			vDatabase.close();
-			//EmitSignalIfStateChanged(true);
-		}
+	if (db.open()) {
+		db.close();
 	}
-	QSqlDatabase::removeDatabase("obuwie_db");
 }
 
 BazaDanychManager::~BazaDanychManager() {
 	rozlacz();
+	QSqlDatabase::removeDatabase("obuwie_db");
 }
 
 bool BazaDanychManager::ponowniePolacz() {

@@ -22,16 +22,15 @@ class MainWindow : public QMainWindow {
 		explicit MainWindow(QWidget *parent = 0);
 		~MainWindow();
 
-        void setTables();
-        
-    private slots:
+		void setTables();
+
+	private slots:
 		void ustawieniaBazy();
 		void on_pushButton_2_clicked();
 		void on_pushButton_clicked();
 		void on_akcjaZamknij_triggered();
 
 	private:
-
 		void rozciagnijWiersze(QTableView *m);
 		void podlaczSygnaly();
 

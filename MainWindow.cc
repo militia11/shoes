@@ -10,7 +10,6 @@
 
 void MainWindow::setTables()
 {
-	podlaczSygnaly();
 	ui->tableViewZam->setModel(dbManager->getModelZamowienia());
 	ui->tableViewKlienci->setModel(dbManager->getModelKlienci());
 	rozciagnijWiersze(ui->tableViewKlienci);
@@ -23,20 +22,17 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	dbManager = new BazaDanychManager();
 	dialog = new UstawieniaForm(dbManager, this);
-	if (!dbManager->ponowniePolacz()) {
+	if (!dbManager->polacz()) {
 		ustawieniaBazy();
 	}
+	podlaczSygnaly();
 	setTables();
 }
 
 void MainWindow::ustawieniaBazy() {
-	if ( dialog->exec() == QDialog::Accepted ) {
-		podlaczSygnaly();
-		ui->tableViewZam->setModel(dbManager->getModelZamowienia());
-		ui->tableViewKlienci->setModel(dbManager->getModelKlienci());
-		rozciagnijWiersze(ui->tableViewKlienci);
-		rozciagnijWiersze(ui->tableViewZam);
-	}//dialog->exec();
+	if ( dialog->exec() == QDialog::Accepted ) {//dialog->exec();
+		setTables();
+	}
 }
 
 void MainWindow::podlaczSygnaly() {

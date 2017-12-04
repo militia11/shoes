@@ -25,14 +25,18 @@ class BazaDanychManager {
 		QSqlTableModel *getModelZamowienia();
 		QSqlTableModel *getModelKlienci();
 
+
 	private:
+		void removeSqlModels();
 		void updateTabele();
 		void setZamowienia();
 		void setKlienci();
 		void setHeaders(QStringList lista, QSqlTableModel *model);
 
+		QSqlDatabase db;
 		QSqlTableModel *mZamowienia;
 		QSqlTableModel *mKlienci;
+		bool firstRun;
 };
 
 #endif // BAZADANYCHMANAGER_H
