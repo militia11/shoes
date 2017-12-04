@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>zasoby/iconClose.png</file>
+        <file>zasoby/add.png</file>
+    </qresource>
+</RCC>
