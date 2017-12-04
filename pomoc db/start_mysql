@@ -1,0 +1,34 @@
+#!/bin/bash
+
+MYSQL_PID=/var/run/mysql.pid
+MYSQL_DATADIR=/var/lib/mysql
+MYSQL_BASEDIR=/wb-5.0/system
+MYSQL_LANGDIR=/wb-5.0/system/share/
+MYSQL_SERVER_BINARY=/wb-5.0/system/bin/mysqld
+MYADMIN=/wb-5.0/system/bin/mysqladmin
+
+# function copied from standard the start scripts of the MySQL in Ubuntu
+mysqld_status () {
+    ping_output=`$MYADMIN ping 2>&1`; ping_alive=$(( ! $? ))
+
+    ps_alive=0
+    if [ -f "$MYSQL_PID" ] && ps `cat $MYSQL_PID` >/dev/null 2>&1; then ps_alive=1; fi
+    
+    if [ "$1" = "check_alive"  -a  $ping_alive = 1 ]; then
+	return 0 # EXIT_SUCCESS
+    else
+  	return 1 # EXIT_FAILURE
+    fi
+}
+
+echo "Starting MySQL"
+$MYSQL_SERVER_BINARY --datadir=$MYSQL_DATADIR --basedir=$MYSQL_BASEDIR --language=$MYSQL_LANGDIR --lc-messages-dir=$MYSQL_LANGDIR --pid-file=$MYSQL_PID &
+
+for i in $(seq 1 10); do
+	sleep 1
+	if mysqld_status check_alive nowarn; then
+		break
+	else
+		echo "."
+	fi
+done

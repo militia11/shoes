@@ -1,0 +1,31 @@
+INSERT INTO `obuwie_db`.`skory` (`kolor`, `sk1`, `dost_sk1`, `sk2`, `dost_sk2`, `sk3`, `dost_sk3`, `kolor_sk_dominujacy`) VALUES (101, 'WEST 930 MAT', 'MARKI', 'F-4', 'MARKI', 'BIO 022 CZEKOLADA', 'F-5', 'czerwony');
+INSERT INTO `obuwie_db`.`skory` (`kolor`, `sk1`, `dost_sk1`, `sk2`, `dost_sk2`, `sk3`, `dost_sk3`, `kolor_sk_dominujacy`) VALUES (22, 'FLOTER CZARNY', 'GOFAR', 'WEST 60 MAT', 'MARKI', 'FLOTER CZARNY', 'BOND 3', 'czerwony');
+INSERT INTO `obuwie_db`.`skory` (`kolor`, `sk1`, `dost_sk1`, `sk2`, `dost_sk2`, `sk3`, `dost_sk3`, `kolor_sk_dominujacy`) VALUES (3, 'F-5', 'BWS', 'F-4','BWS', 'CRAZY 17', 'FLOTER CZARNY', 'zielony');
+INSERT INTO `obuwie_db`.`skory` (`kolor`, `sk1`, `dost_sk1`, `sk2`, `dost_sk2`, `sk3`, `dost_sk3`, `kolor_sk_dominujacy`) VALUES (5, 'FLOTER CZARNY', 'BWS','BOND-8', 'BWS', 'FLOTER CZARNY', 'BOND 4', 'niebieski');
+
+INSERT INTO `obuwie_db`.`wzory` (`nr_wzoru`) VALUES (1);
+INSERT INTO `obuwie_db`.`wzory` (`nr_wzoru`) VALUES (2);
+INSERT INTO `obuwie_db`.`wzory` (`nr_wzoru`) VALUES (3);
+INSERT INTO `obuwie_db`.`wzory` (`nr_wzoru`) VALUES (4);
+INSERT INTO `obuwie_db`.`wzory` (`nr_wzoru`) VALUES (5);
+
+INSERT INTO `obuwie_db`.`klienci` (`nazwa`, `nazwa_skrot`, `miasto`, `kod_pocztowy`, `ulica`, `numer`, `tel`, `tel_kom1`, `tel_kom2`, `fax`, `mail`, `uwagi`, `zamowione`, `odebrane`, `nieodebrane`) VALUES ('ACL SP. Z.O.O.', 'ACL', 'Zawiercie', '42-400', 'Leśna', '123', '32544898', '600544898', '600544898', '320544898', 'stachowiak@onet.pl', 'stały klient', 2, 0, 2);
+INSERT INTO `obuwie_db`.`klienci` (`nazwa`, `nazwa_skrot`, `miasto`, `kod_pocztowy`, `ulica`, `numer`, `tel`, `tel_kom1`, `tel_kom2`, `fax`, `mail`, `uwagi`, `zamowione`, `odebrane`, `nieodebrane`) VALUES ('Adamski DI SP. Z.O.O.', 'Adamski', 'Gliwice', '41-100', 'Akacjowa', '12/44', '32056898', '600544898', '634444898', '326544898', 'andy@onet.pl', 'inne', 4, 2, 2);
+INSERT INTO `obuwie_db`.`klienci` (`nazwa`, `nazwa_skrot`, `miasto`, `kod_pocztowy`, `ulica`, `numer`, `tel`, `tel_kom1`, `tel_kom2`, `fax`, `mail`, `uwagi`, `zamowione`, `odebrane`, `nieodebrane`) VALUES ('Retro SP. Z.O.O.', 'Retro', 'Gliwice', '41-100', 'Maj', '2', '345456898', '504544898', '534444898', '325544898', 'retro@onet.pl', '', 0, 0, 0);
+INSERT INTO `obuwie_db`.`klienci` (`nazwa`, `nazwa_skrot`, `miasto`, `kod_pocztowy`, `ulica`, `numer`, `tel`, `tel_kom1`, `tel_kom2`, `fax`, `mail`, `uwagi`, `zamowione`, `odebrane`, `nieodebrane`) VALUES ('MEMO SP. Z.O.O.', 'MEMO', 'Zawiercie', '42-400', 'Lisia', '1', '32544898', '600544898', '600544898', '320544898', 'memo@onet.pl', 'stały klient', 2, 0, 2);
+
+INSERT INTO `obuwie_db`.`matryce` (`nazwa`, `info_nazwa`) VALUES ('jakaś matryca', 'LASER POZIOMY');
+INSERT INTO `obuwie_db`.`matryce` (`nazwa`, `info_nazwa`) VALUES ('matryca 2', 'DZIURKI');
+INSERT INTO `obuwie_db`.`matryce` (`nazwa`, `info_nazwa`) VALUES ('matryca 3', 'LASER POZIOMY');
+
+INSERT INTO `obuwie_db`.`ocieplenia` (`rodzaj`) VALUES ('KOC');
+INSERT INTO `obuwie_db`.`ocieplenia` (`rodzaj`) VALUES ('NAT');
+INSERT INTO `obuwie_db`.`ocieplenia` (`rodzaj`) VALUES ('SZT');
+
+INSERT INTO `obuwie_db`.`spody` (`nr_spodu`, `nazwa`, `producent`, `rozmiary`, `rodzaj`) VALUES (12, 'PERFECT', 'MSU', '40-45', 'MESKI');
+INSERT INTO `obuwie_db`.`spody` (`nr_spodu`, `nazwa`, `producent`, `rozmiary`, `rodzaj`) VALUES (3, 'ABIS 3', 'MSU', '39-43', 'INNE');
+
+INSERT INTO `obuwie_db`.`modele` (`nr_modelu`, `nr_wzoru`, `matryca`, `ocieplenie`, `spod`, `kolor`) VALUES (1, 12, 'matryca 3', 'NAT', 3, 101);
+INSERT INTO `obuwie_db`.`modele` (`nr_modelu`, `nr_wzoru`, `matryca`, `ocieplenie`, `spod`, `kolor`) VALUES (2, 2, 'matryca 2', 'KOC', 12, 3);
+
+
