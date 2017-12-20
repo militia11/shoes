@@ -2,5 +2,10 @@
     <qresource prefix="/">
         <file>zasoby/iconClose.png</file>
         <file>zasoby/add.png</file>
+        <file>zasoby/reset.png</file>
+        <file>zasoby/find.png</file>
+        <file>zasoby/print.png</file>
+        <file>zasoby/software-update-urgent.png</file>
+        <file>zasoby/update.png</file>
     </qresource>
 </RCC>

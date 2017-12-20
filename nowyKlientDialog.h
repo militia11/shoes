@@ -2,36 +2,40 @@
 #define NOWYKLIENTDIALOG_H
 
 #include <QtWidgets/QDialog>
-#include <QRegExp>
-
+#include <QKeyEvent>
 namespace Ui {
 class nowyKlientDialog;
 }
 
 class nowyKlientDialog : public QDialog
-	{
+{
 		Q_OBJECT
 
-	protected:
-		void showEvent(QEvent *e);
 	public:
 		explicit nowyKlientDialog(QWidget *parent = 0);
 		~nowyKlientDialog();
 
 		QString getNazwa() const;
-		QString getSkrot() const;
-		QString getNumerTelefonu() const;
-		QString getUlica() const;
-		QString getNumerDomu() const;
-		QString getMiasto() const;
-		QString getKodPocztowy() const;
 		void setNazwa(QString noweImie);
+
+		QString getSkrot() const;
 		void setSkrot(QString noweNazwisko);
+
+		QString getNumerTelefonu() const;
 		void setNumerTelefonu(QString nowyNumerTel);
+
+		QString getUlica() const;
 		void setUlica(QString nowaUlica);
+
+		QString getNumerDomu() const;
 		void setNumerDomu(QString nowyNumerDomu);
+
+		QString getMiasto() const;
 		void setMiasto(QString noweMiasto);
+
+		QString getKodPocztowy() const;
 		void setKodPocztowy(QString nowyKodPocztowy);
+
 		QString getTel1() const;
 		void setTel1(const QString &value);
 
@@ -61,6 +65,16 @@ class nowyKlientDialog : public QDialog
 		void on_buttonBox_rejected();
 
 	private:
+		void keyPressEvent(QKeyEvent *event) {
+			if (event->key() == Qt::Key_Escape) {
+				wyczyscPola();
+				resetujPrzyciskiWymagane();
+			}
+			QDialog::keyPressEvent(event);
+		}
+		void wyczyscPola();
+		void resetujPrzyciskiWymagane();
+
 		Ui::nowyKlientDialog *ui;
 		static QRegExp formatNrTelefonu;
 		QString nazwa;
@@ -78,7 +92,7 @@ class nowyKlientDialog : public QDialog
 		int zamowione;
 		int odebrane;
 		int nieodebrane;
-		void setResetujPrzyciskiWymagane();
-	};
+
+};
 
 #endif // NOWYKLIENTDIALOG_H

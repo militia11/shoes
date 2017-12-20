@@ -3,10 +3,11 @@
 #include "BazaDanychManager.h"
 #include <QDebug>
 #include <QSettings>
+#include <QMessageBox>
 
-UstawieniaForm::UstawieniaForm(BazaDanychManager *db, QWidget *parent) :
+UstawieniaForm::UstawieniaForm(BazaDanychManager *dbManager, QWidget *parent) :
 	QDialog(parent),
-	db(db),
+	dbManager(dbManager),
 	ui(new Ui::UstawieniaForm) {
 	ui->setupUi(this);
 
@@ -37,6 +38,7 @@ QString UstawieniaForm::getPassword() {
 }
 
 void UstawieniaForm::on_buttonBox_accepted() {
+	if(!ui->lineEditPassword->text().isEmpty() && !ui->lineEditHost->text().isEmpty() && !ui->lineEditUser->text().isEmpty() && !ui->lineEditDatabase->text().isEmpty()) {
 	QSettings qSetting;
 	qSetting.beginGroup("database");
 	host = ui->lineEditHost->text();
@@ -48,12 +50,18 @@ void UstawieniaForm::on_buttonBox_accepted() {
 	qSetting.setValue("databaseName", databaseName);
 	qSetting.setValue("password", password);
 	qSetting.endGroup();
-	if (db->ponowniePolacz()) {
+	if (dbManager->ponowniePolacz()) {
 		accept();
 	} else {
 		ui->labelError->setText("Brak połączenia z bazą danych");
 		ui->labelError->setStyleSheet("background-color: red; color: white");
 	}
+	} else {
+		QMessageBox::warning( this, "BRAK PARAMETRÓW POŁĄCZENIA",
+					  " <FONT COLOR='#000080'><br>Proszę uzupełnić parametry połączenia. ",
+					  QMessageBox::Ok);
+	}
+
 }
 
 void UstawieniaForm::on_buttonBox_rejected() {
@@ -73,10 +81,16 @@ void UstawieniaForm::updateSettings() {
 }
 
 void UstawieniaForm::showEvent(QShowEvent *e) {
-	if (db->lastConnectionError == true) {
+	Q_UNUSED(e);
+	if (dbManager->lastConnectionError == true) {
 		ui->labelError->setVisible(true);
 	} else {
 		ui->labelError->setText("Połączono");
 		ui->labelError->setStyleSheet("background-color: green; color: white");
 	}
+	ui->lineEditDatabase->setStyleSheet("color:darkblue ;background-color: lightblue;");
+	ui->lineEditHost->setStyleSheet("color:darkblue ;background-color: lightblue;");
+	ui->lineEditPassword->setStyleSheet("color:darkblue ;background-color: lightblue;");
+	ui->lineEditUser->setStyleSheet("color:darkblue ;background-color: lightblue;");
+
 }

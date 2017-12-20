@@ -1,27 +1,20 @@
 #ifndef DELEGATE_H
 #define DELEGATE_H
 
-#include <QtCore/qglobal.h>
 #include <QItemDelegate>
-#include <QSpinBox>
-
-class Delegate : public QItemDelegate
+class NotEditableDelegate : public QItemDelegate
 {
-    Q_OBJECT
-
+	Q_OBJECT
 public:
-    explicit Delegate(QObject *parent = 0);
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-                          const QModelIndex &index) const;
+	explicit NotEditableDelegate(QObject *parent = 0)
+		: QItemDelegate(parent)
+	{}
 
-    void setEditorData(QWidget *editor, const QModelIndex &index) const;
-    void setModelData(QWidget *editor, QAbstractItemModel *model,
-                      const QModelIndex &index) const;
+protected:
+	bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
+	{ return false; }
+	QWidget* createEditor(QWidget *, const QStyleOptionViewItem &, const QModelIndex &) const
+	{ return Q_NULLPTR; }
 
-    void updateEditorGeometry(QWidget *editor,
-        const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    void paint(QPainter* painter,
-               const QStyleOptionViewItem& option,
-               const QModelIndex& index) const;
 };
 #endif // DELEGATE_H

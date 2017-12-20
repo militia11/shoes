@@ -1,4 +1,5 @@
 #include "MainWindow.h"
+
 #include <QApplication>
 #include <QTranslator>
 #include <QLibraryInfo>
@@ -11,12 +12,15 @@ void qtTranslation(const QApplication &a, QTranslator *translator) {
 
 int main(int argc, char *argv[]) {
 	QApplication a(argc, argv);
-	a.setStyleSheet("QLabel {color: blue;}");
+	a.setStyleSheet("QCheckBox {color: white;} QLabel {color: white;} QLineEdit {color:darkblue ;background-color: white;}"
+			" QPushButton {background-color: rgb(58, 129, 204); color:white;}");
 	QApplication::setOrganizationName("ABIS Sp. z o.o.");
 	QApplication::setOrganizationDomain("ABIS");
 	QApplication::setApplicationName("ABIS Manager");
+
 	QTranslator qtTranslator;
 	qtTranslation(a, &qtTranslator);
+
 	MainWindow w;
 	w.show();
 

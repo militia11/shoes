@@ -3,6 +3,7 @@
 
 #include <QtCore/qglobal.h>
 #include <QDialog>
+
 #include "BazaDanychManager.h"
 
 namespace Ui {
@@ -13,7 +14,7 @@ class UstawieniaForm : public QDialog {
 		Q_OBJECT
 
 	public:
-		explicit UstawieniaForm(BazaDanychManager *db, QWidget *parent = 0 );
+		explicit UstawieniaForm(BazaDanychManager *dbManager, QWidget *parent = 0 );
 		~UstawieniaForm();
 
 		QString getHost();
@@ -25,14 +26,11 @@ class UstawieniaForm : public QDialog {
 		void on_buttonBox_accepted();
 		void on_buttonBox_rejected();
 
-	signals:
-		void databaseChange();
-
 	private:
 		void showEvent(QShowEvent *e);
 		void updateSettings();
 
-		BazaDanychManager *db;
+		BazaDanychManager *dbManager;
 		QString host;
 		QString user;
 		QString databaseName;

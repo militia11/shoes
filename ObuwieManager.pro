@@ -4,53 +4,66 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql
+QT       += core gui sql printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = ObuwieManager
 TEMPLATE = app
-
+QTPLUGIN += qsqlmysql
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
-
+CONFIG += c++11
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
+INCLUDEPATH+=/usr/include/mysql
+LIBS+=-L/usr/lib/mysql
 SOURCES += \
-        main.cc \
-        MainWindow.cc \
-    ustawieniaform.cc \
-    nowyKlientDialog.cc \
-    noweZamowienieDialog.cc \
-    Klient.cc \
-    Delegate.cc \
-    BazaDanychManager.cc \
-    CSettings.cc \
-    WybKlientaDialog.cc
+		main.cc \
+		MainWindow.cc \
+	ustawieniaform.cc \
+	nowyKlientDialog.cc \
+	noweZamowienieDialog.cc \
+	Klient.cc \
+	BazaDanychManager.cc \
+	CSettings.cc \
+	WybKlientaDialog.cc \
+	WybModelDialog.cc \
+	WybHandlDialog.cc \
+	NowyHandlowiecDialog.cc \
+	Zamowienia.cc \
+	DokumentDoDruku.cc
 
 HEADERS += \
-        MainWindow.h \
-    ustawieniaform.h \
-    nowyKlientDialog.h \
-    noweZamowienieDialog.h \
-    Klient.h \
-    Delegate.h \
-    BazaDanychManager.h \
-    CSettings.h \
-    WybKlientaDialog.h
+		MainWindow.h \
+	ustawieniaform.h \
+	nowyKlientDialog.h \
+	noweZamowienieDialog.h \
+	Klient.h \
+	Delegate.h \
+	BazaDanychManager.h \
+	CSettings.h \
+	WybKlientaDialog.h \
+	WybModelDialog.h \
+	WybHandlDialog.h \
+	NowyHandlowiecDialog.h \
+	Zamowienia.h \
+	DokumentDoDruku.h
 
 FORMS += \
-        MainWindow.ui \
-    ustawieniaform.ui \
-    nowyKlientDialog.ui \
-    noweZamowienieDialog.ui \
-    WybKlientaDialog.ui
+		MainWindow.ui \
+	ustawieniaform.ui \
+	nowyKlientDialog.ui \
+	noweZamowienieDialog.ui \
+	WybKlientaDialog.ui \
+	WybModelDialog.ui \
+	WybHandlDialog.ui \
+	NowyHandlowiecDialog.ui
 
 RESOURCES += \
-    zasoby.qrc
+	zasoby.qrc

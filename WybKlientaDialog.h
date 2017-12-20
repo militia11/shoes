@@ -1,7 +1,9 @@
 #ifndef WYBKLIENTADIALOG_H
 #define WYBKLIENTADIALOG_H
-#include "BazaDanychManager.h"
+
 #include <QtWidgets/QDialog>
+
+#include "BazaDanychManager.h"
 
 namespace Ui {
 class WybKlientaDialog;
@@ -15,13 +17,20 @@ class WybKlientaDialog : public QDialog
 		explicit WybKlientaDialog(BazaDanychManager *db, QWidget *parent = 0);
 		~WybKlientaDialog();
 
-		void setTable();
+		void aktualizujTabele();
+		QString getAktualnyKlientNazwa() const;
+
+	private slots:
+		void akceptujKlienta(const QModelIndex index);
+
+		void on_pushSzukaj_clicked();
+		void on_pushButton_clicked();
 
 	private:
 		void showEvent(QShowEvent *e);
 
-	private:
-		BazaDanychManager *db;
+		QString aktualnyKlientNazwa;
+		BazaDanychManager *dbManager;
 		Ui::WybKlientaDialog *ui;
 };
 
