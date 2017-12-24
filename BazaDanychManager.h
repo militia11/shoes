@@ -45,7 +45,7 @@ class BazaDanychManager {
 		bool polacz();
 		void rozlacz();
 		bool lastConnectionError;
-
+		void dodajWzor(int w);
 		bool aktualizujStatus(int id, QString status);
 		void setZamowieniaFilter();
 
@@ -86,6 +86,7 @@ class BazaDanychManager {
 
 		void setZamowienia();
 		void setKlienci();
+		void setWzory();
 		void setHandlowce();
 		void setHandlowceWybieranie();
 		void setKlienciWybieranie();
@@ -95,6 +96,9 @@ class BazaDanychManager {
 
 		void setUser(const QString &value);
 		zamowienieStruct filterZamowien;
+
+		QSqlTableModel *getWzory() const;
+		void setWzory(QSqlTableModel *wzory);
 
 	private:
 		int getIdOstatniegoZam();
@@ -119,6 +123,7 @@ class BazaDanychManager {
 		QSqlTableModel *mKlienci;
 		QSqlTableModel *mModeleWybieranie;
 		QSqlTableModel *mWkladki;
+		QSqlTableModel *mWzory;
 		int idKlienta;
 		int64_t idHandlowca;
 		int idModelu;

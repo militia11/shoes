@@ -24,7 +24,6 @@ class klienciDialog : public QDialog
 
 	private:
 		void showEvent(QShowEvent *e);
-		void hideEvent(QHideEvent *e);
 
 		Ui::klienciDialog *ui;
 		BazaDanychManager *dbManager;

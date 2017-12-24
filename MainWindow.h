@@ -28,6 +28,7 @@
 #include "ocieplenieDialog.h"
 #include "matryceDialog.h"
 #include "nowyModelDialog.h"
+#include "wzoryDialog.h"
 #include <QSortFilterProxyModel>
 namespace Ui {
 class MainWindow;
@@ -68,6 +69,8 @@ class MainWindow : public QMainWindow {
 
 		void on_radioButton_4_clicked();
 
+		void on_actionWzory_triggered();
+
 	private:
 		void keyPressEvent(QKeyEvent *event);
 		void filtruj();
@@ -99,6 +102,7 @@ class MainWindow : public QMainWindow {
 		spodyDialog *dialogspody;
 		ocieplenieDialog *dialogocieplenie;
 		matryceDialog *dialogmatryce;
+		wzoryDialog *dialogwzory;
 		QSortFilterProxyModel *proxy;
 		void ustawIFiltruj();
 

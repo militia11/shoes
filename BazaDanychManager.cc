@@ -10,7 +10,8 @@ BazaDanychManager::BazaDanychManager() :
 	mKlienciWybieranie(nullptr),
 	mKlienci(nullptr),
 	mModeleWybieranie(nullptr),
-	mWkladki(nullptr) {
+	mWkladki(nullptr),
+	mWzory(nullptr) {
 	lastConnectionError = false;
 	firstRun = true;
 	db = QSqlDatabase::addDatabase("QMYSQL");
@@ -337,6 +338,16 @@ void BazaDanychManager::aktualizujHeaderyKlient(QAbstractItemModel *model) {
 	setHeaders(listaKlienci, model);
 }
 
+QSqlTableModel *BazaDanychManager::getWzory() const
+{
+	return mWzory;
+}
+
+void BazaDanychManager::setWzory(QSqlTableModel *wzory)
+{
+	mWzory = wzory;
+}
+
 void BazaDanychManager::setUser(const QString &value)
 {
 	user = value;
@@ -407,6 +418,16 @@ void BazaDanychManager::setKlienci() {
 	mKlienci->select();
 }
 
+void BazaDanychManager::setWzory()
+{
+	if (mWzory == nullptr) {
+		mWzory = new QSqlTableModel();
+		mWzory->setTable("wzory");
+		mWzory->setHeaderData(1, Qt::Horizontal, QString("NUMER WZORU"));
+	}
+	mWzory->select();
+}
+
 void BazaDanychManager::setHandlowce() {
 	if (mHandlowce == nullptr) {
 		mHandlowce = new QSqlTableModel();
@@ -417,7 +438,6 @@ void BazaDanychManager::setHandlowce() {
 		setHeaders(listaHandlowce, mHandlowce);
 	}
 	mHandlowce->select();
-
 }
 
 void BazaDanychManager::setHandlowceWybieranie() {
@@ -638,10 +658,12 @@ void BazaDanychManager::ustawIdAktualnegoKlienta(const QModelIndex index) {
 }
 
 void BazaDanychManager::ustawIdAktualnegoHandl(const QModelIndex index) {
-	idHandlowca = mHandlowceWybieranie->data(mHandlowce->index(index.row(),
-			0)).toLongLong();
-	nazwaHandlowca = mHandlowceWybieranie->data(mHandlowce->index(index.row(),
-			 3)).toString();
+	idHandlowca = mHandlowceWybieranie->data(mHandlowceWybieranie->index(
+				index.row(),
+				0)).toLongLong();
+	nazwaHandlowca = mHandlowceWybieranie->data(mHandlowceWybieranie->index(
+				 index.row(),
+				 3)).toString();
 }
 
 QString BazaDanychManager::pobierzNazweAktualnegoKlienta() {
@@ -658,6 +680,16 @@ void BazaDanychManager::rozlacz() {
 	}
 }
 
+void BazaDanychManager::dodajWzor(int w)
+{
+	QSqlQuery qry;
+	qry.prepare( "INSERT INTO wzory (nr_wzoru) VALUES (:nr)" );
+	qry.bindValue( ":nr", w);
+	if ( !qry.exec() ) {
+		qDebug() << "Bląd przy dodaniu wzoru" ;
+	}
+}
+
 bool BazaDanychManager::aktualizujStatus(int id, QString status) {
 	QSqlQuery qry;
 	qry.prepare( "update zamowienia_modele set status=:status where id=:id");
@@ -668,9 +700,6 @@ bool BazaDanychManager::aktualizujStatus(int id, QString status) {
 		return false;
 	}
 	else {
-		//		if ((filterZamowien.status == QString(""))) {
-
-		//		}
 		return true;
 	}
 }

@@ -8,20 +8,18 @@ klienciDialog::klienciDialog(nowyKlientDialog *nowyKliDialog,
 
 {
 	ui->setupUi(this);
-
+	proxy = new QSortFilterProxyModel(this);
 }
 
 klienciDialog::~klienciDialog()
 {
 	delete ui;
+	delete proxy;
 }
 
 void klienciDialog::showEvent(QShowEvent *e) {
 	Q_UNUSED(e);
 	dbManager->setKlienci();
-	if (proxy == nullptr) {
-		proxy = new QSortFilterProxyModel(this);
-	}
 	proxy->setDynamicSortFilter(true);
 	proxy->setSourceModel(dbManager->getModelKlienci());
 	ui->tableViewKlienci->setModel(proxy);
@@ -37,11 +35,6 @@ void klienciDialog::showEvent(QShowEvent *e) {
 	hv->setSectionHidden(14, true);
 	hv->setSectionHidden(15, true);
 	hv->setDefaultAlignment(Qt::AlignLeft);
-}
-
-void klienciDialog::hideEvent(QHideEvent *e) {
-	delete proxy;
-	proxy = 0;
 }
 
 void klienciDialog::on_pushButton_2_clicked() {

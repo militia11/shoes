@@ -5,9 +5,8 @@
 #include <QTextDocument>
 #include <QPrinter>
 
-struct OnePage
+struct ZamowieniaDruk
 {
-	QStringList filenames;
 	QStringList captions;
 };
 
@@ -16,13 +15,12 @@ class DokumentDoDruku
 	public:
 		DokumentDoDruku();
 
-		void dodajStrone(OnePage p);
+		void dodajZamowienia(ZamowieniaDruk p);
 		void populateDocumentUsingHtml(QTextDocument *document);
-		QString pageAsHtml(int page);
-		QString itemsAsHtmlTable(const OnePage &thePage);
+		QString itemsAsHtmlTable(const ZamowieniaDruk &thePage);
 
 	private:
-		QList<OnePage> pages;
+		QList<ZamowieniaDruk> pages;
 };
 
 #endif // DOKUMENTDODRUKU_H

@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	dialogspody = new spodyDialog(dbManager, this);
 	dialogocieplenie = new ocieplenieDialog (dbManager, this);
 	dialogmatryce = new matryceDialog(dbManager, this);
+	dialogwzory = new wzoryDialog(dbManager, this);
 	proxy = new QSortFilterProxyModel(this);
 	proxy->setDynamicSortFilter(true);
 	//logowanie();
@@ -180,7 +181,7 @@ void  MainWindow::edytuj() {
 	if (ui->actionEdycja->isChecked()) {
 		ui->actionEdycja->setIcon(QIcon(":/zasoby/unlock.png"));
 		ui->actionEdycja->setToolTip("Zablokuj edycję zamówień");
-		ui->tableViewZam->setEditTriggers(QAbstractItemView::AllEditTriggers);
+		ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
 
 	} else {
 		ui->actionEdycja->setIcon(QIcon(":/zasoby/lock.png")) ;
@@ -290,7 +291,6 @@ void MainWindow::dodajKlienta() {
 			dialognowyKlient->getFax(), dialognowyKlient->getMail(),
 			dialognowyKlient->getUwagi(),
 			dialognowyKlient->getNumerTelefonu());
-
 		dbManager->zachowajKlienta(klient);
 	}
 }
@@ -319,24 +319,19 @@ void MainWindow::printDocument(QPrinter *printer)
 
 void MainWindow::populateDocument(QTextDocument *document) {
 	DokumentDoDruku tworzacyDokument;
-	OnePage page;
-	page.filenames << "/home/mmichniewski/001.jpg" << "/home/mmichniewski/001.jpg"
-			   << "/home/mmichniewski/001.jpg" << "/home/mmichniewski/001.jpg" <<
-			   "/home/mmichniewski/001.jpg" << "/home/mmichniewski/001.jpg" <<
-			   "/home/mmichniewski/001.jpg" ;
-	page.captions << "111ddddd" << "111ddddd" << "111ddddd" << "111ddddd" <<
-			  "111ddddd" << "111ddddd" << "111ddddd";
-	tworzacyDokument.dodajStrone(page);
+	ZamowieniaDruk zamowienia;
+	zamowienia.captions << "1" << "2" << "3" << "4";
+	tworzacyDokument.dodajZamowienia(zamowienia);
 	tworzacyDokument.populateDocumentUsingHtml(document);
 }
 
 void MainWindow::drukuj() {
-	QPrinter printer; //printer.setResolution(QPrinter::HighResolution);
+	QPrinter printer;
 
 	QMarginsF ma;
 	//	ma.setTop(5.5);
 	//	ma.setLeft(2.7);//0,95
-	printer.setPageMargins(ma);
+	//printer.setPageMargins(ma);
 	//if (pageSetup(&printer)) {
 	printDocument(&printer);
 }
@@ -359,7 +354,6 @@ void MainWindow::ustawIFiltruj()
 }
 
 void MainWindow::on_pushButtonSzukaj_clicked() {
-
 	ustawIFiltruj();
 }
 
@@ -398,8 +392,12 @@ void MainWindow::on_actionDrukuj_zam_wienia_triggered()
 	drukuj();
 }
 
-void MainWindow::on_radioButton_4_clicked()
-{
+void MainWindow::on_radioButton_4_clicked() {
 	dbManager->filterZamowien.status = QString("");
 	filtruj();
+}
+
+void MainWindow::on_actionWzory_triggered()
+{
+	dialogwzory->exec();
 }
