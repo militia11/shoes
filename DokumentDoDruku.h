@@ -7,10 +7,8 @@
 
 struct OnePage
 {
-	QString title;
 	QStringList filenames;
 	QStringList captions;
-	QString descriptionHtml;
 };
 
 class DokumentDoDruku

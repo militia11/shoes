@@ -76,7 +76,6 @@ class nowyKlientDialog : public QDialog
 		void resetujPrzyciskiWymagane();
 
 		Ui::nowyKlientDialog *ui;
-		static QRegExp formatNrTelefonu;
 		QString nazwa;
 		QString skrot;
 		QString numerTelefonu;

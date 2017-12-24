@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QString>
 #include <QSqlTableModel>
+#include <QSqlRelationalTableModel>
 #include <QSqlQueryModel>
 #include <QCoreApplication>
 #include <QSqlRecord>
@@ -17,6 +18,17 @@
 #include <QDate>
 #include <QStandardItem>
 #include "Klient.h"
+
+struct zamowienieStruct {
+	QString nrZ;
+	QString klNaz;
+	int klNr;
+	QString status;
+	QString ociep;
+	QString mat;
+	//QString ;
+};
+
 class BazaDanychManager {
 
 	public:
@@ -34,14 +46,12 @@ class BazaDanychManager {
 		void rozlacz();
 		bool lastConnectionError;
 
-
-		void aktualizujStatus(int id, QString status);
+		bool aktualizujStatus(int id, QString status);
+		void setZamowieniaFilter();
 
 		QAbstractItemModel *wyszukajKlientowPoNazwie(QString nazwa);
 		QAbstractItemModel *wyszukajKlientowPoSkrocie(QString nazwa);
 		QAbstractItemModel *wyszukajKlientow(QString nazwa, QString skrot);
-
-		QAbstractItemModel *selectZamowieniaWgStatusu(QString status);
 
 		void zachowajKlienta(const Klient &klient);
 		void zachowajHandlowca(QString im, QString nz, QString skr);
@@ -54,30 +64,37 @@ class BazaDanychManager {
 		QString pobierzNazweAktualnegoKlienta();
 		QString pobierzNazweAktualnegoHandl();
 
-		QSqlTableModel *getModelZamowienia();
-
-		QAbstractItemModel *getModelZamowieniaModele();
-		QAbstractItemModel *getModelZamowieniaModeleForMainWindow();
+		QSqlRelationalTableModel *getModelZamowienia();
 
 		QImage getImageZamowienia(int id);
 		QSqlTableModel *getModelKlienci();
-		QSqlTableModel *getModelHandlowce();
 		QSqlTableModel *getModelKlienciWybieranie();
+		QSqlTableModel *getModelHandlowce();
+		QSqlTableModel *getModelHandlowceWybieranie();
 		QSqlTableModel *getModelmModeleWybieranie();
 
-		void setIdZamowieniaModeleForMainWindow(const QModelIndex index,
-							bool selectMode);
-		int getIdZamowieniaZTabeli(QModelIndex index, bool selectMode);
+		void setIdZamowieniaModeleForMainWindow(const QModelIndex index);
+		int getIdZamowieniaZTabeli(QModelIndex index);
 		void ustawAktualnyModelId(const QModelIndex index);
 
 		void setHeadersGlowneZamowienia();
-		void setHeadersGlowneSelectZamowienia();
-		void setHeadersForZamowienia(QAbstractItemModel *model);
 		int GetIdOfLastInsertedRow();
 
 		QList<QStandardItem *> zwrocWierszModel();
 
 		QString getOstatniSelectZam() const;
+
+		void setZamowienia();
+		void setKlienci();
+		void setHandlowce();
+		void setHandlowceWybieranie();
+		void setKlienciWybieranie();
+		void setModeleWybieranie();
+		void setWkladki();
+		void setHeaders(QStringList lista, QAbstractItemModel *model);
+
+		void setUser(const QString &value);
+		zamowienieStruct filterZamowien;
 
 	private:
 		int getIdOstatniegoZam();
@@ -90,26 +107,18 @@ class BazaDanychManager {
 		void obsluzSqlError(const QSqlQuery &aQuery);
 		void removeSqlModels();
 
-		void aktualizujTabele();
 		void aktualizujHeaderyKlient(QAbstractItemModel *model);
-		void updateZamowieniaModele();
 		void setZamowieniaModeleHeaders();
-
-		void setZamowienia();
-		void setKlienci();
-		void setHandlowce();
-		void setKlienciWybieranie();
-		void setModeleWybieranie();
-		void setHeaders(QStringList lista, QAbstractItemModel *model);
 
 		QSqlDatabase db;
 		QAbstractItemModel *mSelectZamowienia;
-		QSqlTableModel *mZamowienia;
-		QAbstractItemModel *mZamowieniaModele;
+		QSqlRelationalTableModel *mZamowienia;
 		QSqlTableModel *mHandlowce;
+		QSqlTableModel *mHandlowceWybieranie;
 		QSqlTableModel *mKlienciWybieranie;
 		QSqlTableModel *mKlienci;
 		QSqlTableModel *mModeleWybieranie;
+		QSqlTableModel *mWkladki;
 		int idKlienta;
 		int64_t idHandlowca;
 		int idModelu;
@@ -118,6 +127,7 @@ class BazaDanychManager {
 		QString nazwaHandlowca;
 		bool firstRun;
 		QString ostatniSelectZam;
+		QString user;
 };
 
 #endif // BAZADANYCHMANAGER_H

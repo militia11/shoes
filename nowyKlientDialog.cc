@@ -3,8 +3,6 @@
 #include <QMessageBox>
 #include <QDebug>
 
-QRegExp nowyKlientDialog::formatNrTelefonu("([1-9]\\d\\d)-(\\d{3})-(\\d{3})");
-
 void nowyKlientDialog::resetujPrzyciskiWymagane()
 {
 	ui->lineEditNazwa->setStyleSheet("color:darkblue ;background-color: white;");

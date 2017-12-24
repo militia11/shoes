@@ -23,6 +23,9 @@ void WybModelDialog::akceptujModel(const QModelIndex index) {
 
 void WybModelDialog::showEvent(QShowEvent *e) {
 	Q_UNUSED(e);
+	dbManager->setModeleWybieranie();
+	aktualizujTabele();
+
 }
 
 void WybModelDialog::aktualizujTabele()

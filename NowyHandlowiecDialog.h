@@ -22,7 +22,6 @@ class NowyHandlowiecDialog : public QDialog
 
 	private slots:
 		void on_buttonBox_accepted();
-
 		void on_buttonBox_rejected();
 
 	private:
@@ -35,6 +34,7 @@ class NowyHandlowiecDialog : public QDialog
 		}
 		void wyczyscPola();
 		void resetujPrzyciskiWymagane();
+
 		QString imie;
 		QString nazwisko;
 		QString skrot;

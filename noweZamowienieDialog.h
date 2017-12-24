@@ -26,6 +26,7 @@ class noweZamowienieDialog : public QDialog
 		~noweZamowienieDialog();
 
 	private slots:
+		void obliczSume(QStandardItem *it);
 		void on_pushButton_5_clicked();
 		void on_pushButton_6_clicked();
 

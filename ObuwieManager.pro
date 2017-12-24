@@ -37,7 +37,18 @@ SOURCES += \
 	WybHandlDialog.cc \
 	NowyHandlowiecDialog.cc \
 	Zamowienia.cc \
-	DokumentDoDruku.cc
+	DokumentDoDruku.cc \
+    klienciDialog.cc \
+    handlowceDialog.cc \
+    skoryDialog.cc \
+    wzoryDialog.cc \
+    spodyDialog.cc \
+    wkladkaDialog.cc \
+    ocieplenieDialog.cc \
+    matryceDialog.cc \
+    modeleDialog.cc \
+    koloryDialog.cc \
+    nowyModelDialog.cc
 
 HEADERS += \
 		MainWindow.h \
@@ -53,7 +64,18 @@ HEADERS += \
 	WybHandlDialog.h \
 	NowyHandlowiecDialog.h \
 	Zamowienia.h \
-	DokumentDoDruku.h
+	DokumentDoDruku.h \
+    klienciDialog.h \
+    handlowceDialog.h \
+    skoryDialog.h \
+    wzoryDialog.h \
+    spodyDialog.h \
+    wkladkaDialog.h \
+    ocieplenieDialog.h \
+    matryceDialog.h \
+    modeleDialog.h \
+    koloryDialog.h \
+    nowyModelDialog.h
 
 FORMS += \
 		MainWindow.ui \
@@ -63,7 +85,18 @@ FORMS += \
 	WybKlientaDialog.ui \
 	WybModelDialog.ui \
 	WybHandlDialog.ui \
-	NowyHandlowiecDialog.ui
+	NowyHandlowiecDialog.ui \
+    klienciDialog.ui \
+    handlowceDialog.ui \
+    skoryDialog.ui \
+    wzoryDialog.ui \
+    spodyDialog.ui \
+    wkladkaDialog.ui \
+    ocieplenieDialog.ui \
+    matryceDialog.ui \
+    modeleDialog.ui \
+    koloryDialog.ui \
+    nowyModelDialog.ui
 
 RESOURCES += \
 	zasoby.qrc

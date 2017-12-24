@@ -4,6 +4,7 @@
 #include <QtWidgets/QDialog>
 
 #include "BazaDanychManager.h"
+#include <QSortFilterProxyModel>
 
 namespace Ui {
 class WybKlientaDialog;
@@ -28,10 +29,10 @@ class WybKlientaDialog : public QDialog
 
 	private:
 		void showEvent(QShowEvent *e);
-
 		QString aktualnyKlientNazwa;
 		BazaDanychManager *dbManager;
 		Ui::WybKlientaDialog *ui;
+		QSortFilterProxyModel *proxy;
 };
 
 #endif // WYBKLIENTADIALOG_H

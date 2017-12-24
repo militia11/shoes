@@ -3,6 +3,8 @@
 #include "Delegate.h"
 #include <QMessageBox>
 #include <QKeyEvent>
+#include <QDebug>
+#include <QModelIndex>
 noweZamowienieDialog::noweZamowienieDialog(NowyHandlowiecDialog *nh,
 		WybHandlDialog *wybHandlDialog,
 		BazaDanychManager *db, WybModelDialog *modeleDialog,
@@ -36,6 +38,24 @@ noweZamowienieDialog::~noweZamowienieDialog()
 	delete ui;
 }
 
+void noweZamowienieDialog::obliczSume(QStandardItem *it)
+{
+	int suma = 0;
+	int wszystkie = 0;
+	int rzad = it->row();
+	for (int i = 6; i < 21; i++) {
+		suma += zamowienie->data(zamowienie->index(rzad, i),
+					 Qt::DisplayRole).toInt();
+	}
+	zamowienie->setData(zamowienie->index(rzad, 21), QVariant(suma));
+
+	for (int j = 0; j <  zamowienie->rowCount(); j++) {
+		wszystkie += zamowienie->data(zamowienie->index(j, 21),
+						  Qt::DisplayRole).toInt();
+	}
+	ui->lcdNumber->display(wszystkie);
+}
+
 void noweZamowienieDialog::keyPressEvent(QKeyEvent *event)
 {
 	if (event->key() == Qt::Key_Escape) {
@@ -67,8 +87,7 @@ void noweZamowienieDialog::on_pushButton_6_clicked()
 	}
 }
 
-void noweZamowienieDialog::wyczysc()
-{
+void noweZamowienieDialog::wyczysc() {
 	ui->calendarWidget->setSelectedDate(QDate::currentDate());
 	ui->calendarWidgetRealizacja->setSelectedDate(QDate::currentDate());
 	ui->labelKlient->clear();
@@ -159,7 +178,8 @@ void noweZamowienieDialog::on_pushButtonModel_clicked() {
 		ktoraPozycja++;
 		QStringList listaZamowienia;
 		listaZamowienia << "WZÓR" <<
-				"MATRYCA " << "OCIEPLENIE" << "SPÓD" << "KOLOR" << "R36" << "R37" << "R38"	<<
+				"MATRYCA " << "OCIEPLENIE" << "SPÓD" << "KOLOR" << "WKŁADKA" << "R36" << "R37"
+				<< "R38"	<<
 				"R39" << "R40"
 				<< "R41" << "R42" << "R43"	<< "R44"
 				<< "R45" << "R46" << "R47"	<< "R48" << "R49" << "R50"
@@ -175,6 +195,8 @@ void noweZamowienieDialog::showEvent(QShowEvent *e) {
 	ktoraPozycja = 0;
 	if (zamowienie == 0) {
 		zamowienie = new QStandardItemModel();
+		QObject::connect(zamowienie, SIGNAL(itemChanged(QStandardItem *)), this,
+				 SLOT(obliczSume(QStandardItem *)));
 	}
 }
 

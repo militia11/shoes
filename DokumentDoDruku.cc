@@ -9,8 +9,7 @@ void DokumentDoDruku::dodajStrone(OnePage p)
 	pages.append(p);
 }
 
-void DokumentDoDruku::populateDocumentUsingHtml(QTextDocument *document)
-{
+void DokumentDoDruku::populateDocumentUsingHtml(QTextDocument *document) {
 	QString html("<html>\n<body>\n");
 	for (int page = 0; page < pages.count(); ++page) {
 		html += pageAsHtml(page);
@@ -27,13 +26,10 @@ void DokumentDoDruku::populateDocumentUsingHtml(QTextDocument *document)
 QString DokumentDoDruku::pageAsHtml(int page) {
 	const OnePage &thePage = pages.at(page);
 	QString html;
-	html += QString("<h1 align='center'>%1</h1>\n")
-		.arg(QString(thePage.title).toHtmlEscaped());
 	html += "<p>";
 	html += itemsAsHtmlTable(thePage);
+
 	html += "</p>\n";
-	html += QString("<p style='font-size:15pt;font-family:times'>"
-			"%1</p><hr>\n").arg(thePage.descriptionHtml);
 	return html;
 }
 

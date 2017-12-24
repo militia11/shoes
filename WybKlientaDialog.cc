@@ -2,26 +2,32 @@
 #include "ui_WybKlientaDialog.h"
 
 WybKlientaDialog::WybKlientaDialog(BazaDanychManager *db, QWidget *parent) :
-QDialog(parent),
-dbManager(db),
-ui(new Ui::WybKlientaDialog)
+	QDialog(parent),
+	dbManager(db),
+	ui(new Ui::WybKlientaDialog)
 {
 	ui->setupUi(this);
+	proxy = new QSortFilterProxyModel(this);
 	connect(ui->tableView, SIGNAL(doubleClicked(const QModelIndex)), this,
-	SLOT(akceptujKlienta(const QModelIndex)));
+		SLOT(akceptujKlienta(const QModelIndex)));
 }
 
-WybKlientaDialog::~WybKlientaDialog()
-{
+WybKlientaDialog::~WybKlientaDialog() {
+	delete proxy;
 	delete ui;
 }
 
-void WybKlientaDialog::aktualizujTabele()
-{
-	ui->tableView->setModel(dbManager->getModelKlienciWybieranie());
+void WybKlientaDialog::aktualizujTabele() {
+	proxy->setSourceModel(dbManager->getModelKlienciWybieranie());
+	proxy->setDynamicSortFilter(true);
+	ui->tableView->setModel(proxy);
+	ui->tableView->setSortingEnabled(true);
 	QHeaderView *hv = ui->tableView->horizontalHeader();
 	hv->setStretchLastSection(true);
 	hv->setSectionHidden(0, true);
+	hv->setSectionHidden(13, true);
+	hv->setSectionHidden(14, true);
+	hv->setSectionHidden(15, true);
 	hv->setDefaultAlignment(Qt::AlignLeft);
 	ui->tableView->setColumnWidth(1, 200);
 	ui->tableView->setColumnWidth(2, 135);
@@ -36,10 +42,10 @@ void WybKlientaDialog::akceptujKlienta(const QModelIndex index)
 
 void WybKlientaDialog::showEvent(QShowEvent *e) {
 	Q_UNUSED(e);
+	dbManager->setKlienciWybieranie();
+	aktualizujTabele();
 	ui->lineEditNazwaSkrot->clear();
 	ui->lineEditSkrot->clear();
-	ui->pushSzukaj->click();
-	// przenieść tu tworzenie w razie przeciążenia
 }
 
 QString WybKlientaDialog::getAktualnyKlientNazwa() const
@@ -59,15 +65,15 @@ void WybKlientaDialog::on_pushSzukaj_clicked()
 			return;
 		} else {
 			model = dbManager->wyszukajKlientowPoSkrocie(
-			ui->lineEditSkrot->text());
+					ui->lineEditSkrot->text());
 		}
 	} else {
 		if (ui->lineEditSkrot->text().isEmpty()) {
 			model = dbManager->wyszukajKlientowPoNazwie(
-			ui->lineEditNazwaSkrot->text());
+					ui->lineEditNazwaSkrot->text());
 		} else {
 			model = dbManager->wyszukajKlientow(
-			ui->lineEditNazwaSkrot->text(), ui->lineEditSkrot->text());
+					ui->lineEditNazwaSkrot->text(), ui->lineEditSkrot->text());
 		}
 	}
 
