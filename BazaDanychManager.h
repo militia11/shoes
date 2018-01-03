@@ -18,16 +18,7 @@
 #include <QDate>
 #include <QStandardItem>
 #include "Klient.h"
-
-struct zamowienieStruct {
-	QString nrZ;
-	QString klNaz;
-	int klNr;
-	QString status;
-	QString ociep;
-	QString mat;
-	//QString ;
-};
+#include "zamowienie.h"
 
 class BazaDanychManager {
 
@@ -53,6 +44,7 @@ class BazaDanychManager {
 		QAbstractItemModel *wyszukajKlientowPoSkrocie(QString nazwa);
 		QAbstractItemModel *wyszukajKlientow(QString nazwa, QString skrot);
 
+		void dodajZdjecieModelu(QImage image, int ktore, int ids);
 		void zachowajKlienta(const Klient &klient);
 		void zachowajHandlowca(QString im, QString nz, QString skr);
 		bool zamowienie(QString klientNazwa, QString handlNazwa, QDate zam,
@@ -73,7 +65,6 @@ class BazaDanychManager {
 		QSqlTableModel *getModelHandlowceWybieranie();
 		QSqlTableModel *getModelmModeleWybieranie();
 
-		void setIdZamowieniaModeleForMainWindow(const QModelIndex index);
 		int getIdZamowieniaZTabeli(QModelIndex index);
 		void ustawAktualnyModelId(const QModelIndex index);
 
@@ -84,13 +75,17 @@ class BazaDanychManager {
 
 		QString getOstatniSelectZam() const;
 
+		zamowienieZRozmiaramiStruct stworzZamowienieZBazy(int id);
+
 		void setZamowienia();
 		void setKlienci();
 		void setWzory();
+		void setMatryce();
 		void setHandlowce();
 		void setHandlowceWybieranie();
 		void setKlienciWybieranie();
 		void setModeleWybieranie();
+		void setModele();
 		void setWkladki();
 		void setHeaders(QStringList lista, QAbstractItemModel *model);
 
@@ -98,7 +93,14 @@ class BazaDanychManager {
 		zamowienieStruct filterZamowien;
 
 		QSqlTableModel *getWzory() const;
-		void setWzory(QSqlTableModel *wzory);
+
+		QSqlTableModel *getMatryce() const;
+
+		void zachowajMatryce(QString naz, QString infonaz);
+		QSqlTableModel *getModele() const;
+
+		QString getNazwaMatrycy() const;
+		void setNazwaMatrycy(const QModelIndex index);
 
 	private:
 		int getIdOstatniegoZam();
@@ -122,14 +124,20 @@ class BazaDanychManager {
 		QSqlTableModel *mKlienciWybieranie;
 		QSqlTableModel *mKlienci;
 		QSqlTableModel *mModeleWybieranie;
+		QSqlRelationalTableModel *mModele;
 		QSqlTableModel *mWkladki;
 		QSqlTableModel *mWzory;
+		QSqlTableModel *mMatryce;
 		int idKlienta;
 		int64_t idHandlowca;
 		int idModelu;
-		int idZamowieniaModeleForMainWindow;
+		QVector<int> idModeluL;
 		QString nazwaKlienta;
 		QString nazwaHandlowca;
+
+		QString nazwaMatrycy;
+		int idMatrycy;
+
 		bool firstRun;
 		QString ostatniSelectZam;
 		QString user;

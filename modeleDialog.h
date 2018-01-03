@@ -3,7 +3,10 @@
 
 #include <QtWidgets/QDialog>
 #include "BazaDanychManager.h"
-#include "nowyModelDialog.h"
+#include "NowyModelDialog.h"
+#include <QSortFilterProxyModel>
+#include "clickableLabel.h"
+
 namespace Ui {
 class modeleDialog;
 }
@@ -13,7 +16,8 @@ class modeleDialog : public QDialog
 		Q_OBJECT
 
 	public:
-		explicit modeleDialog(nowyModelDialog *nowyKliDialog,BazaDanychManager *db,QWidget *parent = 0);
+		explicit modeleDialog(NowyModelDialog *nowyModDialog, BazaDanychManager *db,
+					  QWidget *parent = 0);
 		~modeleDialog();
 
 	private slots:
@@ -23,7 +27,8 @@ class modeleDialog : public QDialog
 		void showEvent(QShowEvent *e);
 		Ui::modeleDialog *ui;
 		BazaDanychManager *dbManager;
-		nowyModelDialog *nowyKliDialog;
+		NowyModelDialog *nowyModDialog;
+		QSortFilterProxyModel *proxy;
 };
 
 #endif // MODELEDIALOG_H

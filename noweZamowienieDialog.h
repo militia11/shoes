@@ -6,6 +6,7 @@
 #include "WybKlientaDialog.h"
 #include "WybHandlDialog.h"
 #include "nowyKlientDialog.h"
+#include "NowyModelDialog.h"
 #include "BazaDanychManager.h"
 #include "WybModelDialog.h"
 #include "NowyHandlowiecDialog.h"
@@ -19,7 +20,8 @@ class noweZamowienieDialog : public QDialog
 		Q_OBJECT
 
 	public:
-		explicit noweZamowienieDialog(NowyHandlowiecDialog *nh,
+		explicit noweZamowienieDialog(NowyModelDialog *nowyMod,
+						  NowyHandlowiecDialog *nh,
 						  WybHandlDialog *wybHandlDialog,
 						  BazaDanychManager *db, WybModelDialog *modeleDialog, WybKlientaDialog *dialog,
 						  nowyKlientDialog *nowyKliDialog, QWidget *parent = 0);
@@ -38,6 +40,10 @@ class noweZamowienieDialog : public QDialog
 
 		void on_checkBox_stateChanged(int arg1);
 
+		void on_pushButton_8_clicked();
+
+		void on_pushButton_10_clicked();
+
 	private:
 		void keyPressEvent(QKeyEvent *event);
 		void showEvent(QShowEvent *e);
@@ -50,6 +56,7 @@ class noweZamowienieDialog : public QDialog
 		WybHandlDialog *dialogHandl;
 		nowyKlientDialog *nowyKliDialog;
 		NowyHandlowiecDialog *nowyHandlDialog;
+		NowyModelDialog *nowyMod;
 		Ui::noweZamowienieDialog *ui;
 		QStandardItemModel *zamowienie;
 		int ktoraPozycja;

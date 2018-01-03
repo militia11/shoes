@@ -30,10 +30,10 @@ void klienciDialog::showEvent(QShowEvent *e) {
 	}
 	QHeaderView *hv = ui->tableViewKlienci->horizontalHeader();
 	hv->setStretchLastSection(true);
-	hv->setSectionHidden(0, true);
-	hv->setSectionHidden(13, true);
-	hv->setSectionHidden(14, true);
-	hv->setSectionHidden(15, true);
+	//hv->setSectionHidden(0, true);
+	//	hv->setSectionHidden(13, true);
+	//	hv->setSectionHidden(14, true);
+	//	hv->setSectionHidden(15, true);
 	hv->setDefaultAlignment(Qt::AlignLeft);
 }
 

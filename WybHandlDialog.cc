@@ -24,16 +24,18 @@ void WybHandlDialog::aktualizujTabele() {
 	ui->tableView->setSortingEnabled(true);
 	QHeaderView *hv = ui->tableView->horizontalHeader();
 	hv->setStretchLastSection(true);
-	hv->setSectionHidden(0, true);
+	//hv->setSectionHidden(0, true);
 	hv->setDefaultAlignment(Qt::AlignLeft);
 }
 
 QString WybHandlDialog::getAktualnyHandlNazwa() {
-	return  aktualnyHandlNazwa;
+	return aktualnyHandlNazwa;
 }
 
 void WybHandlDialog::akceptujHandl(const QModelIndex index) {
-	dbManager->ustawIdAktualnegoHandl(index);
+	QModelIndex  idx = proxy->mapToSource(
+				   ui->tableView->selectionModel()->currentIndex());
+	dbManager->ustawIdAktualnegoHandl(idx);
 	aktualnyHandlNazwa = dbManager->pobierzNazweAktualnegoHandl();
 	accept();
 }

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>679</width>
-    <height>388</height>
+    <height>438</height>
    </rect>
   </property>
   <property name="palette">
@@ -426,7 +426,7 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>Formularz dodania klienta</string>
+   <string>Dodaj klienta</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

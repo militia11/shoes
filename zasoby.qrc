@@ -5,10 +5,10 @@
         <file>zasoby/reset.png</file>
         <file>zasoby/find.png</file>
         <file>zasoby/print.png</file>
-        <file>zasoby/software-update-urgent.png</file>
         <file>zasoby/update.png</file>
         <file>zasoby/lock.png</file>
         <file>zasoby/unlock.png</file>
         <file>zasoby/conn.png</file>
+        <file>zasoby/select.png</file>
     </qresource>
 </RCC>

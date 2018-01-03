@@ -441,7 +441,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>19</width>
+         <width>40</width>
          <height>20</height>
         </size>
        </property>
@@ -457,7 +457,7 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>201</width>
+         <width>191</width>
          <height>0</height>
         </size>
        </property>
@@ -473,7 +473,7 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>131</width>
+         <width>120</width>
          <height>0</height>
         </size>
        </property>
@@ -560,6 +560,9 @@
      </property>
      <attribute name="horizontalHeaderMinimumSectionSize">
       <number>25</number>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
      </attribute>
     </widget>
    </item>

@@ -7,17 +7,20 @@ WybModelDialog::WybModelDialog(BazaDanychManager *db, QWidget *parent) :
 	ui(new Ui::WybModelDialog)
 {
 	ui->setupUi(this);
+	proxy = new QSortFilterProxyModel(this);
 	connect(ui->tableView, SIGNAL(doubleClicked(const QModelIndex)), this,
 		SLOT(akceptujModel(const QModelIndex)));
 }
 
 WybModelDialog::~WybModelDialog()
-{
+{	delete proxy;
 	delete ui;
 }
 
 void WybModelDialog::akceptujModel(const QModelIndex index) {
-	dbManager->ustawAktualnyModelId(index);
+	QModelIndex  idx = proxy->mapToSource(
+				   ui->tableView->selectionModel()->currentIndex());
+	dbManager->ustawAktualnyModelId(idx);
 	accept();
 }
 
@@ -25,12 +28,13 @@ void WybModelDialog::showEvent(QShowEvent *e) {
 	Q_UNUSED(e);
 	dbManager->setModeleWybieranie();
 	aktualizujTabele();
-
 }
 
 void WybModelDialog::aktualizujTabele()
-{
-	ui->tableView->setModel(dbManager->getModelmModeleWybieranie());
+{	proxy->setSourceModel(dbManager->getModelmModeleWybieranie());
+	proxy->setDynamicSortFilter(true);
+	ui->tableView->setModel(proxy);
+	ui->tableView->setSortingEnabled(true);
 	QHeaderView *hv = ui->tableView->horizontalHeader();
 	hv->setStretchLastSection(true);
 	hv->setSectionHidden(0, true);

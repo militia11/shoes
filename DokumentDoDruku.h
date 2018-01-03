@@ -4,23 +4,19 @@
 #include <QtCore/qglobal.h>
 #include <QTextDocument>
 #include <QPrinter>
-
-struct ZamowieniaDruk
-{
-	QStringList captions;
-};
+#include "zamowienie.h"
+#include <vector>
 
 class DokumentDoDruku
 {
 	public:
 		DokumentDoDruku();
 
-		void dodajZamowienia(ZamowieniaDruk p);
+		void dodajZamowienia(std::vector<zamowienieZRozmiaramiStruct> zam);
 		void populateDocumentUsingHtml(QTextDocument *document);
-		QString itemsAsHtmlTable(const ZamowieniaDruk &thePage);
 
 	private:
-		QList<ZamowieniaDruk> pages;
+		std::vector<zamowienieZRozmiaramiStruct> zam;
 };
 
 #endif // DOKUMENTDODRUKU_H

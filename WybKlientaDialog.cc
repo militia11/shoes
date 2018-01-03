@@ -24,18 +24,20 @@ void WybKlientaDialog::aktualizujTabele() {
 	ui->tableView->setSortingEnabled(true);
 	QHeaderView *hv = ui->tableView->horizontalHeader();
 	hv->setStretchLastSection(true);
-	hv->setSectionHidden(0, true);
+	//hv->setSectionHidden(0, true);
 	hv->setSectionHidden(13, true);
 	hv->setSectionHidden(14, true);
 	hv->setSectionHidden(15, true);
 	hv->setDefaultAlignment(Qt::AlignLeft);
+	ui->tableView->setColumnWidth(0, 46);
 	ui->tableView->setColumnWidth(1, 200);
 	ui->tableView->setColumnWidth(2, 135);
 }
 
 void WybKlientaDialog::akceptujKlienta(const QModelIndex index)
-{
-	dbManager->ustawIdAktualnegoKlienta(index);
+{	QModelIndex  idx = proxy->mapToSource(
+				   ui->tableView->selectionModel()->currentIndex());
+	dbManager->ustawIdAktualnegoKlienta(idx);
 	aktualnyKlientNazwa = dbManager->pobierzNazweAktualnegoKlienta();
 	accept();
 }

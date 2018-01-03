@@ -10,6 +10,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QSqlRelationalDelegate>
+#include <QSqlRelationalDelegate>
 
 void MainWindow::logowanie() {
 	QString text("");
@@ -24,20 +25,20 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow) {
 	ui->setupUi(this);
-	nrkar = 67;
-	kl = 138;
-	klnr = 55;
-	wz = 49;
-	oc = 74;
+	nrkar = 58;
+	kl = 84;
+	klnr = 51;
+	wz = 52;
+	oc = 52;
 	sp = 42;
-	ma = 73;
-	kol = 53;
-	wkl = 76;
+	ma = 53;
+	kol = 48;
+	wkl = 52;
 	s123 = 56;
-	uz = 118;
-	ha = 103;
+	uz = 97;
+	ha = 90;
 	daty = 88;
-	spnazproc = 89;
+	spnazproc = 59;
 	ui->tableViewZam->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	ui->toolBar->setIconSize(QSize(36, 36));
 	dbManager = new BazaDanychManager();
@@ -47,21 +48,27 @@ MainWindow::MainWindow(QWidget *parent) :
 	dialogWybModel = new WybModelDialog(dbManager, this);
 	dialognowyKlient = new nowyKlientDialog(this);
 	dialognowyHandl = new NowyHandlowiecDialog(this);
-	dialognowyModel = new nowyModelDialog(this);
-	dialogNoweZamowienie = new noweZamowienieDialog(dialognowyHandl, dialogWybHandl,
-			dbManager,
-			dialogWybModel, dialogWybKlienta,
-			dialognowyKlient, this);
 	dialogKlienci = new klienciDialog(dialognowyKlient, dbManager, this);
 	dialogHandl = new handlowceDialog(dialognowyHandl, dbManager, this);
 	dialogwkladka = new wkladkaDialog(dbManager, this);
-	dialogmodele = new modeleDialog(dialognowyModel, dbManager, this);
 	dialogskory = new skoryDialog(dbManager, this);
 	dialogkolory = new koloryDialog(dbManager, this);
-	dialogspody = new spodyDialog(dbManager, this);
+	dialognspod = new nowySpodDialog(this);
+	dialogspody = new spodyDialog(dialognspod, dbManager, this);
 	dialogocieplenie = new ocieplenieDialog (dbManager, this);
-	dialogmatryce = new matryceDialog(dbManager, this);
+
+	nowaMatryca = new NowaMatrycaDialog(this);
+	dialogmatryce = new matryceDialog(nowaMatryca, dbManager, this);
+
 	dialogwzory = new wzoryDialog(dbManager, this);
+	dialognowyModel = new NowyModelDialog(dialogmatryce, this);
+	dialogmodele = new modeleDialog(dialognowyModel, dbManager, this);
+
+	dialogNoweZamowienie = new noweZamowienieDialog(dialognowyModel,
+			dialognowyHandl, dialogWybHandl,
+			dbManager,
+			dialogWybModel, dialogWybKlienta,
+			dialognowyKlient, this);
 	proxy = new QSortFilterProxyModel(this);
 	proxy->setDynamicSortFilter(true);
 	//logowanie();
@@ -81,7 +88,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	podlaczSygnaly();
 	aktualizujTabele();
 	a();
-	//ui->tableViewZam->setItemDelegate(new QSqlRelationalDelegate(ui->tableViewZam));
 }
 
 void MainWindow::aktualizujTabele() {
@@ -92,6 +98,7 @@ void MainWindow::aktualizujTabele() {
 
 void MainWindow::a()
 {
+	dialognowyModel->exec();
 	//dialogNoweZamowienie->exec();
 }
 
@@ -113,8 +120,8 @@ void MainWindow::stionResized(int logicalIndex, int oldSize, int newSize)
 			break;
 		}
 		case 4:
-			klnr = newSize;
-			ui->lineEditKlientN->setFixedWidth(klnr);
+			ma = newSize;
+			ui->lineEditMa->setFixedWidth(ma);
 			break;
 
 		default:
@@ -147,7 +154,7 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
 			}
 			if (sukces) {
 				QMessageBox::information(this, "ZAKTUALIZOWANO",
-							 QString(" <FONT COLOR='#000080'>Zmieniono na status %1.").arg(
+							 QString(" <FONT COLOR='#000080'>Przeniesiono do <FONT COLOR='#0fff00'><b>%1.").arg(
 								 selectedItem->text().toLower()),
 							 QMessageBox::Ok);
 				dbManager->getModelZamowienia()->select();
@@ -167,10 +174,8 @@ void MainWindow::podlaczSygnaly() {
 		SLOT(ustawieniaBazy()));
 	connect(ui->actionDodajZamowienie , SIGNAL(triggered()), this,
 		SLOT(dodajZam()));
-	connect(ui->actionEdycja , SIGNAL(triggered()), this,
+	connect(ui->actionEdycja, SIGNAL(triggered()), this,
 		SLOT(edytuj()));
-	connect(ui->actionDrukuj_zam_wienia , SIGNAL(triggered()), this,
-		SLOT(drukuj()));
 	connect(ui->tableViewZam, SIGNAL(customContextMenuRequested(const QPoint &)),
 		this,
 		SLOT(ShowContextMenu(const QPoint &)));
@@ -179,18 +184,19 @@ void MainWindow::podlaczSygnaly() {
 
 void  MainWindow::edytuj() {
 	if (ui->actionEdycja->isChecked()) {
-		ui->actionEdycja->setIcon(QIcon(":/zasoby/unlock.png"));
+		ui->actionEdycja->setIcon(QIcon(":/zasoby/lock.png"));
 		ui->actionEdycja->setToolTip("Zablokuj edycję zamówień");
 		ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
 
 	} else {
-		ui->actionEdycja->setIcon(QIcon(":/zasoby/lock.png")) ;
+		ui->actionEdycja->setIcon(QIcon(":/zasoby/unlock.png")) ;
 		ui->actionEdycja->setToolTip("Odblokuj edycję zamówień");
 		ui->tableViewZam->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	}
 }
 
 void MainWindow::dodajZam() {
+	dialogNoweZamowienie->setFixedSize(dialogNoweZamowienie->size());
 	if ( dialogNoweZamowienie->exec() == QDialog::Accepted ) {
 		QMessageBox::information(this, "POWODZENIE",
 					 " <FONT COLOR='#000080'>Dodano zamówienie. ",
@@ -217,7 +223,7 @@ void MainWindow::rozciagnijWiersze() {
 	ui->tableViewZam->setColumnWidth(7, ma);
 	ui->tableViewZam->setColumnWidth(8, kol);
 	ui->tableViewZam->setColumnWidth(9, wkl);
-	ui->tableViewZam->setColumnWidth(25, 46);// suma
+	ui->tableViewZam->setColumnWidth(25, 44); // suma
 	ui->lineEditWzor->setFixedWidth(wz);
 	ui->lineEditO->setFixedWidth(oc);
 	ui->lineEditSpod->setFixedWidth(sp);
@@ -233,12 +239,13 @@ void MainWindow::rozciagnijWiersze() {
 	ui->lineEditzre->setFixedWidth(daty);
 	QHeaderView *hv = ui->tableViewZam->horizontalHeader();
 	hv->setStretchLastSection(true);
-	hv->setSectionHidden(0, true);
+
 	hv->setSectionHidden(26, true);
 	hv->setSectionHidden(34, true);
 	hv->setSectionHidden(36, true);
 	hv->setDefaultAlignment(Qt::AlignLeft);
 
+	ui->tableViewZam->setColumnWidth(0, 35);
 	ui->tableViewZam->setColumnWidth(27, s123);// sk1
 	ui->tableViewZam->setColumnWidth(28, s123);
 	ui->tableViewZam->setColumnWidth(29, s123);
@@ -248,8 +255,7 @@ void MainWindow::rozciagnijWiersze() {
 	ui->lineEditsprod->setFixedWidth(spnazproc);
 	ui->tableViewZam->setColumnWidth(32, daty);
 	ui->tableViewZam->setColumnWidth(33, daty);
-	ui->tableViewZam->setColumnWidth(35, 70);
-	ui->tableViewZam->setColumnWidth(36, uz);
+	ui->tableViewZam->setColumnWidth(35, uz);
 	ui->tableViewZam->setColumnWidth(37, 62);
 	ui->tableViewZam->setColumnWidth(38, ha);
 	connect(hv, SIGNAL(sectionResized (int , int , int)), this,
@@ -267,13 +273,13 @@ void MainWindow::on_akcjaZamknij_triggered() {
 }
 
 void MainWindow::on_tableViewZam_clicked(const QModelIndex &index) {
-	dbManager->setIdZamowieniaModeleForMainWindow(index);
-
 	ui->labelPodglad->clear();
-	QSqlRelationalTableModel *model = dbManager->getModelZamowienia();
-	int id = model->data(model->index(
-					 index.row(),
-					 0)).toInt();
+	QModelIndex  idx = proxy->mapFromSource(
+				   ui->tableViewZam->selectionModel()->currentIndex());
+	int id =  dbManager->getModelZamowienia()->data(
+			  dbManager->getModelZamowienia()->index(idx.row(),
+					  33)).toInt();
+	qDebug() << id;
 	ui->labelPodglad->setPixmap(QPixmap::fromImage(
 						dbManager->getImageZamowienia(id)));
 }
@@ -313,21 +319,70 @@ bool MainWindow::pageSetup(QPrinter *printer) {
 
 void MainWindow::printDocument(QPrinter *printer)
 {	QTextDocument document;
-	populateDocument(&document);
+	dodajZamowieniaDoHtml(&document);
 	document.print(printer);
 }
 
-void MainWindow::populateDocument(QTextDocument *document) {
-	DokumentDoDruku tworzacyDokument;
-	ZamowieniaDruk zamowienia;
-	zamowienia.captions << "1" << "2" << "3" << "4";
-	tworzacyDokument.dodajZamowienia(zamowienia);
-	tworzacyDokument.populateDocumentUsingHtml(document);
+void MainWindow::dodajZamowieniaDoHtml(QTextDocument *document) {
+	QString html("<HTML><HEAD><STYLE type=\"text/css\"<table style=\"font-family:'Times New Roman', serif; font-size: 12px;\">");
+	int counter = 0;
+	for (zamowienieZRozmiaramiStruct zamowienie : zamowieniaDruk) {
+		if (counter % 2 == 0) {
+			html += "<tr>\n";
+		}
+		if (!zamowienie.rozmiary.isEmpty()) {
+			QMap<QString, int> rozm;
+			int suma = zamowienie.rozmiary[15];
+			for (int i = 0; i < 15; i++) {
+				rozm.insert(QString("R%1").arg(36 + i), zamowieniaDruk[0].rozmiary[i]);
+			}
+
+			for (QMap<QString, int>::iterator it = rozm.begin(); it != rozm.end(); ) {
+				if ((*it) == 0) {
+					rozm.erase(it++);
+				} else {
+					++it;
+				}
+			}
+
+			for (QMap<QString, int>::iterator it = rozm.begin(); it != rozm.end(); it++) {
+				qDebug() << it.key() << it.value();
+			}
+
+			QString zamowienieStr = QString("<td>%1</td>").arg(suma);
+			html += zamowienieStr;
+		}
+		if (counter % 2 != 0) {
+			html += "</tr>\n";
+		}
+		counter++;
+	}
+
+	//<tr><td>komórka1</td></tr></td><td>komórka2</td></tr><tr>	<td>komórka3</td>	<td>komórka4</td></tr>
+	//	html += QString("<HTML><HEAD><STYLE type=\"text/css\">"
+	//			"	</style></head></html>");
+
+	//QString html("<HTML><HEAD><STYLE type=\"text/css\"<table border='1' cellpadding='3' cellspacing='0' style='page-break-before: always; page-break-after: auto'>");
+	//	for (int i = 0; i < zamowieniaDruk.count(); ++i) {
+	//		if (i % 2 == 0) {
+	//			html += "<tr>\n";
+	//		}
+	//		html += QString("<td align='center'><p style='font-size:18pt'>%1</p></td>\n")
+	//			.arg(QString("1").toHtmlEscaped());
+	//		if (i % 2 != 0) {
+	//			html += "</tr>\n";
+	//		}
+	//	}
+	//	if (!html.endsWith("</tr>\n")) {
+	//		html += "</tr>\n";
+	//	}
+	html += "</table>";
+	document->setHtml(html);
+	zamowieniaDruk.clear();
 }
 
 void MainWindow::drukuj() {
 	QPrinter printer;
-
 	QMarginsF ma;
 	//	ma.setTop(5.5);
 	//	ma.setLeft(2.7);//0,95
@@ -337,19 +392,35 @@ void MainWindow::drukuj() {
 }
 
 void MainWindow::on_actionKlienci_triggered() {
+	dialogKlienci->setFixedSize(dialogKlienci->size());
 	if (dialogKlienci->exec() == QDialog::Accepted ) {
 	}
 }
 
 void MainWindow::on_actionModele_triggered() {
+	dialogmodele->setFixedSize(dialogmodele->size());
 	if (dialogmodele->exec() == QDialog::Accepted ) {
 	}
 }
 
-void MainWindow::ustawIFiltruj()
-{
+void MainWindow::ustawIFiltruj() {
 	dbManager->filterZamowien.nrZ = ui->lineEditNrKarta->text();
+	dbManager->filterZamowien.ociep = ui->lineEditO->text();
+	dbManager->filterZamowien.uzyt = ui->lineEditUzy->text();
+	dbManager->filterZamowien.wzor = ui->lineEditWzor->text();
+	dbManager->filterZamowien.kolor = ui->lineEditKol->text();
 	dbManager->filterZamowien.mat = ui->lineEditMa->text();
+	dbManager->filterZamowien.wkladka = ui->lineEditWkl ->text();
+	dbManager->filterZamowien.sk1 = ui->lineEdits1 ->text();
+	dbManager->filterZamowien.sk2 = ui->lineEdits2 ->text();
+	dbManager->filterZamowien.sk3 = ui->lineEdits3 ->text();
+	dbManager->filterZamowien.ha = ui->lineEditHan ->text();
+	dbManager->filterZamowien.snaz = ui->lineEditsnaz ->text();
+	dbManager->filterZamowien.sprod = ui->lineEditsprod ->text();
+	dbManager->filterZamowien.wpr = ui->lineEditwpr ->text();
+	dbManager->filterZamowien.rea = ui->lineEditzre ->text();
+	dbManager->filterZamowien.klNaz = ui->lineEditKlientN->text();
+	dbManager->filterZamowien.klNr = ui->lineEditKlient ->text();
 	filtruj();
 }
 
@@ -387,8 +458,22 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	QMainWindow::keyPressEvent(event);
 }
 
+void MainWindow::stworzListeZamowien()
+{
+	QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
+	std::vector<zamowienieZRozmiaramiStruct> zamowienia;
+	int id = 0;
+	for (int i = 0; i < selection.count(); i++)
+	{
+		QModelIndex index = selection.at(i);
+		id = dbManager->getIdZamowieniaZTabeli(index);
+		zamowieniaDruk.append(dbManager->stworzZamowienieZBazy(id));
+	}
+}
+
 void MainWindow::on_actionDrukuj_zam_wienia_triggered()
 {
+	stworzListeZamowien();
 	drukuj();
 }
 
@@ -400,4 +485,26 @@ void MainWindow::on_radioButton_4_clicked() {
 void MainWindow::on_actionWzory_triggered()
 {
 	dialogwzory->exec();
+}
+
+void MainWindow::on_actionMatryce_triggered()
+{
+	dialogmatryce->exec();
+}
+
+void MainWindow::on_actionHandlowce_triggered()
+{
+	dialogHandl->setFixedSize(dialogHandl->size());
+	dialogHandl->exec();
+}
+
+void MainWindow::on_actionSk_ry_triggered()
+{
+	dialogskory->exec();
+}
+
+void MainWindow::on_actionSpody_triggered()
+{
+	dialogspody->setFixedSize(dialogspody->size());
+	dialogspody->exec();
 }

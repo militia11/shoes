@@ -17,7 +17,6 @@
 #include "WybModelDialog.h"
 #include "WybHandlDialog.h"
 #include "NowyHandlowiecDialog.h"
-#include "DokumentDoDruku.h"
 #include "klienciDialog.h"
 #include "handlowceDialog.h"
 #include "wkladkaDialog.h"
@@ -27,9 +26,13 @@
 #include "spodyDialog.h"
 #include "ocieplenieDialog.h"
 #include "matryceDialog.h"
-#include "nowyModelDialog.h"
+#include "NowyModelDialog.h"
 #include "wzoryDialog.h"
+#include "NowaMatrycaDialog.h"
+#include "nowySpodDialogx.h"
 #include <QSortFilterProxyModel>
+#include <QTextDocument>
+
 namespace Ui {
 class MainWindow;
 }
@@ -71,12 +74,20 @@ class MainWindow : public QMainWindow {
 
 		void on_actionWzory_triggered();
 
+		void on_actionMatryce_triggered();
+
+		void on_actionHandlowce_triggered();
+
+		void on_actionSk_ry_triggered();
+
+		void on_actionSpody_triggered();
+
 	private:
 		void keyPressEvent(QKeyEvent *event);
 		void filtruj();
 		void logowanie();
 		bool pageSetup(QPrinter *printer);
-		void populateDocument(QTextDocument *document);
+		void dodajZamowieniaDoHtml(QTextDocument *document);
 		void printDocument(QPrinter *printer);
 		void rozciagnijWiersze();
 		void podlaczSygnaly();
@@ -92,20 +103,23 @@ class MainWindow : public QMainWindow {
 		noweZamowienieDialog *dialogNoweZamowienie;
 		nowyKlientDialog *dialognowyKlient;
 		NowyHandlowiecDialog *dialognowyHandl;
-		nowyModelDialog *dialognowyModel;
 		klienciDialog *dialogKlienci;
 		handlowceDialog *dialogHandl;
 		wkladkaDialog *dialogwkladka;
-		modeleDialog *dialogmodele;
 		skoryDialog *dialogskory;
 		koloryDialog *dialogkolory;
+		nowySpodDialog *dialognspod;
 		spodyDialog *dialogspody;
 		ocieplenieDialog *dialogocieplenie;
+		NowaMatrycaDialog *nowaMatryca;
 		matryceDialog *dialogmatryce;
 		wzoryDialog *dialogwzory;
+		NowyModelDialog *dialognowyModel;
+		modeleDialog *dialogmodele;
 		QSortFilterProxyModel *proxy;
-		void ustawIFiltruj();
 
+		void ustawIFiltruj();
+		QVector<zamowienieZRozmiaramiStruct> zamowieniaDruk;
 		int nrkar;
 		int kl;
 		int klnr;
@@ -120,6 +134,7 @@ class MainWindow : public QMainWindow {
 		int ha ;
 		int daty;
 		int spnazproc;
+		void stworzListeZamowien();
 };
 
 #endif // MAINWINDOW_H

@@ -48,7 +48,10 @@ SOURCES += \
     matryceDialog.cc \
     modeleDialog.cc \
     koloryDialog.cc \
-    nowyModelDialog.cc
+    NowaMatrycaDialog.cc \
+    NowyModelDialog.cc \
+    clickableLabel.cc \
+    nowySpodDialog.cc
 
 HEADERS += \
 		MainWindow.h \
@@ -75,7 +78,11 @@ HEADERS += \
     matryceDialog.h \
     modeleDialog.h \
     koloryDialog.h \
-    nowyModelDialog.h
+    NowaMatrycaDialog.h \
+    NowyModelDialog.h \
+    zamowienie.h \
+    clickableLabel.h \
+    nowySpodDialog.h
 
 FORMS += \
 		MainWindow.ui \
@@ -96,7 +103,9 @@ FORMS += \
     matryceDialog.ui \
     modeleDialog.ui \
     koloryDialog.ui \
-    nowyModelDialog.ui
+    NowaMatrycaDialog.ui \
+    NowyModelDialog.ui \
+    nowySpodDialog.ui
 
 RESOURCES += \
 	zasoby.qrc

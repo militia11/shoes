@@ -5,7 +5,8 @@
 #include <QKeyEvent>
 #include <QDebug>
 #include <QModelIndex>
-noweZamowienieDialog::noweZamowienieDialog(NowyHandlowiecDialog *nh,
+noweZamowienieDialog::noweZamowienieDialog(NowyModelDialog *nowyMod,
+		NowyHandlowiecDialog *nh,
 		WybHandlDialog *wybHandlDialog,
 		BazaDanychManager *db, WybModelDialog *modeleDialog,
 		WybKlientaDialog *dialog,
@@ -19,12 +20,12 @@ noweZamowienieDialog::noweZamowienieDialog(NowyHandlowiecDialog *nh,
 	dialogHandl(wybHandlDialog),
 	nowyKliDialog(nowyKliDialog),
 	nowyHandlDialog(nh),
+	nowyMod(nowyMod),
 	ui(new Ui::noweZamowienieDialog),
 	zamowienie(0),
 	ktoraPozycja(0)
 {
 	ui->setupUi(this);
-
 	ui->lineEditPapier->setVisible(false);
 	ui->lineEditPapier->setText("A");
 	ui->checkBox->setChecked(false);
@@ -53,7 +54,7 @@ void noweZamowienieDialog::obliczSume(QStandardItem *it)
 		wszystkie += zamowienie->data(zamowienie->index(j, 21),
 						  Qt::DisplayRole).toInt();
 	}
-	ui->lcdNumber->display(wszystkie);
+	ui->lcdNumber->setText(QString::number(wszystkie));
 }
 
 void noweZamowienieDialog::keyPressEvent(QKeyEvent *event)
@@ -99,6 +100,7 @@ void noweZamowienieDialog::wyczysc() {
 		delete zamowienie;
 		zamowienie = 0;
 	}
+	ui->tableViewZam->update();
 }
 
 void noweZamowienieDialog::on_buttonBox_accepted()
@@ -200,19 +202,31 @@ void noweZamowienieDialog::showEvent(QShowEvent *e) {
 	}
 }
 
-void noweZamowienieDialog::on_pushButton_7_clicked()
-{
+void noweZamowienieDialog::on_pushButton_7_clicked() {
 	if ( nowyHandlDialog->exec() == QDialog::Accepted ) {
 		dbManager->zachowajHandlowca(nowyHandlDialog->getImie(),
 						 nowyHandlDialog->getNazwisko(), nowyHandlDialog->getSkrot());
 	}
 }
 
-void noweZamowienieDialog::on_checkBox_stateChanged(int arg1)
-{
+void noweZamowienieDialog::on_checkBox_stateChanged(int arg1) {
 	if (arg1 == 0) {
 		ui->lineEditPapier->setVisible(false);
 	} else {
 		ui->lineEditPapier->setVisible(true);
 	}
+}
+
+void noweZamowienieDialog::on_pushButton_8_clicked() {
+	if (nowyMod->exec() == QDialog::Accepted ) {
+		//		dbManager->zachowajModel(nowyMod->getImie(),
+		//						 nowyMod->getNazwisko(), nowyMod->getSkrot());
+	}
+}
+
+void noweZamowienieDialog::on_pushButton_10_clicked() {
+	int row = ui->tableViewZam->selectionModel()->currentIndex().row();
+	zamowienie->removeRow(row);
+	ui->tableViewZam->update(
+	);
 }

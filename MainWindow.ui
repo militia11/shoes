@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1092</width>
-    <height>521</height>
+    <width>1365</width>
+    <height>1000</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -667,7 +667,7 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>14</width>
+          <width>36</width>
           <height>20</height>
          </size>
         </property>
@@ -878,7 +878,7 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>229</width>
+          <width>226</width>
           <height>20</height>
          </size>
         </property>
@@ -1013,6 +1013,22 @@
        </widget>
       </item>
       <item>
+       <spacer name="horizontalSpacer_8">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Minimum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>56</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <widget class="QLineEdit" name="lineEditHan">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -1054,6 +1070,18 @@
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectRows</enum>
       </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+      <attribute name="horizontalHeaderHighlightSections">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderHighlightSections">
+       <bool>false</bool>
+      </attribute>
      </widget>
     </item>
    </layout>
@@ -1077,7 +1105,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1092</width>
+     <width>1365</width>
      <height>25</height>
     </rect>
    </property>
@@ -1100,15 +1128,16 @@
     <property name="title">
      <string>Słowniki</string>
     </property>
-    <addaction name="actionKlienci"/>
     <addaction name="actionHandlowce"/>
-    <addaction name="actionModele"/>
-    <addaction name="actionWzory"/>
-    <addaction name="actionSpody"/>
-    <addaction name="actionOcieplenia"/>
-    <addaction name="actionMatryce"/>
+    <addaction name="actionKlienci"/>
     <addaction name="actionKolory"/>
+    <addaction name="actionMatryce"/>
+    <addaction name="actionModele"/>
+    <addaction name="actionOcieplenia"/>
+    <addaction name="actionSk_ry"/>
+    <addaction name="actionSpody"/>
     <addaction name="actionWk_adki"/>
+    <addaction name="actionWzory"/>
    </widget>
    <addaction name="menuPlik"/>
    <addaction name="menuS_owniki"/>
@@ -1218,6 +1247,11 @@
   <action name="actionWk_adki">
    <property name="text">
     <string>Wkładki</string>
+   </property>
+  </action>
+  <action name="actionSk_ry">
+   <property name="text">
+    <string>Skóry</string>
    </property>
   </action>
  </widget>

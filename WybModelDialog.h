@@ -4,13 +4,13 @@
 #include <QtWidgets/QDialog>
 
 #include "BazaDanychManager.h"
-
+#include <QSortFilterProxyModel>
 namespace Ui {
 class WybModelDialog;
 }
 
 class WybModelDialog : public QDialog
-	{
+{
 		Q_OBJECT
 
 	public:
@@ -24,6 +24,7 @@ class WybModelDialog : public QDialog
 		void showEvent(QShowEvent *e);
 		BazaDanychManager *dbManager;
 		Ui::WybModelDialog *ui;
-	};
+		QSortFilterProxyModel *proxy;
+};
 
 #endif // WYBMODELDIALOG_H
