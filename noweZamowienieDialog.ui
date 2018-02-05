@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>984</width>
-    <height>996</height>
+    <height>999</height>
    </rect>
   </property>
   <property name="palette">
@@ -431,10 +431,10 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>630</x>
-     <y>960</y>
-     <width>341</width>
-     <height>32</height>
+     <x>620</x>
+     <y>961</y>
+     <width>351</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="orientation">
@@ -450,7 +450,7 @@
      <x>10</x>
      <y>150</y>
      <width>961</width>
-     <height>451</height>
+     <height>421</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -462,7 +462,7 @@
    <widget class="QPushButton" name="pushButtonModel">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>350</x>
       <y>10</y>
       <width>41</width>
       <height>41</height>
@@ -492,6 +492,9 @@
       <height>35</height>
      </size>
     </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
    </widget>
    <widget class="QTableView" name="tableViewZam">
     <property name="geometry">
@@ -499,8 +502,11 @@
       <x>10</x>
       <y>60</y>
       <width>941</width>
-      <height>341</height>
+      <height>321</height>
      </rect>
+    </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
     </property>
     <property name="alternatingRowColors">
      <bool>true</bool>
@@ -509,7 +515,7 @@
      <enum>QAbstractItemView::ExtendedSelection</enum>
     </property>
     <property name="selectionBehavior">
-     <enum>QAbstractItemView::SelectRows</enum>
+     <enum>QAbstractItemView::SelectItems</enum>
     </property>
    </widget>
    <widget class="QLabel" name="label_11">
@@ -530,46 +536,12 @@
      <string>Modele</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_8">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>10</y>
-      <width>41</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset resource="zasoby.qrc">
-      <normaloff>:/zasoby/add.png</normaloff>:/zasoby/add.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>28</width>
-      <height>29</height>
-     </size>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="lcdNumber">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>410</y>
-      <width>121</width>
+      <x>820</x>
+      <y>380</y>
+      <width>131</width>
       <height>31</height>
      </rect>
     </property>
@@ -589,7 +561,7 @@
    <widget class="QPushButton" name="pushButton_10">
     <property name="geometry">
      <rect>
-      <x>580</x>
+      <x>410</x>
       <y>10</y>
       <width>41</width>
       <height>41</height>
@@ -611,13 +583,16 @@
     </property>
     <property name="icon">
      <iconset resource="zasoby.qrc">
-      <normaloff>:/zasoby/reset.png</normaloff>:/zasoby/reset.png</iconset>
+      <normaloff>:/zasoby/trash2.png</normaloff>:/zasoby/trash2.png</iconset>
     </property>
     <property name="iconSize">
      <size>
-      <width>33</width>
-      <height>33</height>
+      <width>40</width>
+      <height>40</height>
      </size>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>
@@ -626,7 +601,7 @@
     <rect>
      <x>10</x>
      <y>80</y>
-     <width>961</width>
+     <width>451</width>
      <height>61</height>
     </rect>
    </property>
@@ -669,7 +644,7 @@
    <widget class="QPushButton" name="pushButton_9">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>350</x>
       <y>10</y>
       <width>41</width>
       <height>41</height>
@@ -699,6 +674,9 @@
       <height>35</height>
      </size>
     </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="label_10">
     <property name="geometry">
@@ -718,47 +696,13 @@
      <string>Handlowiec</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_7">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>10</y>
-      <width>41</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset resource="zasoby.qrc">
-      <normaloff>:/zasoby/add.png</normaloff>:/zasoby/add.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>28</width>
-      <height>29</height>
-     </size>
-    </property>
-   </widget>
   </widget>
   <widget class="QFrame" name="frame_2">
    <property name="geometry">
     <rect>
      <x>9</x>
      <y>10</y>
-     <width>961</width>
+     <width>451</width>
      <height>61</height>
     </rect>
    </property>
@@ -801,7 +745,7 @@
    <widget class="QPushButton" name="pushButton_5">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>350</x>
       <y>10</y>
       <width>41</width>
       <height>41</height>
@@ -831,39 +775,8 @@
       <height>35</height>
      </size>
     </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_6">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>10</y>
-      <width>41</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset resource="zasoby.qrc">
-      <normaloff>:/zasoby/add.png</normaloff>:/zasoby/add.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>28</width>
-      <height>29</height>
-     </size>
+    <property name="autoDefault">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QLabel" name="label_8">
@@ -889,9 +802,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>610</y>
+     <y>580</y>
      <width>961</width>
-     <height>231</height>
+     <height>211</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -903,9 +816,9 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>110</x>
       <y>0</y>
-      <width>361</width>
+      <width>251</width>
       <height>31</height>
      </rect>
     </property>
@@ -924,9 +837,9 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>590</x>
+      <x>600</x>
       <y>0</y>
-      <width>361</width>
+      <width>251</width>
       <height>31</height>
      </rect>
     </property>
@@ -942,71 +855,49 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QCalendarWidget" name="calendarWidgetRealizacja">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>30</y>
-      <width>360</width>
-      <height>195</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QCalendarWidget" name="calendarWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>110</x>
       <y>30</y>
-      <width>360</width>
-      <height>195</height>
+      <width>251</width>
+      <height>171</height>
      </rect>
+    </property>
+    <property name="horizontalHeaderFormat">
+     <enum>QCalendarWidget::SingleLetterDayNames</enum>
+    </property>
+    <property name="verticalHeaderFormat">
+     <enum>QCalendarWidget::NoVerticalHeader</enum>
+    </property>
+    <property name="navigationBarVisible">
+     <bool>true</bool>
+    </property>
+    <property name="dateEditEnabled">
+     <bool>false</bool>
     </property>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QCalendarWidget" name="calendarWidgetRealizacja">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>100</y>
-      <width>196</width>
-      <height>61</height>
+      <x>600</x>
+      <y>30</y>
+      <width>251</width>
+      <height>171</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QCheckBox" name="checkBox">
-         <property name="font">
-          <font>
-           <pointsize>13</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_5">
-         <property name="font">
-          <font>
-           <pointsize>13</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Zamówienie papierowe</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineEditPapier"/>
-     </item>
-    </layout>
+    <property name="horizontalHeaderFormat">
+     <enum>QCalendarWidget::SingleLetterDayNames</enum>
+    </property>
+    <property name="verticalHeaderFormat">
+     <enum>QCalendarWidget::NoVerticalHeader</enum>
+    </property>
+    <property name="navigationBarVisible">
+     <bool>true</bool>
+    </property>
+    <property name="dateEditEnabled">
+     <bool>false</bool>
+    </property>
    </widget>
   </widget>
   <widget class="QWidget" name="layoutWidget">
@@ -1024,9 +915,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>850</y>
+     <y>800</y>
      <width>961</width>
-     <height>111</height>
+     <height>171</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -1040,7 +931,7 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>361</width>
+      <width>441</width>
       <height>31</height>
      </rect>
     </property>
@@ -1050,7 +941,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Uwagi 1</string>
+     <string>Opis 1</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -1059,9 +950,9 @@
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>590</x>
+      <x>510</x>
       <y>0</y>
-      <width>361</width>
+      <width>441</width>
       <height>31</height>
      </rect>
     </property>
@@ -1071,7 +962,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Uwagi 2</string>
+     <string>Opis 2</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -1082,23 +973,149 @@
      <rect>
       <x>10</x>
       <y>30</y>
-      <width>361</width>
-      <height>70</height>
+      <width>441</width>
+      <height>131</height>
      </rect>
+    </property>
+    <property name="tabChangesFocus">
+     <bool>true</bool>
+    </property>
+    <property name="backgroundVisible">
+     <bool>false</bool>
+    </property>
+    <property name="centerOnScroll">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QPlainTextEdit" name="plainTextEditU2">
     <property name="geometry">
      <rect>
-      <x>590</x>
+      <x>510</x>
       <y>30</y>
-      <width>361</width>
-      <height>70</height>
+      <width>441</width>
+      <height>131</height>
      </rect>
+    </property>
+    <property name="tabChangesFocus">
+     <bool>true</bool>
+    </property>
+    <property name="backgroundVisible">
+     <bool>false</bool>
+    </property>
+    <property name="centerOnScroll">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>510</x>
+     <y>10</y>
+     <width>461</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLineEdit" name="lineEditPapier">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>341</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>70</pointsize>
+     </font>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: transparent</string>
+    </property>
+    <property name="frame">
+     <bool>false</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="clearButtonEnabled">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>0</y>
+      <width>101</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QCheckBox" name="checkBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Papierowe</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
  </widget>
+ <tabstops>
+  <tabstop>pushButton_5</tabstop>
+  <tabstop>pushButton_9</tabstop>
+  <tabstop>pushButtonModel</tabstop>
+  <tabstop>calendarWidget</tabstop>
+  <tabstop>calendarWidgetRealizacja</tabstop>
+  <tabstop>plainTextEditU1</tabstop>
+  <tabstop>plainTextEditU2</tabstop>
+  <tabstop>tableViewZam</tabstop>
+  <tabstop>lcdNumber</tabstop>
+  <tabstop>pushButton_10</tabstop>
+  <tabstop>lineEditPapier</tabstop>
+  <tabstop>checkBox</tabstop>
+ </tabstops>
  <resources>
   <include location="zasoby.qrc"/>
  </resources>

@@ -446,7 +446,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Dodaj klienta</string>
+        <string>Dodaj wzór</string>
        </property>
        <property name="text">
         <string/>
@@ -484,7 +484,7 @@
       <bool>true</bool>
      </property>
      <property name="selectionMode">
-      <enum>QAbstractItemView::ExtendedSelection</enum>
+      <enum>QAbstractItemView::SingleSelection</enum>
      </property>
      <property name="selectionBehavior">
       <enum>QAbstractItemView::SelectRows</enum>

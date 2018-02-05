@@ -32,12 +32,7 @@ SOURCES += \
 	Klient.cc \
 	BazaDanychManager.cc \
 	CSettings.cc \
-	WybKlientaDialog.cc \
-	WybModelDialog.cc \
-	WybHandlDialog.cc \
 	NowyHandlowiecDialog.cc \
-	Zamowienia.cc \
-	DokumentDoDruku.cc \
     klienciDialog.cc \
     handlowceDialog.cc \
     skoryDialog.cc \
@@ -51,7 +46,16 @@ SOURCES += \
     NowaMatrycaDialog.cc \
     NowyModelDialog.cc \
     clickableLabel.cc \
-    nowySpodDialog.cc
+    nowySpodDialog.cc \
+    ManagerZdjec.cc \
+    ZdjecieDialog.cc \
+    nowyKolorDialog.cc \
+    nowaSkoraDialog.cc \
+    nowywzorDialog.cc \
+    DelegateArrows.cc \
+    DoRozkrojuDialog.cc \
+    RozkrojeDialog.cc \
+    RozniceDialog.cc
 
 HEADERS += \
 		MainWindow.h \
@@ -62,12 +66,7 @@ HEADERS += \
 	Delegate.h \
 	BazaDanychManager.h \
 	CSettings.h \
-	WybKlientaDialog.h \
-	WybModelDialog.h \
-	WybHandlDialog.h \
 	NowyHandlowiecDialog.h \
-	Zamowienia.h \
-	DokumentDoDruku.h \
     klienciDialog.h \
     handlowceDialog.h \
     skoryDialog.h \
@@ -82,16 +81,22 @@ HEADERS += \
     NowyModelDialog.h \
     zamowienie.h \
     clickableLabel.h \
-    nowySpodDialog.h
+    nowySpodDialog.h \
+    ManagerZdjec.h \
+    ZdjecieDialog.h \
+    nowyKolorDialog.h \
+    nowaSkoraDialog.h \
+    nowywzorDialog.h \
+    DelegateArrows.h \
+    DoRozkrojuDialog.h \
+    RozkrojeDialog.h \
+    RozniceDialog.h
 
 FORMS += \
 		MainWindow.ui \
 	ustawieniaform.ui \
 	nowyKlientDialog.ui \
 	noweZamowienieDialog.ui \
-	WybKlientaDialog.ui \
-	WybModelDialog.ui \
-	WybHandlDialog.ui \
 	NowyHandlowiecDialog.ui \
     klienciDialog.ui \
     handlowceDialog.ui \
@@ -105,7 +110,14 @@ FORMS += \
     koloryDialog.ui \
     NowaMatrycaDialog.ui \
     NowyModelDialog.ui \
-    nowySpodDialog.ui
+    nowySpodDialog.ui \
+    ZdjecieDialog.ui \
+    nowyKolorDialog.ui \
+    nowaSkoraDialog.ui \
+    nowywzorDialog.ui \
+    DoRozkrojuDialog.ui \
+    RozkrojeDialog.ui \
+    RozniceDialog.ui
 
 RESOURCES += \
 	zasoby.qrc

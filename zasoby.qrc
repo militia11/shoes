@@ -10,5 +10,8 @@
         <file>zasoby/unlock.png</file>
         <file>zasoby/conn.png</file>
         <file>zasoby/select.png</file>
+        <file>zasoby/change.png</file>
+        <file>zasoby/add2.png</file>
+        <file>zasoby/trash2.png</file>
     </qresource>
 </RCC>

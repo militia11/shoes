@@ -16,10 +16,23 @@ class ocieplenieDialog : public QDialog
 		explicit ocieplenieDialog(BazaDanychManager *db, QWidget *parent = 0);
 		~ocieplenieDialog();
 
+		QString getAktualnyKolor() const;
+
+		int selectExec();
+	private slots:
+
+		void on_pushButton_2_clicked();
+		void wybranoOc(const QModelIndex index);
+	public slots:
+		virtual int exec();
+
 	private:
 		void showEvent(QShowEvent *e);
+		void hideEvent(QHideEvent *e);
+		QString aktualnyKolor;
 		Ui::ocieplenieDialog *ui;
 		BazaDanychManager *dbManager;
+		QSortFilterProxyModel *proxy;
 };
 
 #endif // OCIEPLENIEDIALOG_H

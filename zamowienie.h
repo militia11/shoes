@@ -22,6 +22,15 @@ struct zamowienieStruct {
 	QString sprod;
 	QString wpr;
 	QString rea;
+	QString typ;
+	QString mont;
+	QString r1;
+	QString r2;
+	QString r3;
+	QString r4;
+	QString r5;
+	QString r6;
+	QString spn;
 };
 
 struct zamowienieZRozmiaramiStruct : public zamowienieStruct {

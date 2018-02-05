@@ -20,20 +20,22 @@ class matryceDialog : public QDialog
 
 		QString getAktualnaMatrycaNazwa() const;
 		int selectExec();
+
 	public slots:
 		virtual int exec();
+
 	private slots:
 		void on_pushButton_2_clicked();
 		void wybranoMatryce(const QModelIndex index);
 
 	private:
 		void showEvent(QShowEvent *e);
+		void hideEvent(QHideEvent *e);
 		QString aktualnaMatrycaNazwa;
 		Ui::matryceDialog *ui;
 		BazaDanychManager *dbManager;
 		NowaMatrycaDialog *nowamat;
 		QSortFilterProxyModel *proxy;
-		bool wybieranie;
 };
 
 #endif // MATRYCEDIALOG_H

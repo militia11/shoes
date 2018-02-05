@@ -20,6 +20,8 @@ class NowyHandlowiecDialog : public QDialog
 
 		QString getSkrot() const;
 
+		QString getUwagi() const;
+
 	private slots:
 		void on_buttonBox_accepted();
 		void on_buttonBox_rejected();
@@ -38,6 +40,7 @@ class NowyHandlowiecDialog : public QDialog
 		QString imie;
 		QString nazwisko;
 		QString skrot;
+		QString uwagi;
 		Ui::NowyHandlowiecDialog *ui;
 };
 

@@ -4,6 +4,8 @@
 #include <QtWidgets/QDialog>
 #include "BazaDanychManager.h"
 #include <QSortFilterProxyModel>
+#include "nowywzorDialog.h"
+
 namespace Ui {
 class wzoryDialog;
 }
@@ -13,16 +15,24 @@ class wzoryDialog : public QDialog
 		Q_OBJECT
 
 	public:
-		explicit wzoryDialog(BazaDanychManager *db, QWidget *parent = 0);
+		explicit wzoryDialog(nowywzorDialog * nw,BazaDanychManager *db, QWidget *parent = 0);
 		~wzoryDialog();
+		int selectExec();
 
+		int getAktualnyWzorNr() const;
+
+	public slots:
+		virtual int exec();
 	private slots:
 		void on_pushButton_2_clicked();
+		void wybranoWzor(const QModelIndex index);
 
 	private:
 		void showEvent(QShowEvent *e);
+		void hideEvent(QHideEvent *e);
+		int aktualnyWzorNr;
 		Ui::wzoryDialog *ui;
-		BazaDanychManager *dbManager;
+		BazaDanychManager *dbManager;nowywzorDialog * nw;
 		QSortFilterProxyModel *proxy;
 };
 

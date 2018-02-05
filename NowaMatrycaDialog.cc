@@ -56,4 +56,5 @@ void NowaMatrycaDialog::on_buttonBox_accepted()
 void NowaMatrycaDialog::on_buttonBox_rejected()
 {
 	wyczyscPola();
+	reject();
 }

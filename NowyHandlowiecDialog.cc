@@ -1,6 +1,7 @@
 #include "NowyHandlowiecDialog.h"
 #include "ui_NowyHandlowiecDialog.h"
 #include <QMessageBox>
+
 NowyHandlowiecDialog::NowyHandlowiecDialog(QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::NowyHandlowiecDialog)
@@ -42,6 +43,7 @@ void NowyHandlowiecDialog::on_buttonBox_accepted() {
 		imie = ui->lineEditImie->text();
 		nazwisko = ui->lineEditNazwisko->text();
 		skrot = ui->lineEditSkrot_2->text();
+		uwagi = ui->plainTextEdit->toPlainText();
 
 		wyczyscPola();
 		resetujPrzyciskiWymagane();
@@ -49,26 +51,30 @@ void NowyHandlowiecDialog::on_buttonBox_accepted() {
 	}
 }
 
-void NowyHandlowiecDialog::on_buttonBox_rejected()
-{
+void NowyHandlowiecDialog::on_buttonBox_rejected() {
 	wyczyscPola();
 	resetujPrzyciskiWymagane();
 	reject();
 }
 
-void NowyHandlowiecDialog::wyczyscPola()
-{
+void NowyHandlowiecDialog::wyczyscPola() {
 	ui->lineEditImie->clear();
 	ui->lineEditNazwisko->clear();
 	ui->lineEditSkrot_2->clear();
+	ui->plainTextEdit->clear();
 }
 
-void NowyHandlowiecDialog::resetujPrzyciskiWymagane()
-{
+void NowyHandlowiecDialog::resetujPrzyciskiWymagane() {
 	ui->lineEditImie->setStyleSheet("color:darkblue ;background-color: white;");
 	ui->lineEditNazwisko->setStyleSheet("color:darkblue ;background-color: white;");
 	ui->lineEditSkrot_2->setStyleSheet("color:darkblue ;background-color: white;");
 }
+
+QString NowyHandlowiecDialog::getUwagi() const
+{
+	return uwagi;
+}
+
 QString NowyHandlowiecDialog::getSkrot() const
 {
 	return skrot;

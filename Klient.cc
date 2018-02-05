@@ -1,8 +1,8 @@
 #include "Klient.h"
 
 Klient::Klient(QString nazwa, QString skrot, QString ulica, QString numerDomu,
-	       QString miasto, QString kodPocztowy, QString tel1, QString tel2,
-	       QString fax, QString mail, QString uwagi, QString numerTelefon)
+		   QString miasto, QString kodPocztowy, QString tel1, QString tel2,
+		   QString fax, QString mail, QString uwagi, QString numerTelefon)
 	: nazwa(nazwa),
 	  skrot(skrot),
 	  ulica(ulica),
@@ -20,7 +20,6 @@ QString Klient::getNazwa() const
 {
 	return nazwa;
 }
-
 QString Klient::getSkrot() const
 {
 	return skrot;
@@ -84,12 +83,6 @@ void Klient::setKodPocztowy(QString nowyKodPocztowy)
 QString Klient::getNumerTelefonu() const
 {
 	return numerTelefonu;
-}
-
-QString Klient::toString() const
-{
-	return QString("ID: %1  %2 %3  %4 %5 %6").arg(nazwa).arg(skrot).arg(ulica).arg(
-		       numerDomu).arg(kodPocztowy).arg(miasto);
 }
 
 QString Klient::getTel1() const

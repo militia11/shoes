@@ -6,13 +6,10 @@
 matryceDialog::matryceDialog(NowaMatrycaDialog *nowamat, BazaDanychManager *db,
 				 QWidget *parent) :
 	QDialog(parent),
-	ui(new Ui::matryceDialog), dbManager(db), nowamat(nowamat), proxy(nullptr),
-	wybieranie(false)
+	ui(new Ui::matryceDialog), dbManager(db), nowamat(nowamat), proxy(nullptr)
 {
 	ui->setupUi(this);
 	proxy = new QSortFilterProxyModel(this);
-	connect(ui->tableView, SIGNAL(doubleClicked(const QModelIndex)), this,
-		SLOT(wybranoMatryce(const QModelIndex)));
 }
 
 matryceDialog::~matryceDialog()
@@ -35,10 +32,15 @@ void matryceDialog::showEvent(QShowEvent *e) {
 	hv->setStretchLastSection(true);
 	hv->setSectionHidden(0, true);
 	hv->setDefaultAlignment(Qt::AlignLeft);
+	ui->tableView->sortByColumn(0, Qt::AscendingOrder);
 }
 
-QString matryceDialog::getAktualnaMatrycaNazwa() const
-{
+void matryceDialog::hideEvent(QHideEvent *e) {
+	disconnect(ui->tableView, SIGNAL(doubleClicked(const QModelIndex)), this,
+		   SLOT(wybranoMatryce(const QModelIndex)));
+}
+
+QString matryceDialog::getAktualnaMatrycaNazwa() const {
 	return aktualnaMatrycaNazwa;
 }
 
@@ -49,17 +51,17 @@ void matryceDialog::on_pushButton_2_clicked() {
 	}
 }
 
-void matryceDialog::wybranoMatryce(const QModelIndex index)
-{
+void matryceDialog::wybranoMatryce(const QModelIndex index) {
 	QModelIndex  idx = proxy->mapToSource(
 				   ui->tableView->selectionModel()->currentIndex());
-	dbManager->setNazwaMatrycy(idx);
-	aktualnaMatrycaNazwa = dbManager->getNazwaMatrycy();
+	aktualnaMatrycaNazwa = dbManager->pobierzNazweMatrycy(idx);
 	accept();
 }
 
 int matryceDialog::selectExec() {
 	ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	connect(ui->tableView, SIGNAL(doubleClicked(const QModelIndex)), this,
+		SLOT(wybranoMatryce(const QModelIndex)));
 	return QDialog::exec();
 }
 

@@ -10,7 +10,7 @@ class clickableLabel : public QLabel
 {
 		Q_OBJECT
 	public:
-		clickableLabel();
+		clickableLabel(QWidget *parent);
 
 	signals:
 

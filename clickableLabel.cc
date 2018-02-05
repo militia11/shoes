@@ -1,16 +1,15 @@
 #include "clickableLabel.h"
 #include <QSize>
 #include <QMouseEvent>
-#include <QDebug>
+
 void clickableLabel::mousePressEvent(QMouseEvent *e)
 {
 	QLabel::mousePressEvent(e);
-
 	emit clicked();
-	qDebug() << "SS";
 }
 
-clickableLabel::clickableLabel()
+clickableLabel::clickableLabel(QWidget *parent) : QLabel (parent)
 {
-	//setFixedSieze(QSize(400, 400));
+	setFixedSize(QSize(155, 150));
+	setFrameStyle(QFrame::StyledPanel);
 }
