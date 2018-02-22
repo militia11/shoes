@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1571</width>
-    <height>1072</height>
+    <width>1764</width>
+    <height>1161</height>
    </rect>
   </property>
   <property name="palette">
@@ -428,6 +428,9 @@
   <property name="windowTitle">
    <string>Rozkrój</string>
   </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label_10">
@@ -453,7 +456,7 @@
       <enum>QAbstractItemView::SingleSelection</enum>
      </property>
      <property name="selectionBehavior">
-      <enum>QAbstractItemView::SelectRows</enum>
+      <enum>QAbstractItemView::SelectItems</enum>
      </property>
      <property name="sortingEnabled">
       <bool>true</bool>

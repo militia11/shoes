@@ -55,7 +55,8 @@ SOURCES += \
     DelegateArrows.cc \
     DoRozkrojuDialog.cc \
     RozkrojeDialog.cc \
-    RozniceDialog.cc
+    RozniceDialog.cc \
+    edycjazamowieniadialog.cpp
 
 HEADERS += \
 		MainWindow.h \
@@ -90,7 +91,8 @@ HEADERS += \
     DelegateArrows.h \
     DoRozkrojuDialog.h \
     RozkrojeDialog.h \
-    RozniceDialog.h
+    RozniceDialog.h \
+    edycjazamowieniadialog.h
 
 FORMS += \
 		MainWindow.ui \
@@ -117,7 +119,8 @@ FORMS += \
     nowywzorDialog.ui \
     DoRozkrojuDialog.ui \
     RozkrojeDialog.ui \
-    RozniceDialog.ui
+    RozniceDialog.ui \
+    edycjazamowieniadialog.ui
 
 RESOURCES += \
 	zasoby.qrc

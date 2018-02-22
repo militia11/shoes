@@ -13,7 +13,7 @@ class wkladkaDialog : public QDialog
 		Q_OBJECT
 
 	public:
-		explicit wkladkaDialog(BazaDanychManager *db,QWidget *parent = 0);
+		explicit wkladkaDialog(BazaDanychManager *db, QWidget *parent = 0);
 		~wkladkaDialog();
 		int selectExec();
 
@@ -24,10 +24,6 @@ class wkladkaDialog : public QDialog
 		void wybranoWkl(const QModelIndex index);
 
 	private slots:
-		void on_buttonBox_accepted();
-
-		void on_buttonBox_rejected();
-
 		void on_pushButton_2_clicked();
 
 	private:

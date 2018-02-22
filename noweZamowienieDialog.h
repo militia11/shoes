@@ -50,6 +50,7 @@ class noweZamowienieDialog : public QDialog
 	private:
 		void keyPressEvent(QKeyEvent *event);
 		void showEvent(QShowEvent *e);
+    void hideEvent(QHideEvent *e);
 		void wyczysc();
 
 		QStringList uwagi;

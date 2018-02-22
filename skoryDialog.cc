@@ -110,13 +110,3 @@ void skoryDialog::getceny() {
 void skoryDialog::on_tableViewKlienci_clicked(const QModelIndex &index) {
 	getceny();
 }
-
-void skoryDialog::on_buttonBox_accepted()
-{
-	accept();
-}
-
-void skoryDialog::on_buttonBox_rejected()
-{
-	reject();
-}

@@ -1,17 +1,28 @@
 #include "DoRozkrojuDialog.h"
 #include "ui_DoRozkrojuDialog.h"
 #include "Delegate.h"
+#include "DelegateArrows.h"
 DoRozkrojuDialog::DoRozkrojuDialog(QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::DoRozkrojuDialog), model(nullptr)
 {
 	ui->setupUi(this);
-	//proxy = new QSortFilterProxyModel(this);
+	NotEditableDelegate *del = new NotEditableDelegate(this);
+	for (int i = 0; i < 10; i++) {
+		ui->tableViewZam->setItemDelegateForColumn(i, del);
+	}
+	for (int i = 25; i < 33; i++) {
+		ui->tableViewZam->setItemDelegateForColumn(i, del);
+	}
+	ui->tableViewZam->setItemDelegateForColumn(37, del);
+	DelegateArrows *delArrow = new DelegateArrows(this);
+	for (int i = 10; i < 25; i++) {
+		ui->tableViewZam->setItemDelegateForColumn(i, delArrow);
+	}
 }
 
 DoRozkrojuDialog::~DoRozkrojuDialog() {
 	delete ui;
-	//delete proxy;
 	if (model) {
 		delete model;
 	}
@@ -31,8 +42,6 @@ void DoRozkrojuDialog::showEvent(QShowEvent *e) {
 		delete old;
 		old = 0;
 	}
-	//	proxy->setDynamicSortFilter(true);
-	//	proxy->setSourceModel(model);
 	ui->tableViewZam->setModel(model);
 	QHeaderView *hv = ui->tableViewZam->horizontalHeader();
 	hv->setSectionHidden(0, true);
@@ -65,21 +74,30 @@ void DoRozkrojuDialog::showEvent(QShowEvent *e) {
 	ui->tableViewZam->setColumnWidth(33, 88);
 	ui->tableViewZam->setColumnWidth(34, 88);
 	ui->tableViewZam->setColumnWidth(37, 25);
-	//	NotEditableDelegate *del = new NotEditableDelegate(this);
-	//	for (int i = 0; i < 10; i++) {
-	//		ui->tableViewZam->setItemDelegateForColumn(i, del);
-	//	}
-	//	for (int i = 25; i < 33; i++) {
-	//		ui->tableViewZam->setItemDelegateForColumn(i, del);
-	//	}
-	//	ui->tableViewZam->setItemDelegateForColumn(37, del);
+	QStringList listaZamowienia;
+	listaZamowienia  << "" << "NR ZAM" << "KLI SKRÓT" << "KLI NR"  << "WZÓR"  << "SPÓD" << "KOL" <<
+			 "OCIEP" <<
+			 "MAT" << "WKŁ" << "R36" << "R37" << "R38" << "R39" << "R40"	 << "R41" << "R42" << "R43"
+			 << "R44" << "R45" << "R46" << "R47"	<< "R48" << "R49" << "R50"
+			 << "SUMA"  << "SK1" <<	"SK2" <<	"SK3" << "SP NAZWA" <<
+			 "SP PROD" << "UŻYTKOWNIK" << "HANDLOWIEC" << "DATA WPR" << "DATA REALIZ" << "UWAGI 1" << "UWAGI 2" << "DRUK" << ""
+			 << "" << ""
+			 << ""  << "" << ""
+			 << ""  << "" << ""
+			 << ""  << "" << ""
+			 << ""  << "" << ""
+			 << ""  << "" << ""
+			 << "" << ""  << "" << "";
+	for (int i = 0; i < model->columnCount(); ++i) {
+		model->setHeaderData(i, Qt::Horizontal, listaZamowienia[i]);
+	}
 }
 
-QAbstractItemModel *DoRozkrojuDialog::getModel() const {
+QStandardItemModel *DoRozkrojuDialog::getModel() const {
 	return model;
 }
 
-void DoRozkrojuDialog::setModel(QAbstractItemModel *value) {
+void DoRozkrojuDialog::setModel(QStandardItemModel *value) {
 	if (model) {
 		delete model;
 	}

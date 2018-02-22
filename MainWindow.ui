@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1661</width>
+    <width>1632</width>
     <height>1104</height>
    </rect>
   </property>
@@ -1392,8 +1392,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1661</width>
-     <height>25</height>
+     <width>1632</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPlik">
@@ -1426,7 +1426,15 @@
     <addaction name="actionWk_adki"/>
     <addaction name="actionWzory"/>
    </widget>
+   <widget class="QMenu" name="menuProdukcja">
+    <property name="title">
+     <string>Produkcja</string>
+    </property>
+    <addaction name="actionRozkroje"/>
+    <addaction name="actionR_nice_rozkroje"/>
+   </widget>
    <addaction name="menuPlik"/>
+   <addaction name="menuProdukcja"/>
    <addaction name="menuS_owniki"/>
    <addaction name="menuUstawienia"/>
   </widget>
@@ -1542,6 +1550,16 @@
   <action name="actionSk_ry">
    <property name="text">
     <string>Skóry</string>
+   </property>
+  </action>
+  <action name="actionRozkroje">
+   <property name="text">
+    <string>Rozkroje</string>
+   </property>
+  </action>
+  <action name="actionR_nice_rozkroje">
+   <property name="text">
+    <string>Różnice rozkroje</string>
    </property>
   </action>
  </widget>

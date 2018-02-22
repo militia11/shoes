@@ -42,8 +42,6 @@ class modeleDialog : public QDialog {
 		void zdj3();
 		void zdj4();
 		void on_pushButton_2_clicked();
-		void on_buttonBox_accepted();
-		void on_buttonBox_rejected();
 		void on_pushButton_3_clicked();
 		void on_tableView_clicked(const QModelIndex &index);
 		void on_pushButtonSzukaj_clicked();

@@ -2,7 +2,6 @@
 #define DOROZKROJUDIALOG_H
 
 #include <QtWidgets/QDialog>
-#include <QAbstractItemModel>
 #include <QStandardItemModel>
 #include <QSqlQueryModel>
 
@@ -19,30 +18,18 @@ class DoRozkrojuDialog : public QDialog {
 
 		void setZamowienia(const std::vector<int> &value);
 
-		QAbstractItemModel *getModel() const;
-		void setModel(QAbstractItemModel *value);
+		QStandardItemModel *getModel() const;
+		void setModel(QStandardItemModel *value);
 
 	private slots:
 		void on_buttonBox_accepted();
-		void on_buttonBox_rejected();
-
-		//	public slots:
-		//		virtual int exec();
+        void on_buttonBox_rejected();
 	private:
-		void copy(QStandardItemModel *from, QStandardItemModel *to)
-		{
-			to->clear();
-			for (int i = 0 ; i < from->rowCount() ; i++)
-			{
-				to->appendRow(from->item(i)->clone());
-			}
-		}
 
 		void showEvent(QShowEvent *e);
 		Ui::DoRozkrojuDialog *ui;
 		std::vector<int> zamowienia;
-		QAbstractItemModel *model;
-		//QSortFilterProxyModel *proxy;
+		QStandardItemModel *model;
 };
 
 #endif // DOROZKROJUDIALOG_H

@@ -207,13 +207,3 @@ void spodyDialog::on_tableView_clicked(const QModelIndex &index) {
 	label3->setPixmap(QPixmap::fromImage(image3));
 	label4->setPixmap(QPixmap::fromImage(image4));
 }
-
-void spodyDialog::on_buttonBox_accepted()
-{
-	accept();
-}
-
-void spodyDialog::on_buttonBox_rejected()
-{
-	reject();
-}

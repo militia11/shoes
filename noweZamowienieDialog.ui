@@ -484,12 +484,12 @@
     </property>
     <property name="icon">
      <iconset resource="zasoby.qrc">
-      <normaloff>:/zasoby/select.png</normaloff>:/zasoby/select.png</iconset>
+      <normaloff>:/zasoby/add.png</normaloff>:/zasoby/add.png</iconset>
     </property>
     <property name="iconSize">
      <size>
-      <width>35</width>
-      <height>35</height>
+      <width>31</width>
+      <height>31</height>
      </size>
     </property>
     <property name="autoDefault">
@@ -512,7 +512,7 @@
      <bool>true</bool>
     </property>
     <property name="selectionMode">
-     <enum>QAbstractItemView::ExtendedSelection</enum>
+     <enum>QAbstractItemView::SingleSelection</enum>
     </property>
     <property name="selectionBehavior">
      <enum>QAbstractItemView::SelectItems</enum>
@@ -1060,7 +1060,7 @@
      <rect>
       <x>340</x>
       <y>0</y>
-      <width>101</width>
+      <width>104</width>
       <height>131</height>
      </rect>
     </property>

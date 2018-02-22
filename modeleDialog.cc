@@ -203,14 +203,6 @@ void modeleDialog::on_pushButton_2_clicked() {
 	nowyModDialog->exec();
 }
 
-void modeleDialog::on_buttonBox_accepted() {
-	accept();
-}
-
-void modeleDialog::on_buttonBox_rejected() {
-	reject();
-}
-
 void modeleDialog::showPhoto(QImage im) {
 	dialogZdj->setLabel(im);
 	dialogZdj->exec();

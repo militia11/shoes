@@ -29,11 +29,6 @@ class skoryDialog : public QDialog
 		void on_pushButton_2_clicked();
 
 		void on_tableViewKlienci_clicked(const QModelIndex &index);
-
-		void on_buttonBox_accepted();
-
-		void on_buttonBox_rejected();
-
 	private:
 		void showEvent(QShowEvent *e);
 		void hideEvent(QHideEvent *e);
@@ -44,6 +39,6 @@ class skoryDialog : public QDialog
 		QString aktualnaSkoraNazwa;
 		QSqlQueryModel *m ;
 		void getceny();
-	};
+};
 
 #endif // SKORYDIALOG_H

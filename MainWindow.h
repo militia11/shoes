@@ -35,6 +35,8 @@
 #include "nowywzorDialog.h"
 #include "DoRozkrojuDialog.h"
 #include "RozkrojeDialog.h"
+#include "RozniceDialog.h"
+#include "edycjazamowieniadialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -52,7 +54,6 @@ class MainWindow : public QMainWindow {
 
 	private slots:
 		void refreshTable();
-		void beforeupdate(int row, QSqlRecord &record);
 		void updateZamSum(const QModelIndex &topLeft, const QModelIndex &bot,
 				  const QVector<int> &);
 		void stionResized (int logicalIndex, int oldSize, int newSize);
@@ -91,6 +92,10 @@ class MainWindow : public QMainWindow {
 		void on_actionOcieplenia_triggered();
 		void on_radioButton_5_clicked();
 
+		void on_actionRozkroje_triggered();
+
+		void on_actionR_nice_rozkroje_triggered();
+
 	private:
 		void keyPressEvent(QKeyEvent *event);
 		void filtruj();
@@ -127,7 +132,9 @@ class MainWindow : public QMainWindow {
 		NowyModelDialog *dialognowyModel;
 		modeleDialog *dialogmodele;
 		RozkrojeDialog *rozkroje;
-		DoRozkrojuDialog *dorozkroku;
+		DoRozkrojuDialog *dorozkroju;
+		RozniceDialog *roznicerozkroje;
+        EdycjaZamowieniaDialog *dialogEdycjaZam;
 		QSortFilterProxyModel *proxy;
 
 		void ustawIFiltruj();
@@ -154,6 +161,7 @@ class MainWindow : public QMainWindow {
 		void createCombos();
 		void setSumaZamowien();
 
+                QString getNrZam(QModelIndex idx);
 };
 
 #endif // MAINWINDOW_H

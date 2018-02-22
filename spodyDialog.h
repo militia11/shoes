@@ -46,10 +46,6 @@ class spodyDialog : public QDialog
 
 		void on_tableView_clicked(const QModelIndex &index);
 
-		void on_buttonBox_accepted();
-
-		void on_buttonBox_rejected();
-
 	private:
 		void showEvent(QShowEvent *e);
 		void hideEvent(QHideEvent *e);

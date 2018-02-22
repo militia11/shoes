@@ -434,7 +434,7 @@
      <x>10</x>
      <y>240</y>
      <width>1481</width>
-     <height>681</height>
+     <height>711</height>
     </rect>
    </property>
    <property name="alternatingRowColors">
@@ -448,22 +448,6 @@
    </property>
    <property name="sortingEnabled">
     <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>1150</x>
-     <y>920</y>
-     <width>341</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_2">
