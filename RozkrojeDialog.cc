@@ -233,135 +233,106 @@ void RozkrojeDialog::dodajZamowieniaDoHtml(QTextDocument *document) {
         "<P STYLE=\"margin-right: -0.51in; margin-bottom: 0in; background: transparent; line-height: 100%; page-break-before: auto\"><BR></P> "
         " </body> </html > ";
 
-
     //            "</table>"
     //            "<p><span class = rvts3><br> </span > </p > "
 
     document->setHtml(html);
+
+    // ///////////////
+//    QString html("<html><head><meta content=\"text/html\"><style type=\"text/css\"></style></head><body><div>"
+//                 "    <table>"
+//                 "<tr>");
+//    int counter = 0;
+//    for (zamowienieZRozmiaramiStruct zamowienie : zamowieniaDruk) {
+//        if (counter % 2 == 0) {
+//            html += "<tr>\n";
+//        }
+//        if (!zamowienie.rozmiary.isEmpty()) {
+//            html += zamowienieTabelka(zamowienie);
+//        }
+//        if (counter % 2 != 0) {
+//            html += " < / tr > \n";
+//        }
+//        counter++;
+//    }
+
+//    html += "</table></div > "
+//            "<p><span class = rvts3><br> </span > </p > "
+//            " </body> </html > ";
+//    document->setHtml(html);</td >
+    // /////
 }
 
+
 QString RozkrojeDialog::zamowienieTabelka(zamowienieZRozmiaramiStruct zamowienie) {
-    QString wynik = QString("<TABLE border=1  WIDTH=317 CELLPADDING=4 CELLSPACING=0 style=\"border-width: 1px; border-collapse: collapse;\">	"
-                            "<COL WIDTH=42>	<COL WIDTH=62>	<COL WIDTH=45>	<COL WIDTH=37>	<COL WIDTH=22>	<COL WIDTH=3>	<COL WIDTH=48>	<TR VALIGN=TOP>		"
-                            "<TD WIDTH=42 STYLE=\"border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; "
-                            "border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; "
-                            "padding-right: 0in\">			<P><FONT SIZE=2>DATA:</FONT></P><P><BR>"
-                            "</P></TD><TD WIDTH=62 STYLE=\"border-top: 1px solid #000000; border-bottom: "
-                            "1px solid #000000; border-left: 1px solid #000000; border-right: none; "
-                            "padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in\">"
-                            "<P><FONT SIZE=2>KLIENT:</FONT></P></TD><TD WIDTH=45 STYLE=\"border-top: 1px solid #000000;"
-                            "border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none;"
-                            " padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in\">	"
-                            "<P><FONT SIZE=2>NR ZAM:</FONT></P>		</TD>		<TD COLSPAN=2 WIDTH=67 STYLE=\"border-top:"
-                            "1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000;"
-                            " border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in;"
-                            "padding-right: 0in\">			<P><FONT SIZE=2>NR ROZKROJU</FONT></P>"
-                            "</TD>		<TD COLSPAN=2 WIDTH=59 STYLE=\"border: 1px solid #000000; padding: 0.04in\">"
-                            "<P><FONT SIZE=2>ZLECAJĄCY</FONT></P>		</TD>	</TR>	<TR VALIGN=TOP>"
-                            "<TD WIDTH=42 STYLE=\"border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; "
-                            "border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in\">"
-                            "<P><FONT SIZE=2>WZÓR</FONT></P>	</TD><TD WIDTH=62 STYLE=\"border-top: none; border-bottom: 1px solid #000000; "
-                            "border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; "
-                            "padding-right: 0in\"><P><FONT SIZE=2>Spód</FONT></P>		</TD>		<TD WIDTH=45 STYLE=\"border-top: none; border-bottom: 1px "
-                            "solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; "
-                            "padding-right: 0in\">			<P><FONT SIZE=2>KOLOR</FONT></P>		</TD>		<TD WIDTH=37 STYLE=\"border-top: none; border-bottom: 1px "
-                            "solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in\">"
-                            "<P><FONT SIZE=2>OCIE</FONT></P>		</TD>		<TD COLSPAN=2  WIDTH=33 STYLE=\"border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid"
-                            " #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in\">			<P><FONT SIZE=2>MAT</FONT></P>		"
-                            "</TD>		<TD WIDTH=48 STYLE=\"border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; "
-                            "padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in\">			<P><FONT SIZE=2>WKŁ</FONT></P>		</TD>	</TR>	<TR VALIGN=TOP>		<TD ROWSPAN=3 COLSPAN=4"
-                            " WIDTH=210 STYLE=\"border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in;"
-                            " padding-left: 0.04in; padding-right: 0in\">			<P><BR>			</P>		</TD>		<TD ROWSPAN=3 COLSPAN=2 WIDTH=33 STYLE=\"border-top: none; "
-                            "border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in\">"
-                            "<P><FONT SIZE=2>SUMA</FONT></P>		</TD>		<TD WIDTH=48 STYLE=\"border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px"
-                            " solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in\">			<P><FONT SIZE=2>KROJ</FONT></P>		</TD>	</TR>	<TR VALIGN=TOP>		"
-                            "<TD WIDTH=48 STYLE=\"border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right:"
-                            " 0.04in\">			<P><FONT SIZE=2>SZWALNIA</FONT></P>		</TD>	</TR>	<TR VALIGN=TOP>		<TD WIDTH=48 STYLE=\"border-top: none; border-bottom: 1px solid #000000; border-left: 1px"
-                            " solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in\">			<P><FONT SIZE=2>MONTAŻ</FONT></P>"
-                            "</TD>	</TR>	<TR>		<TD COLSPAN=7 WIDTH=307 VALIGN=TOP STYLE=\"border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid "
-                            "#000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in\">			<P><FONT SIZE=2>U1</FONT></P>		</TD>	</TR>	<TR>		<TD COLSPAN=7"
-                            " WIDTH=307 VALIGN=TOP STYLE=\"border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; "
-                            "padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in\">"
-                            "			<P><FONT SIZE=2>U2</FONT></P>		</TD>	</TR></TABLE>"
-                            "");
+//padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in\"
+    QString wynik =
+        QString("<td><TABLE border=1  WIDTH=340 CELLPADDING=0 CELLSPACING=-1 style=\"border-width: 1px; border-collapse: collapse;font-family:'Times New Roman', serif;font-size: 9px;\">"
+                "<COL WIDTH=52>	<COL WIDTH=45>	<COL WIDTH=48>	<COL WIDTH=38>	<COL WIDTH=37>	<COL WIDTH=70>	<TR VALIGN=TOP>		"
+                "<TD WIDTH=52 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">"
+                "<P>DATA:</P>"
+                " <p style=\"font-size: 9px;\">20-02-1986%1</p>"
+                " <p style=\"font-size: 9px;\">%220-02-1986</p>"
+
+                "<P><BR></P></TD><TD WIDTH=45 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">"
+                "<P>KLIENT:</P>"
+                "</TD>		"
+
+                "<TD WIDTH=53 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px;  border-right: none;\"><p>NR ZAM:</p>"
+                "<P>NR ZAMxxxxxxxxxx:</P>		</TD>		"
+
+                "<TD COLSPAN=2 WIDTH=83 STYLE=\"border-top: 1px solid #000000; border-bottom: 1px solid #000000; "
+                "border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in\">	"
+                "		<P>NR ROZKROJU</P>		</TD>		<TD WIDTH=70 STYLE=\"border: 1px solid #000000; padding: 0.04in\">			"
+                "<P>ZLECAJĄCY</P>		</TD>	</TR>"
 
 
-//        QString("<td><table border=1 cellpadding=0 cellspacing=-1 style=\"border-width: 1px; border-collapse: collapse;font-family:'Times New Roman', serif;font-size: 10px;\">"
-//                "<tr valign=top>"
-//                "<td width=81 height=84 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\"><p  >DATA:</p>"
-//                "<p style=\"font-size: 13px;\">%1&nbsp;&nbsp;&nbsp;&nbsp;%2</p>"
-//                "</td>"
-//                "<td colspan=2 width=193 height=84 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\"><p >ZAM&#211;WIENIE:</p><p style=\"font-size: 13px;\">%3</p>"
-//                "</td>"
-//                "<td width=118 height=84 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px;\"><p >ZLECAJ&#260;CY:</p><p style=\"font-size: 13px;\">%4</p>"
-//                "</td>"
-//                "</tr>"
-//                "<tr valign=top>"
-//                "<td width=81 height=84 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\"><p >WZ&#211;R:</p><p style=\" font-size: 13px;\">%5</p>"
-//                "</td>"
-//                "<td width=54 height=84 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px;  border-right: none;\"><p>SPODY:</p><p style=\"font-size: 13px;\">%6</p>"
-//                "</td>"
-//                "<td width=68 height=84 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\"><p >KOLOR SK&#211;RA</p><p style=\"font-size: 13px;\">%7</p>"
-//                "</td>"
-//                "<td width=81 height=84 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px;\"><p >SZARFIARZ:</p><p style=\";font-size: 13px;\"></p></span></p>"
-//                "</td>"
-//                "</tr>").arg(zamowienie.wpr.toHtmlEscaped(), zamowienie.rea.toHtmlEscaped(), zamowienie.nrZ.toHtmlEscaped(),
-//                             zamowienie.klNaz.toHtmlEscaped(), zamowienie.wzor.toHtmlEscaped(), zamowienie.snaz.toHtmlEscaped(),
-//                             zamowienie.kolor.toHtmlEscaped());
+                "	<TR VALIGN=TOP>		"
+                "<TD WIDTH=52 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\""
+                "<P>WZÓR</P><P>xxx</P></TD>		"
 
-//    QMap<QString, int> rozm;
-//    int suma = zamowienie.rozmiary[15];
-//    for (int i = 0; i < 15; i++) {
-//        int id = 36 + i;
-//        rozm.insert(QString("R %1").arg(id),
-//                    zamowienie.rozmiary[i]);
-//    }
+                "<TD WIDTH=45 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">"
+                "<P>SPÓD</P>	<P>SPÓDx</P>	</TD>	"
 
-//    for (QMap<QString, int>::iterator it = rozm.begin(); it != rozm.end();) {
-//        if ((*it) == 0) {
-//            rozm.erase(it++);
-//        } else {
-//            ++it;
-//        }
-//    }
+                "	<TD WIDTH=48 STYLE=\"border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in\">"
+                "	<P>KOLOR</P>	<P>KOLORx</P>	</TD>		"
 
-//    for (QMap<QString, int>::iterator it = rozm.begin(); it != rozm.end(); it++) {
-//        //  qDebug() << it.key() << it.value();
-//    }
+                "<TD WIDTH=38 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">"
+                "<P>OCIE</P>	<P>OCIEx</P>	</TD>		"
 
-    //wynik += QString (
-    //        < / td > ");
-    //QString zamowienm,,ieStr = QString(% 1").arg(suma);
-//    wynik += QString("<tr valign=top>"
-//                     "<td colspan=2 rowspan=2 width=174 height=29 valign=top style=\"border-width : 0px; border-color: #000000; border-style: solid; padding: 0px; border-top: none; border-right: none;\">"
-//                     "<table border=1 cellpadding=9 cellspacing=-1 style=\"border-collapse: collapse;font-family:'Times New Roman', serif;font-size: 14px;\">"
-//                     "<tr>"
-//                     "<td ><u>R36</u><br>1</td>"
-//                     " <td><u>R37</u></u><br>8</td><td><p><u>R38</u><br>21</p></td><td><p><u>R39</u><br>10</p></td>"
-//                     " <td border=1 style=\"border-width: 3px; border-color: #000000; border-style: solid; \"><u>R43</u></u><br>8</td><td><p><u>R46</u><br>21</p></td><td><p><u>R47</u><br>10</p></td>"
-//                     " <td border=1  style=\"border-width : 3px; border-color: #000000; border-style: solid; \"><u>R48</u><br>18</td></tr>"
+                "<TD WIDTH=37 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">			<P>MAT</P>		<P>MATx</P>	</TD>		"
 
-//                     "<tr>"
-//                     "<td><u>R49</u><br>1</td>"
-//                     " <td><u>R50</u></u><br>8</td>"
-//                     "</tr>"
+                "<TD WIDTH=70 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">			<P>WKŁ</P>	<P>WKŁx</P>	</TD>	</TR>"
 
-//                     "</table>"
 
-//                     "</td>"
-//                     "<td rowspan=2 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-top: none; border-right: none;\">SUMA:</td>"
-//                     "<td width = 128 height = 48 valign = top style = \"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-top: none;\"><p>PRZYJMUJ&#260;CY:</p><p style=\"font-size: 13px;\"></p>"
-//                     " </td> </tr> "
-//                     "<tr valign = top>"
-//                     "<td width = 128 height = 48 valign = top style = \"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-top: none;\"><p>MONTA&#379;:</p><p style=\"font-size: 13px;\"></p>"
-//                     " </td> </tr> "
-//                     "<tr valign = top>"
-//                     "<td colspan = 4 width = 530 height = 54 valign = top style = \"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-top: none;\"><p>UWAGI 1: < / p > <p style = \"font-size: 13px;\">jakies uwagi < / p > "
-//                     " </td > </tr> "
-//                     "<tr>"
-//                     "<td colspan = 4 width = 530 height = 54 valign = top style = \"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-top: none;\"><p>UWAGI 2: < / p > <p style = \"font-size: 13px;\">jakies uwagi < / p > "
-//                     " </td > </tr></table ></td >").arg(zamowienie.nrZ.toHtmlEscaped(),
-//                             zamowienie.klNaz.toHtmlEscaped());
+
+                "<TR VALIGN=TOP>		"
+                "<TD ROWSPAN=3 COLSPAN=4 WIDTH=207 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">	"
+                "<P><BR></P></TD>		"
+
+                "<TD ROWSPAN=3 WIDTH=37 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">	"
+                "<P>SUMA</P>	<P>SUMAxx</P>	</TD>	"
+
+
+                "<TD WIDTH=70 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">			"
+                "<P>KROJ</P>		</TD>	</TR>"
+
+
+                "<TR VALIGN=TOP>	"
+                "	<TD WIDTH=70 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">			<P>SZWALNIA</P>		</TD>	</TR>	"
+
+
+
+                "<TR VALIGN=TOP>	"
+                "<TD WIDTH=70 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">			<P>MONTAŻ</P>		</TD>	</TR>	<TR>"
+
+                "<TD COLSPAN=6 WIDTH=330 VALIGN=TOP STYLE=\"border-top: none;"
+                " border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in\">	"
+                "<P>U1</P>	<P>U1xxxxxx</P>	</TD>	</TR>	<TR>		"
+
+                "<TD COLSPAN=6 WIDTH=330 VALIGN=TOP STYLE=\"border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid"
+                " #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in\">			<P>U2</P><P>U2xxxxxxxxxxx</P>		</TD>	</TR></TABLE></td>"
+               );
 
     return wynik;
 }
