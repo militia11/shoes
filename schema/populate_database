@@ -1,0 +1,86 @@
+INSERT INTO `klienci` VALUES (1,'ACL SP. Z.O.O.','ACL','Zawiercie','42-400','Leśna','123','32544898','600544898','600544898','320544898','stachowiak@onet.pl','stały klient',2,0,2),(2,'Adamski DI SP. Z.O.O.','Adamski','Gliwice','41-100','Akacjowa','12/44','32056898','600544898','634444898','326544898','andy@onet.pl','inne',4,2,2),(3,'Retro SP. Z.O.O.','Retro','Gliwice','41-100','Maj','2','345456898','504544898','534444898','325544898','retro@onet.pl','',0,0,0),(4,'MEMO SP. Z.O.O.','MEMO','Zawiercie','42-400','Lisia','1','32544898','600544898','600544898','320544898','memo@onet.pl','stały klient',2,0,2),(5,'Wenek sklep','Jakiś','Mrzygłodzka','32-500','Janków','4','','','','','','',0,0,0),(9,'Gonim buty','Janków','Leśna','29-211','Machów','2',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0),(10,'ddqed','de','dewdwed','edwqd','deqde','dadffeqffe',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0),(11,'ji','ji','ji','ji','ji','sw',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0),(12,'xxdwd','deded','edw','edwd','qdewd','edwdqde',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0),(13,'swws','wswqs','wsqswqs','ed','ded','ded',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0),(14,'sqws','wsqws','swqs','de','ede','de',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0),(15,'dedq','dewd','dew','dedd','ededwd','Ważne pole ',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0),(16,'dewd','ewdedd','ewde','ewde','edew','ee',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0),(17,'dewdeewd','ewdwed','wdewdw','edewdw','eddwe','dw',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0),(18,'ferfref','ref','ref','rferf','fref','refr',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0),(19,'22222222222222','dee','ded','dede','de','ede',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0),(20,'dewdedew','ewdewd','dewd','ed','ewde','wdw',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0),(21,'fdcd','fcfdc','fdcdf','cdfcf','dcdfcfdc','fdc',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0),(22,'rfefr','fer','refrefre','ferf','f','fref',NULL,NULL,NULL,'',NULL,NULL,0,0,0),(23,'deqd','wedew','dewd','ewdewd','ewd','wed','5784584895','389387289','382732783','327382737','anim@jaable.com','inne',0,0,0),(24,'j','i','m','i','i','i',NULL,NULL,NULL,'',NULL,'',0,0,0),(25,'Wank ','Mazur','ZawiercieQ','dfe','fjief','efef','','','','','','',0,0,0);
+
+INSERT INTO `obuwie_db`.`kolor` (`kolor`, `sk1`, `dost_sk1`, `sk2`, `dost_sk2`, `sk3`, `dost_sk3`, `kolor_sk_dominujacy`) VALUES (101, 'WEST 930 MAT', 'MARKI', 'F-4', 'MARKI', 'BIO 022 CZEKOLADA', 'F-5', 'czerwony');
+INSERT INTO `obuwie_db`.`kolor` (`kolor`, `sk1`, `dost_sk1`, `sk2`, `dost_sk2`, `sk3`, `dost_sk3`, `kolor_sk_dominujacy`) VALUES (22, 'FLOTER CZARNY', 'GOFAR', 'WEST 60 MAT', 'MARKI', 'FLOTER CZARNY', 'BOND 3', 'czerwony');
+INSERT INTO `obuwie_db`.`kolor` (`kolor`, `sk1`, `dost_sk1`, `sk2`, `dost_sk2`, `sk3`, `dost_sk3`, `kolor_sk_dominujacy`) VALUES (3, 'F-5', 'BWS', 'F-4','BWS', 'CRAZY 17', 'FLOTER CZARNY', 'zielony');
+INSERT INTO `obuwie_db`.`kolor` (`kolor`, `sk1`, `dost_sk1`, `sk2`, `dost_sk2`, `sk3`, `dost_sk3`, `kolor_sk_dominujacy`) VALUES (5, 'FLOTER CZARNY', 'BWS','BOND-8', 'BWS', 'FLOTER CZARNY', 'BOND 4', 'niebieski');
+
+INSERT INTO `obuwie_db`.`wzory` (`nr_wzoru`) VALUES (1);
+INSERT INTO `obuwie_db`.`wzory` (`nr_wzoru`) VALUES (2);
+INSERT INTO `obuwie_db`.`wzory` (`nr_wzoru`) VALUES (3);
+INSERT INTO `obuwie_db`.`wzory` (`nr_wzoru`) VALUES (4);
+INSERT INTO `obuwie_db`.`wzory` (`nr_wzoru`) VALUES (5);
+
+INSERT INTO `obuwie_db`.`matryce` (`nazwa`, `info_nazwa`) VALUES ('jakaś matryca', 'LASER POZIOMY');
+INSERT INTO `obuwie_db`.`matryce` (`nazwa`, `info_nazwa`) VALUES ('matryca 2', 'DZIURKI');
+INSERT INTO `obuwie_db`.`matryce` (`nazwa`, `info_nazwa`) VALUES ('matryca 3', 'LASER POZIOMY');
+
+INSERT INTO `obuwie_db`.`ocieplenia` (`rodzaj`) VALUES ('KOC');
+INSERT INTO `obuwie_db`.`ocieplenia` (`rodzaj`) VALUES ('NAT');
+INSERT INTO `obuwie_db`.`ocieplenia` (`rodzaj`) VALUES ('SZT');
+
+INSERT INTO wkladka (rodzaj) VALUES ("rodzaj1");
+INSERT INTO wkladka (rodzaj) VALUES ("rodzaj2");
+INSERT INTO wkladka (rodzaj) VALUES ("rodzaj3");
+INSERT INTO `obuwie_db`.`skora` (nazwa) VALUES ('derka');
+INSERT INTO `obuwie_db`.`skora` (nazwa) VALUES ('best quality');
+
+insert into cena (cena, data, skora_id) values ('200', '12.01.2017', 1);
+insert into cena (cena, data, skora_id) values ('300', '13.01.2017', 1);
+insert into cena (cena, data, skora_id) values ('500', '13.01.2017', 1);
+
+
+INSERT INTO `obuwie_db`.`handlowce` (`imie`, `nazwisko`, `skrot`) VALUES ('stefan', 'nas', 'han1');
+INSERT INTO `obuwie_db`.`handlowce` (`imie`, `nazwisko`, `skrot`) VALUES ('adam', 'nsas', 'handl 2');
+
+#CREATE TRIGGER historia_cen AFTER UPDATE ON skora FOR EACH ROW insert into cena (cena, data, skora_id) values (NEW.aktualna_cena, CURDATE() , NEW.id);
+
+insert into typ (nazwa) values ('DAMSKI');
+insert into typ (nazwa) values ('MĘSKI');
+
+insert into rodzaj_montazu (nazwa) values ('BEZPAS');
+insert into rodzaj_montazu (nazwa) values ('CALIF');
+insert into rodzaj_montazu (nazwa) values ('ĆWIEK');
+insert into rodzaj_montazu (nazwa) values ('FLEX PAS');
+insert into rodzaj_montazu (nazwa) values ('FUSBET');
+insert into rodzaj_montazu (nazwa) values ('MOKA');
+insert into rodzaj_buta (nazwa) values ('CZUŁENKO');
+
+insert into rodzaj_buta (nazwa) values ('KLAPEK');
+insert into rodzaj_buta (nazwa) values ('PÓŁBUT');
+insert into rodzaj_buta (nazwa) values ('SANDAŁ');
+insert into rodzaj_buta (nazwa) values ('ZIMA');
+
+
+insert into rodzaj_buta_2 (nazwa) values ('KLAMRA');
+insert into rodzaj_buta_2 (nazwa) values ('RZEP');
+insert into rodzaj_buta_2 (nazwa) values ('SZNUR');
+insert into rodzaj_buta_2 (nazwa) values ('SZNUR - SUW');
+insert into rodzaj_buta_2 (nazwa) values ('WSUWKA');
+
+insert into rodzaj_buta_3 (nazwa) values ('CASU - WIZYT');
+insert into rodzaj_buta_3 (nazwa) values ('CASUAL');
+insert into rodzaj_buta_3 (nazwa) values ('SPORT');
+insert into rodzaj_buta_3 (nazwa) values ('TRAPER');
+insert into rodzaj_buta_3 (nazwa) values ('WIZYTOWY');
+
+insert into rodzaj_buta_4 (nazwa) values ('NA PODST INNEGO');
+insert into rodzaj_buta_4 (nazwa) values ('PO 500 PARACH');
+insert into rodzaj_buta_4 (nazwa) values ('PO 60 PARACH');
+insert into rodzaj_buta_4 (nazwa) values ('SZABLONY');
+
+insert into rodzaj_buta_5 (nazwa) values ('BRAK');
+insert into rodzaj_buta_5 (nazwa) values ('CENNIK');
+insert into rodzaj_buta_5 (nazwa) values ('KATALOG');
+insert into rodzaj_buta_6 (nazwa) values ('A');
+insert into rodzaj_buta_6 (nazwa) values ('B');
+
+
+set global table_open_cache:=12;
+set global max_connections:=8;
+
+
+INSERT INTO `obuwie_db`.`spody` (`nr`, `nazwa`, `producent`) values (2,'x', 'y');
+INSERT INTO `obuwie_db`.`spody` (`nr`, `nazwa`, `producent`) values (5,'x2', 'y2');
+INSERT INTO `obuwie_db`.`modele` ( `wzory_id`,  `matryce_id`,  `ocieplenie`, `kolor`, `wkladka`, `skora_id`, `spody_id`, `typ`,`rodzaj_montazu`, `rodzaj_buta`, `rodzaj_buta_2`, `rodzaj_buta_3`, `rodzaj_buta_4`, `rodzaj_buta_5`, `rodzaj_buta_6`) VALUES (1,1, 1,1, 1,1,1, 'DAMSKI','CALIF' , 'KLAPEK', 'KLAMRA','CASUAL' ,'PO 500 PARACH' ,'CENNIK' ,'A' );
+INSERT INTO `obuwie_db`.`modele` ( `wzory_id`,  `matryce_id`,  `ocieplenie`, `kolor`, `wkladka`, `skora_id`, `spody_id`, `typ`,`rodzaj_montazu`, `rodzaj_buta`, `rodzaj_buta_2`, `rodzaj_buta_3`, `rodzaj_buta_4`, `rodzaj_buta_5`, `rodzaj_buta_6`) VALUES (2,2, 2,2, 2,2,2, 'MĘSKI','MOKA' , 'PÓŁBUT', 'SZNUR','TRAPER' ,'SZABLONY' ,'KATALOG' ,'B' );

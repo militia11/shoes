@@ -1,0 +1,2 @@
+INSERT INTO `obuwie_db`.`zamowienia` (`nr_zamowienia`,`id_klienta`, `status`, `modele_id`, `handlowce_id`, `uzytkownik`, `wprowadzono`, `realizacja` ) VALUES ('B100',2, 'WPROWADZONE',1, 1, 'Mateusz', '2018-01-01', '2016-01-05' );
+INSERT INTO `obuwie_db`.`zamowienia` (`nr_zamowienia`,`id_klienta`, `status`, `modele_id`, `handlowce_id`, `uzytkownik`, `wprowadzono`, `realizacja`) VALUES ('B200',3, 'DO WYSYŁKI',2, 2, 'Adam', '2018-02-01', '2015-01-05');
