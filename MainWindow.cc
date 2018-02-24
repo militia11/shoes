@@ -4,7 +4,6 @@
 #include <QCloseEvent>
 #include <QSettings>
 #include <QDesktopWidget>
-#include <QPainter>
 #include "nowyKlientDialog.h"
 #include "Klient.h"
 #include <QMessageBox>
@@ -72,10 +71,9 @@ MainWindow::MainWindow(QWidget *parent) :
     dialogmodele = new modeleDialog(dialogzdj, dialognowyModel, dbManager, this);
 
     dialogNoweZamowienie = new noweZamowienieDialog(dialogHandl, dbManager, dialogmodele, dialogKlienci, this);
-    rozkroje = new RozkrojeDialog(this);
+    rozkroje = new RozkrojeDialog(dbManager, this);
     dorozkroju = new DoRozkrojuDialog(this);
-    roznicerozkroje = new RozniceDialog(this) ;
-    dialogEdycjaZam = new  EdycjaZamowieniaDialog(dialogKlienci, dialogHandl, dialogmodele, dbManager, this);
+    roznicerozkroje = new RozniceDialog(dbManager, this) ;
     proxy = new QSortFilterProxyModel(this);
     //logowanie();
 
@@ -83,7 +81,6 @@ MainWindow::MainWindow(QWidget *parent) :
         ustawieniaBazy();
     }
 
-    ui->actionDrukuj_zam_wienia->setEnabled(false);
     ui->tableViewZam->setContextMenuPolicy(Qt::CustomContextMenu);
     podlaczSygnaly();
     a();
@@ -105,6 +102,9 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableViewZam->setItemDelegateForColumn(i, del);
     }
     ui->tableViewZam->setItemDelegateForColumn(37, del);
+    dialogEdycjaZam = new  EdycjaZamowieniaDialog(dialogKlienci, dialogHandl, dialogmodele, dbManager, this);
+    connect(dialogEdycjaZam, SIGNAL(koniecEdycji()), this, SLOT(ustawIFiltruj()));
+
     //ui->tableViewZam->selectRow(2);
     //on_actionDrukuj_zam_wienia_triggered();
     //exit(1);
@@ -118,10 +118,10 @@ void MainWindow::aktualizujTabele() {
 }
 
 void MainWindow::a() {
-    //if (  dialogmodele->exec() == QDialog::Accepted) {
+    //if (dialogmodele->exec() == QDialog::Accepted) {
     //    if (  dialognowyModel->exec() == QDialog::Accepted) {
     //}
-    //dialogNoweZamowienie->exec();
+    //roznicerozkrojep->exec();
 }
 
 void MainWindow::refreshTable() {
@@ -221,16 +221,23 @@ QString MainWindow::getNrZam(QModelIndex idx) {
     return nr_zam;
 }
 
+QString MainWindow::prepareRozkroj() {
+    int ostatniNumer = dbManager->getNumerOstatniegoRozkroju();
+    int numerRozkrojuNowego = ostatniNumer + 1;
+    QString nr = QString("R%1").arg(numerRozkrojuNowego);
+    dbManager->stworzSzkieletRozkroju(nr);
+
+    return nr;
+}
+
 void MainWindow::ShowContextMenu(const QPoint &pos) {
     if (!ui->actionEdycja->isChecked()) {
         QPoint globalPos = ui->tableViewZam->mapToGlobal(pos);
         QMenu myMenu;
         if (dbManager->filterZamowien.status == QString("WPROWADZONE")) {
             myMenu.addAction("KRÓJ");
-            myMenu.addAction("DO WYSYŁKI");
         } else if (dbManager->filterZamowien.status == QString("DO WYSYŁKI")) {
-            myMenu.addAction("ZREALIZUJ");
-            myMenu.addAction("USUŃ");
+            myMenu.addAction("ZREALIZOWANO");
         }
         myMenu.addSeparator();
         QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
@@ -264,25 +271,35 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
                     dbManager->zmienHandlZam(nr_zam);
                 }
             } else if (selectedItem->text() == QString("KRÓJ")) {
+                QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
+                std::vector<int> zamowienia;
+                int id = 0;
+                for (int i = 0; i < selection.count(); i++) {
+                    QModelIndex index = proxy->mapToSource(selection.at(i));
+                    id = dbManager->getIdZamowieniaZTabeli(index);
+                    zamowienia.push_back(id);
+                }
                 if (QMessageBox::question(this, "ZMODYFIKOWAĆ?",
                                           " <FONT COLOR='#000080'>Czy pomniejszyć o stany magazynowe?") == QMessageBox::Yes) {
-                    QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
-                    std::vector<int> zamowienia;
-                    int id = 0;
-                    for (int i = 0; i < selection.count(); i++) {
-                        QModelIndex index = proxy->mapToSource(selection.at(i));
-                        id = dbManager->getIdZamowieniaZTabeli(index);
-                        zamowienia.push_back(id);
-                    }
                     dorozkroju->setModel(dbManager->getDoRozkroju(zamowienia));
-                    //dorozkroku->setZamowienia(zamowienia);
-                    dorozkroju->exec();
+                    QString nr = prepareRozkroj();
+                    dorozkroju->setNr(nr);
+                    if (dorozkroju->exec() == QDialog::Accepted) {
+                        dbManager->rozkroj(dorozkroju->getModel(), dorozkroju->getBazowyModel());
+                        rozkroje->exec();
+                    } else {
+                        dbManager->usunSzkieletRozkroju();
+                    }
                 } else {
-
+                    prepareRozkroj();
+                    dbManager->rozkroj(dbManager->getDoRozkroju(zamowienia));
+                    rozkroje->exec();
                 }
+            } else if (selectedItem->text() == QString("ZREALIZOWANE")) {
+
+
             } else if (selectedItem->text() == QString("EDYTUJ ZAMÓWIENIE")) {
                 QString nr_zam = getNrZam(idx);
-                dbManager->setZamowieniaSzczegoly();
                 dialogEdycjaZam->setNrZam(nr_zam);
                 dialogEdycjaZam->exec();
             } else {
@@ -388,9 +405,10 @@ void MainWindow::rozciagnijWiersze() {
     QHeaderView *hv = ui->tableViewZam->horizontalHeader();
     hv->setSectionHidden(0, true);
     hv->setStretchLastSection(true);
-    for (int i = 38; i < 47; i++) {
+    for (int i = 37; i < 47; i++) {
         hv->setSectionHidden(i, true);
     }
+
     hv->setDefaultAlignment(Qt::AlignLeft);
     ui->tableViewZam->setColumnWidth(26, s123);// sk1
     ui->tableViewZam->setColumnWidth(27, s123);
@@ -454,134 +472,6 @@ void MainWindow::dodajHandlowca() {
     }
 }
 
-bool MainWindow::pageSetup(QPrinter *printer) {
-    QPageSetupDialog psd(printer);
-    if (psd.exec() == QDialog::Accepted) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-void MainWindow::printDocument(QPrinter *printer) {
-    QTextDocument document;
-    dodajZamowieniaDoHtml(&document);
-    document.print(printer);
-}
-
-QString MainWindow::zamowienieTabelka(zamowienieZRozmiaramiStruct zamowienie) {
-    QString wynik =
-        QString("<td><table border=1 cellpadding=0 cellspacing=-1 style=\"border-width: 1px; border-collapse: collapse;font-family:'Times New Roman', serif;font-size: 10px;\">"
-                "<tr valign=top>"
-                "<td width=81 height=84 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\"><p  >DATA:</p>"
-                "<p style=\"font-size: 13px;\">%1&nbsp;&nbsp;&nbsp;&nbsp;%2</p>"
-                "</td>"
-                "<td colspan=2 width=193 height=84 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\"><p >ZAM&#211;WIENIE:</p><p style=\"font-size: 13px;\">%3</p>"
-                "</td>"
-                "<td width=118 height=84 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px;\"><p >ZLECAJ&#260;CY:</p><p style=\"font-size: 13px;\">%4</p>"
-                "</td>"
-                "</tr>"
-                "<tr valign=top>"
-                "<td width=81 height=84 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\"><p >WZ&#211;R:</p><p style=\" font-size: 13px;\">%5</p>"
-                "</td>"
-                "<td width=54 height=84 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px;  border-right: none;\"><p>SPODY:</p><p style=\"font-size: 13px;\">%6</p>"
-                "</td>"
-                "<td width=68 height=84 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\"><p >KOLOR SK&#211;RA</p><p style=\"font-size: 13px;\">%7</p>"
-                "</td>"
-                "<td width=81 height=84 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px;\"><p >SZARFIARZ:</p><p style=\";font-size: 13px;\"></p></span></p>"
-                "</td>"
-                "</tr>").arg(zamowienie.wpr.toHtmlEscaped(), zamowienie.rea.toHtmlEscaped(), zamowienie.nrZ.toHtmlEscaped(),
-                             zamowienie.klNaz.toHtmlEscaped(), zamowienie.wzor.toHtmlEscaped(), zamowienie.snaz.toHtmlEscaped(),
-                             zamowienie.kolor.toHtmlEscaped());
-
-    QMap<QString, int> rozm;
-    int suma = zamowienie.rozmiary[15];
-    for (int i = 0; i < 15; i++) {
-        int id = 36 + i;
-        rozm.insert(QString("R %1").arg(id),
-                    zamowienie.rozmiary[i]);
-    }
-
-    for (QMap<QString, int>::iterator it = rozm.begin(); it != rozm.end();) {
-        if ((*it) == 0) {
-            rozm.erase(it++);
-        } else {
-            ++it;
-        }
-    }
-
-    for (QMap<QString, int>::iterator it = rozm.begin(); it != rozm.end(); it++) {
-        qDebug() << it.key() << it.value();
-    }
-
-    //wynik += QString (
-    //        < / td > ");
-    //QString zamowienm,,ieStr = QString(% 1").arg(suma);
-    wynik += QString("<tr valign=top>"
-                     "<td colspan=2 rowspan=2 width=174 height=29 valign=top style=\"border-width : 0px; border-color: #000000; border-style: solid; padding: 0px; border-top: none; border-right: none;\">"
-                     "<table border=1 cellpadding=9 cellspacing=-1 style=\"border-collapse: collapse;font-family:'Times New Roman', serif;font-size: 14px;\">"
-                     "<tr>"
-                     "<td ><u>R36</u><br>1</td>"
-                     " <td><u>R37</u></u><br>8</td><td><p><u>R38</u><br>21</p></td><td><p><u>R39</u><br>10</p></td>"
-                     " <td border=1 style=\"border-width: 3px; border-color: #000000; border-style: solid; \"><u>R43</u></u><br>8</td><td><p><u>R46</u><br>21</p></td><td><p><u>R47</u><br>10</p></td>"
-                     " <td border=1  style=\"border-width : 3px; border-color: #000000; border-style: solid; \"><u>R48</u><br>18</td></tr>"
-
-                     "<tr>"
-                     "<td><u>R49</u><br>1</td>"
-                     " <td><u>R50</u></u><br>8</td>"
-                     "</tr>"
-
-                     "</table>"
-
-                     "</td>"
-                     "<td rowspan=2 valign=top style=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-top: none; border-right: none;\">SUMA:</td>"
-                     "<td width = 128 height = 48 valign = top style = \"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-top: none;\"><p>PRZYJMUJ&#260;CY:</p><p style=\"font-size: 13px;\"></p>"
-                     " </td> </tr> "
-                     "<tr valign = top>"
-                     "<td width = 128 height = 48 valign = top style = \"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-top: none;\"><p>MONTA&#379;:</p><p style=\"font-size: 13px;\"></p>"
-                     " </td> </tr> "
-                     "<tr valign = top>"
-                     "<td colspan = 4 width = 530 height = 54 valign = top style = \"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-top: none;\"><p>UWAGI 1: < / p > <p style = \"font-size: 13px;\">jakies uwagi < / p > "
-                     " </td > </tr> "
-                     "<tr>"
-                     "<td colspan = 4 width = 530 height = 54 valign = top style = \"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-top: none;\"><p>UWAGI 2: < / p > <p style = \"font-size: 13px;\">jakies uwagi < / p > "
-                     " </td > </tr></table ></td >").arg(zamowienie.nrZ.toHtmlEscaped(),
-                             zamowienie.klNaz.toHtmlEscaped());
-
-    return wynik;
-}
-
-void MainWindow::dodajZamowieniaDoHtml(QTextDocument *document) {
-    QString html("<html><head><meta content=\"text/html\"><style type=\"text/css\"></style></head><body><div>"
-                 "	<table>"
-                 "<tr>");
-    int counter = 0;
-    for (zamowienieZRozmiaramiStruct zamowienie : zamowieniaDruk) {
-        if (counter % 2 == 0) {
-            html += "<tr>\n";
-        }
-        if (!zamowienie.rozmiary.isEmpty()) {
-            html += zamowienieTabelka(zamowienie);
-        }
-        if (counter % 2 != 0) {
-            html += " < / tr > \n";
-        }
-        counter++;
-    }
-
-    html += "</table></div > "
-            "<p><span class = rvts3><br> </span > </p > "
-            " </body> </html > ";
-    document->setHtml(html);
-}
-
-void MainWindow::oznaczDrukowano() {
-    for (int i : idDrukowanychZam) {
-        dbManager->oznaczDrukowano(i);
-    }
-    dbManager->getModelZamowienia()->select();
-}
-
 void MainWindow::ustawCombo(QString tabela, QComboBox *com) {
     com->clear();
     QString q = QString("select * from %1").arg(tabela);
@@ -609,26 +499,6 @@ void MainWindow::createCombos() {
     ustawCombo("rodzaj_buta_4", ui->comboBoxb4);
     ustawCombo("rodzaj_buta_5", ui->comboBoxb5);
     ustawCombo("rodzaj_buta_6", ui->comboBoxb6);
-}
-
-void MainWindow::drukuj() {
-    QPrinter printer;
-    QMarginsF ma;
-    ma.setTop(0);
-    ma.setLeft(0);
-    ma.setBottom(0);
-    ma.setRight(0);
-    printer.setPageMargins(ma);
-    printer.setFullPage(true);
-    //if (pageSetup(&printer)) {
-    printDocument(&printer);
-    oznaczDrukowano();
-
-    //  } else {
-    //    qDebug() << "anulowane";
-    //  }
-    zamowieniaDruk.clear();
-    idDrukowanychZam.clear();
 }
 
 void MainWindow::on_actionKlienci_triggered() {
@@ -663,13 +533,11 @@ void MainWindow::ustawIFiltruj() {
     dbManager->filterZamowien.rea = ui->lineEditzre ->text();
     dbManager->filterZamowien.spn = ui->lineEditS->text();
     filtruj();
-
 }
 
 void MainWindow::on_pushButtonSzukaj_clicked() {
     ustawIFiltruj();
 }
-
 
 void MainWindow::filtruj() {
     dbManager->setZamowieniaFilter();
@@ -678,13 +546,11 @@ void MainWindow::filtruj() {
 
 void MainWindow::on_radioButton_clicked() {
     dbManager->filterZamowien.status = QString("WPROWADZONE");
-    ui->actionDrukuj_zam_wienia->setEnabled(false);
     filtruj();
 }
 
 void MainWindow::on_radioButton_3_clicked() {
     dbManager->filterZamowien.status = QString("DO WYSYŁKI");
-    ui->actionDrukuj_zam_wienia->setEnabled(false);
     filtruj();
 }
 
@@ -695,26 +561,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     QMainWindow::keyPressEvent(event);
 }
 
-void MainWindow::stworzListeZamowien() {
-    QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
-    std::vector<zamowienieZRozmiaramiStruct> zamowienia;
-    int id = 0;
-    for (int i = 0; i < selection.count(); i++) {
-        QModelIndex index = proxy->mapToSource(selection.at(i));
-        id = dbManager->getIdZamowieniaZTabeli(index);
-        zamowieniaDruk.append(dbManager->stworzZamowienieZBazy(id));
-        idDrukowanychZam.append(id);
-    }
-}
-
-void MainWindow::on_actionDrukuj_zam_wienia_triggered() {
-    stworzListeZamowien();
-    drukuj();
-}
-
 void MainWindow::on_radioButton_4_clicked() {
     dbManager->filterZamowien.status = QString("");
-    ui->actionDrukuj_zam_wienia->setEnabled(false);
     filtruj();
 }
 
@@ -832,11 +680,9 @@ void MainWindow::on_actionOcieplenia_triggered() {
 }
 
 void MainWindow::on_radioButton_5_clicked() {
-    dbManager->filterZamowien.status = QString("ZREALIZUJ");
-    ui->actionDrukuj_zam_wienia->setEnabled(false);
+    dbManager->filterZamowien.status = QString("ZREALIZOWANE");
     filtruj();
 }
-
 
 void MainWindow::on_actionRozkroje_triggered() {
     rozkroje->exec();

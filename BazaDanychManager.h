@@ -45,12 +45,11 @@ class BazaDanychManager {
         void zmienHandlZam(QString nrzam);
         void zmienModellZam(int idzam);
         int zwrocSumeZamowien();
-        int zwrocSumeZamowienSzczegoly();
         bool aktualizujStatus(int id, QString status);
         bool zamowienie(QDate zam, QDate realizacji, QStandardItemModel *pozycje,
                         QStringList uwagi1,
                         QString uwagi2, QString nr_zam);
-        int getIdZamowieniaZTabeli(QModelIndex index);
+        bool rozkroj(QStandardItemModel *pozycje, QStandardItemModel *bazowepozycje = 0);
         void ustawAktualnyModelId(const QModelIndex index);
         QList<QStandardItem *> zwrocWierszModel();
         QString getOstatniSelectZam() const;
@@ -83,7 +82,6 @@ class BazaDanychManager {
         KlientFilter filterKlientow;
         void setZamowieniaFilter();
         void setKlienciFilter();
-
 
         void ustawIdAktualnegoKlienta(const QModelIndex index);
         void ustawIdAktualnegoHandl(const QModelIndex index);
@@ -145,17 +143,19 @@ class BazaDanychManager {
         QStandardItemModel *getDoRozkroju(const std::vector<int> &value);
         QString filterZamString;
         void clearFilterZam();
-        int updateRozmIdKli;
-        int updateRozmSuma;
-        int updateRozmIdZam;
-        void setDoRozkroju(const std::vector<int> &value);
         void setIdModelu(int value);
         int getNumerOstatniegoZamKomputerowego();
+        int getNumerOstatniegoRozkroju();
+        void stworzSzkieletRozkroju(QString nr);
+        void usunSzkieletRozkroju();
         QVector<QString> zwrocListeModel(int id);
-
-        QSqlTableModel *getZamowieniaSzczegoly() const;
-        void setZamowieniaSzczegoly();
         void setZamowieniaSzczegolyFilter(QString f);
+
+        QSqlTableModel *getRozkroje() const;
+        void setRozkroje();
+
+        QSqlTableModel *getRoznice() const;
+        void setRoznice();
 
     private:
         QVariant GetFirstValueForQuery(QSqlQuery *aQuery);
@@ -171,7 +171,6 @@ class BazaDanychManager {
         QSqlDatabase db;
         QAbstractItemModel *mSelectZamowienia;
         QSqlTableModel *mZamowienia;
-        QSqlTableModel *mZamowieniaSzczegoly;
         QSqlTableModel *mHandlowce;
         QSqlTableModel *mKlienci;
         QSqlTableModel *mModele;
@@ -182,6 +181,8 @@ class BazaDanychManager {
         QSqlTableModel *mKolory;
         QSqlTableModel *mSkory;
         QSqlTableModel *mOciep;
+        QSqlTableModel *mRozkroje;
+        QSqlTableModel *mRoznice;
 
         int idKlienta;
         int idHandlowca;
@@ -193,10 +194,13 @@ class BazaDanychManager {
         int idOciep;
         int idSkory;
         int idMatrycy;
+        int idRozkroju;
+        int idRoznicy;
 
         QVector<int> idModeluL;
         QString nazwaKlienta;
         QString nazwaHandlowca;
+        QString currentIdZamRozkroje;
 
         bool firstRun;
         QString ostatniSelectZam;

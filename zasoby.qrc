@@ -13,5 +13,6 @@
         <file>zasoby/change.png</file>
         <file>zasoby/add2.png</file>
         <file>zasoby/trash2.png</file>
+        <file>zasoby/print2.png</file>
     </qresource>
 </RCC>

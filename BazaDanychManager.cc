@@ -28,10 +28,6 @@ void BazaDanychManager::clearFilterZam() {
     filterKlientow.skrot =  QString("");
 }
 
-void BazaDanychManager::setDoRozkroju(const std::vector<int> &value) {
-
-}
-
 void BazaDanychManager::setIdModelu(int value) {
     idModelu = value;
 }
@@ -48,7 +44,8 @@ BazaDanychManager::BazaDanychManager() :
     mSkory(nullptr),
     mOciep(nullptr),
     mZamowienia(nullptr),
-    mZamowieniaSzczegoly(nullptr) {
+    mRozkroje(nullptr),
+    mRoznice(nullptr) {
     lastConnectionError = false;
     firstRun = true;
     db = QSqlDatabase::addDatabase("QMYSQL");
@@ -63,21 +60,17 @@ BazaDanychManager::BazaDanychManager() :
     idWzoru = -1;
     idOciep = -1;
     idWkladki = -1;
-    updateRozmIdKli = 0;
-    updateRozmSuma = 0;
-    updateRozmIdZam = 0;
+    idRozkroju = -1;
+    idRoznicy = -1;
     clearFilterZam();
+    // todo
+    user = "x007";
 }
 
 void BazaDanychManager::removeSqlModels() {
     if (mZamowienia) {
         delete mZamowienia;
         mZamowienia = 0;
-    }
-
-    if (mZamowieniaSzczegoly) {
-        delete mZamowieniaSzczegoly;
-        mZamowieniaSzczegoly = 0;
     }
     if (mWkladki) {
         delete  mWkladki;
@@ -118,6 +111,14 @@ void BazaDanychManager::removeSqlModels() {
     if (mOciep) {
         delete  mOciep;
         mOciep = 0;
+    }
+    if (mRozkroje) {
+        delete  mRozkroje;
+        mRozkroje = 0;
+    }
+    if (mRoznice) {
+        delete  mRoznice;
+        mRoznice = 0;
     }
 }
 
@@ -193,22 +194,12 @@ QSqlTableModel *BazaDanychManager::getModelHandlowce() {
 }
 
 void BazaDanychManager::oznaczDrukowano(int id) {
-    QSqlQuery qry2;
-    qry2.prepare("update zamowienia set drukowano='TAK' where id=:id");
-    qry2.bindValue(":id", id);
-    if (!qry2.exec()) {
-        qDebug() << "Bląd przy aktualizacji drukowano" ;
-    }
-}
-
-int BazaDanychManager::getIdZamowieniaZTabeli(QModelIndex index) {
-    int id = -1;
-
-    id = mZamowienia->data(mZamowienia->index(
-                               index.row(),
-                               0)).toInt();
-
-    return id;
+//    QSqlQuery qry2;
+//    qry2.prepare("update rozkroje set DRUKOWANO= +1 where id=:id");
+//    qry2.bindValue(":id", id);
+//    if (!qry2.exec()) {
+//        qDebug() << "Bląd przy aktualizacji drukowano" ;
+//    }
 }
 
 void BazaDanychManager::ustawAktualnyModelId(const QModelIndex index) {
@@ -225,7 +216,7 @@ void BazaDanychManager::setHeadersGlowneZamowienia() {
                      "MAT" << "WKŁ" << "R36" << "R37" << "R38" << "R39" << "R40"    << "R41" << "R42" << "R43"
                      << "R44" << "R45" << "R46" << "R47"    << "R48" << "R49" << "R50"
                      << "SUMA"  << "SK1" << "SK2" <<    "SK3" << "SP NAZWA" <<
-                     "SP PROD" << "UŻYTKOWNIK" << "HANDLOWIEC" << "DATA WPR" << "DATA REALIZ" << "UWAGI 1" << "UWAGI 2" << "DRUK" << ""
+                     "SP PROD" << "UŻYTKOWNIK" << "HANDLOWIEC" << "DATA WPR" << "DATA REALIZ" << "UWAGI 1" << "UWAGI 2" << ""
                      << "" << ""
                      << ""  << "" << ""
                      << ""  << "" << ""
@@ -253,10 +244,49 @@ int BazaDanychManager::getNumerOstatniegoZamKomputerowego() {
     vIdQuery.exec("SELECT nr_zamowienia FROM zamowienia  WHERE nr_zamowienia LIKE 'B%' ORDER BY id DESC LIMIT 1;");
 
     QVariant vIdAsVariant = GetFirstValueForQuery(&vIdQuery);
-    QString numer = vIdAsVariant.isNull() ? QString("B1") :
+    QString numer = vIdAsVariant.isNull() ? QString("B0") :
                     vIdAsVariant.toString();
     int liczba = numer.remove(0, 1).toInt();
     return liczba;
+}
+
+int BazaDanychManager::getNumerOstatniegoRozkroju() {
+    QSqlQuery vIdQuery(db);
+    vIdQuery.exec("SELECT nr_rozkroju FROM rozkroje ORDER BY id DESC LIMIT 1;");
+
+    QVariant vIdAsVariant = GetFirstValueForQuery(&vIdQuery);
+    QString numer = vIdAsVariant.isNull() ? QString("R0") :
+                    vIdAsVariant.toString();
+    int liczba = numer.remove(0, 1).toInt();
+    return liczba;
+}
+
+void BazaDanychManager::stworzSzkieletRozkroju(QString nr) {
+    QSqlQuery qry;
+    qry.prepare("INSERT INTO `obuwie_db`.`rozkroje` (`nr_rozkroju`, `WPROWADZONO`,"
+                " `UZYTKOWNIK`) VALUES (:nr_rozkroju, :WPROWADZONO,"
+                " :UZYTKOWNIK);");
+    qry.bindValue(":nr_rozkroju", nr);
+    qry.bindValue(":WPROWADZONO", QDate::currentDate());
+    qry.bindValue(":UZYTKOWNIK", user);
+    if (!qry.exec()) {
+        qDebug() << "Bląd przy stworzSzkieletRozkroju" ;
+    }
+
+    QSqlQuery qry2;
+    qry2.prepare("SELECT MAX(id) FROM rozkroje;");
+    qry2.exec();
+    qry2.next();
+    idRozkroju = qry2.value(0).toInt();
+}
+
+void BazaDanychManager::usunSzkieletRozkroju() {
+    QSqlQuery qry;
+    qry.prepare("delete from `obuwie_db`.`rozkroje` where id=:id");
+    qry.bindValue(":id", idRozkroju);
+    if (!qry.exec()) {
+        qDebug() << "Bląd przy usunieciu rozk" ;
+    }
 }
 
 QVector<QString> BazaDanychManager::zwrocListeModel(int id) {
@@ -285,7 +315,7 @@ QList<QStandardItem *> BazaDanychManager::zwrocWierszModel() {
     QSqlQuery vQuery(db);
     vQuery.prepare(vQueryText);
     vQuery.exec();
-    int id = 0;
+    // int id = 0;
     int nr_wzoru = 0;
     QString matryca;
     QString ocieplenie;
@@ -295,20 +325,20 @@ QList<QStandardItem *> BazaDanychManager::zwrocWierszModel() {
     if (wystapilBlad(vQuery)) {
         obsluzSqlError(vQuery);
     } else if (vQuery.next()) {
-        id = vQuery.value(0).toInt();
-        nr_wzoru = vQuery.value(0).toInt();
-        matryca = vQuery.value(1).toString();
-        ocieplenie = vQuery.value(2).toString();
-        spod = vQuery.value(3).toInt();
-        kolor = vQuery.value(4).toInt();
-        wkladka = vQuery.value(5).toString();
+        //   id = vQuery.value(0).toInt();
+        nr_wzoru = vQuery.value(1).toInt();
+        spod  = vQuery.value(2).toInt();
+        kolor  = vQuery.value(3).toInt();
+        ocieplenie = vQuery.value(4).toString();
+        matryca = vQuery.value(5).toString();
+        wkladka = vQuery.value(6).toString();
     }
 
     rzad.append(new QStandardItem(QString::number(nr_wzoru)));
-    rzad.append(new QStandardItem(matryca));
-    rzad.append(new QStandardItem(ocieplenie));
     rzad.append(new QStandardItem(QString::number(spod)));
     rzad.append(new QStandardItem(QString::number(kolor)));
+    rzad.append(new QStandardItem(matryca));
+    rzad.append(new QStandardItem(ocieplenie));
     rzad.append(new QStandardItem(wkladka));
     for (int i = 0; i < 16; i++) {
         rzad.append(new QStandardItem(QString("0")));
@@ -356,13 +386,14 @@ QAbstractItemModel *BazaDanychManager::getModelForQuery(QSqlQuery *aQuery) {
 }
 
 QStandardItemModel *BazaDanychManager::getDoRozkroju(const std::vector<int> &value) {
-    QString queString("select * from vzam where zamowienia_id in ( ");
+    QString queString("select *from vzam where zamowienia_id in ( ");
     QString idki;
     for (int v : value) {
         idki.append(QString("%1 ,").arg(v));
     }
     idki.remove(idki.count() - 1, 1);
     queString += idki;
+    currentIdZamRozkroje = idki;
     queString += " )";
     QSqlQuery query(queString);
     QAbstractItemModel *abmodel = getModelForQuery(&query);
@@ -434,16 +465,32 @@ void BazaDanychManager::aktualizujHeaderyKlient(QAbstractItemModel *model) {
     setHeaders(listaKlienci, model);
 }
 
-QSqlTableModel *BazaDanychManager::getZamowieniaSzczegoly() const {
-    return mZamowieniaSzczegoly;
+QSqlTableModel *BazaDanychManager::getRoznice() const {
+    return mRoznice;
 }
 
-void BazaDanychManager::setZamowieniaSzczegoly() {
-    mZamowieniaSzczegoly = new QSqlTableModel();
-    mZamowieniaSzczegoly->setTable("vzam");
-    setHeadersGlowneZamowienia();
-    mZamowieniaSzczegoly->select();
-    //mZamowieniaSzczegoly
+void BazaDanychManager::setRoznice() {
+    if (mRoznice == nullptr) {
+        mRoznice = new QSqlTableModel();
+        mRoznice->setTable("roznice");
+
+        mRoznice->setHeaderData(1, Qt::Horizontal, "RÓŻNICA ROZKROJU");
+    }
+    mRoznice->select();
+}
+
+QSqlTableModel *BazaDanychManager::getRozkroje() const {
+    return mRozkroje;
+}
+
+void BazaDanychManager::setRozkroje() {
+    if (mRozkroje == nullptr) {
+        mRozkroje = new QSqlTableModel();
+        mRozkroje->setTable("rozkroje");
+
+        mRozkroje->setHeaderData(1, Qt::Horizontal, "NR ROZKROJU");
+    }
+    mRozkroje->select();
 }
 
 void BazaDanychManager::setZamowieniaSzczegolyFilter(QString f) {
@@ -701,35 +748,41 @@ QString BazaDanychManager::getOstatniSelectZam() const {
 zamowienieZRozmiaramiStruct BazaDanychManager::stworzZamowienieZBazy(int id) {
     zamowienieZRozmiaramiStruct zam;
     QSqlQuery qry;
-    qry.prepare("select z.R36, z.R37, z.R38, z.R39, z.R40, z.R41, z.R42, z.R43, z.R44, z.R45, z.R46, z.R47, z.R48, z.R49, z.R50, z.suma, z.nr_zamowienia, k.nazwa_skrot, w.nr_wzoru, s.nr, kl.kolor,z.wprowadzono, z.realizacja from zamowienia z"
-                " join klienci k on z.id_klienta=k.id join modele m on z.modele_id=m.id join wzory w on m.wzory_id=w.id join "
-                "spody s on m.spody_id=s.id join kolor kl on m.kolor=kl.id where z.id=:id;");
+    qry.prepare("select *from vroz where zamowienia_id=:id;");
     qry.bindValue(":id", id);
     qry.exec();
     if (qry.next()) {
-        zam.rozmiary.append(qry.value(0).toInt());
-        zam.rozmiary.append(qry.value(1).toInt());
-        zam.rozmiary.append(qry.value(2).toInt());
-        zam.rozmiary.append(qry.value(3).toInt());
-        zam.rozmiary.append(qry.value(4).toInt());
-        zam.rozmiary.append(qry.value(5).toInt());
-        zam.rozmiary.append(qry.value(6).toInt());
-        zam.rozmiary.append(qry.value(7).toInt());
-        zam.rozmiary.append(qry.value(8).toInt());
-        zam.rozmiary.append(qry.value(9).toInt());
+        zam.nrZ = qry.value(1).toString();
+        zam.klNaz = qry.value(2).toString();
+        zam.klNr = qry.value(3).toString();
+        zam.wzor = qry.value(4).toString();
+        zam.spn = qry.value(5).toString();
+        zam.kolor = qry.value(6).toString();
+        zam.ociep = qry.value(7).toString();
+        zam.mat = qry.value(8).toString();
+        zam.wkladka = qry.value(9).toString();
         zam.rozmiary.append(qry.value(10).toInt());
         zam.rozmiary.append(qry.value(11).toInt());
         zam.rozmiary.append(qry.value(12).toInt());
         zam.rozmiary.append(qry.value(13).toInt());
         zam.rozmiary.append(qry.value(14).toInt());
         zam.rozmiary.append(qry.value(15).toInt());
-        zam.nrZ = qry.value(16).toString();
-        zam.klNaz = qry.value(17).toString();
-        zam.wzor = qry.value(18).toString();
-        zam.snaz = qry.value(19).toString();
-        zam.kolor = qry.value(20).toString();
-        zam.wpr = qry.value(21).toString();
-        zam.rea = qry.value(22).toString();
+        zam.rozmiary.append(qry.value(16).toInt());
+        zam.rozmiary.append(qry.value(17).toInt());
+        zam.rozmiary.append(qry.value(18).toInt());
+        zam.rozmiary.append(qry.value(19).toInt());
+        zam.rozmiary.append(qry.value(20).toInt());
+        zam.rozmiary.append(qry.value(21).toInt());
+        zam.rozmiary.append(qry.value(22).toInt());
+        zam.rozmiary.append(qry.value(23).toInt());
+        zam.rozmiary.append(qry.value(24).toInt());
+        zam.rozmiary.append(qry.value(25).toInt());
+        zam.uzyt = qry.value(32).toString();
+        zam.wpr = qry.value(33).toString();
+        zam.rea = qry.value(34).toString();
+        zam.uwagi = qry.value(35).toString();
+        zam.uwagi2 = qry.value(36).toString();
+        zam.rozkrojNr = qry.value(49).toString();
     }
     return zam;
 }
@@ -1010,49 +1063,163 @@ bool BazaDanychManager::zamowienie(QDate zam,
             qDebug() << "Bląd przy zapisie pozycji" ;
             vSuccess = false;
             pozycje->appendRow(rzad);
-        } else {
-            mZamowienia->select();
         }
     }
 
     idModeluL.clear();
-    if (vSuccess == true) {
-        int zamowione = 0;
-        int nieodebrane = 0;
-        QSqlQuery qry;
-        qry.prepare("select zamowione, nieodebrane from klienci where id=:id");
-        qry.bindValue(":id", idKlienta);
-
-        qry.exec();
-
-        if (wystapilBlad(qry)) {
-            obsluzSqlError(qry);
-        } else if (qry.next()) {
-            zamowione = qry.value(0).toInt();
-            nieodebrane = qry.value(1).toInt();
-        }
-        zamowione += sumaKlient;
-        nieodebrane += sumaKlient;
-        QSqlQuery qry2;
-        qry2.prepare("update klienci set zamowione=:zamowione, nieodebrane=:nieodebrane where id=:id");
-        qry2.bindValue(":zamowione", zamowione);
-        qry2.bindValue(":nieodebrane", nieodebrane);
-        qry2.bindValue(":id", idKlienta);
-        if (!qry2.exec()) {
-            qDebug() << "Bląd przy aktualizacji sumy zamowień klienta" ;
-            vSuccess = false;
-        }
-    }
-
     if (vSuccess == true) {
         db.commit();
         mZamowienia->select();
         return true;
     } else {
         db.rollback();
-        mZamowienia->select();
         return false;
     }
+}
+
+bool BazaDanychManager::rozkroj(QStandardItemModel *pozycje, QStandardItemModel *bazowepozycje) {
+    db.transaction();
+    if (bazowepozycje) {
+        QSqlQuery qry0;
+        qry0.prepare("INSERT INTO `obuwie_db`.`roznice` (`nr_rozkroju`, `WPROWADZONO`,"
+                     " `UZYTKOWNIK`) VALUES (:nr_rozkroju, :WPROWADZONO,"
+                     " :UZYTKOWNIK);");
+        QString nr = QString("ROZ-R%1").arg(idRozkroju);
+        qry0.bindValue(":nr_rozkroju", nr);
+        qry0.bindValue(":WPROWADZONO", QDate::currentDate());
+        qry0.bindValue(":UZYTKOWNIK", user);
+        if (!qry0.exec()) {
+            qDebug() << "Bląd przy stworzSzkielet Roznic" ;
+        }
+        QSqlQuery qry20;
+        qry20.prepare("SELECT MAX(id) FROM roznice;");
+        qry20.exec();
+        qry20.next();
+        idRoznicy = qry20.value(0).toInt();
+    }
+    bool vSuccess = true;
+    int count = pozycje->rowCount();
+    for (int i = 0; i < count; i++) {
+        QList<QStandardItem *> rzad = pozycje->takeRow(0);
+        QSqlQuery qry;
+        qry.prepare("INSERT INTO `obuwie_db`.`rozkrojeZam` (`nr_zamowieniaR`, `R36`, `R37`, `R38`, `R39`, `R40`, `R41`,"
+                    " `R42`, `R43`, `R44`, `R45`, `R46`, `R47`, `R48`, `R49`, `R50`, `suma`,`wprowadzono`,`realizacja`, `uwagi`, `uwagi2`,"
+                    " `uzytkownik`, `modele_id`, `klienci_id`, `handlowce_id`, `rozkroje_id`) VALUES (:nr_zamowieniaR, :R36, :R37 ,:R38,:R39, :R40 ,  :R41 ,  :R42 , :R43  ,:R44, :R45 ,  :R46 , :R47  , :R48, :R49,:R50 ,:suma,:wprowadzono, :realizacja,:uwagi, :uwagi2,"
+                    " :uzytkownik, :modele_id, :klienci_id, :handlowce_id, :rozkroje_id);");
+        qry.bindValue(":nr_zamowieniaR", rzad.at(1)->data(Qt::DisplayRole).toString());
+        qry.bindValue(":klienci_id", rzad.at(3)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R36", rzad.at(10)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R37", rzad.at(11)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R38", rzad.at(12)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R39", rzad.at(13)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R40", rzad.at(14)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R41", rzad.at(15)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R42", rzad.at(16)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R43", rzad.at(17)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R44", rzad.at(18)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R45", rzad.at(19)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R46", rzad.at(20)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R47", rzad.at(21)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R48", rzad.at(22)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R49", rzad.at(23)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":R50", rzad.at(24)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":suma", rzad.at(25)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":uzytkownik", user);
+        qry.bindValue(":wprowadzono", rzad.at(33)->data(Qt::DisplayRole).toString());
+        qry.bindValue(":realizacja", rzad.at(34)->data(Qt::DisplayRole).toString());
+        qry.bindValue(":uwagi", rzad.at(35)->data(Qt::DisplayRole).toString());
+        qry.bindValue(":uwagi2", rzad.at(36)->data(Qt::DisplayRole).toString());
+        qry.bindValue(":handlowce_id",  rzad.at(46)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":modele_id", rzad.at(47)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":rozkroje_id", idRozkroju);
+        if (!qry.exec()) {
+            qDebug() << "Bląd przy zapisie rozk poz" ;
+            vSuccess = false;
+            pozycje->appendRow(rzad);
+        }
+
+        if (vSuccess == true && bazowepozycje) {
+            QList<QStandardItem *> bazarzad = bazowepozycje->takeRow(0);
+            QSqlQuery qry2;
+            qry2.prepare("INSERT INTO `obuwie_db`.`rozniceZam`(`nr_zamowieniaRoz`, `R36`, `R37`, `R38`, `R39`, `R40`, `R41`,"
+                         " `R42`, `R43`, `R44`, `R45`, `R46`, `R47`, `R48`, `R49`, `R50`, `suma`,`wprowadzono`,`realizacja`, `uwagi`, `uwagi2`,"
+                         " `uzytkownik`, `modele_id`, `klienci_id`, `handlowce_id`, `roznice_id`) VALUES (:nr_zamowieniaRoz, :R36, :R37 ,:R38,:R39, :R40 ,  :R41 ,  :R42 , :R43  ,:R44, :R45 ,  :R46 , :R47  , :R48, :R49,:R50 ,:suma,:wprowadzono, :realizacja,:uwagi, :uwagi2,"
+                         " :uzytkownik, :modele_id, :klienci_id, :handlowce_id, :roznice_id);");
+            qry2.bindValue(":nr_zamowieniaRoz", rzad.at(1)->data(Qt::DisplayRole).toString());
+            qry2.bindValue(":klienci_id", rzad.at(3)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R36", bazarzad.at(10)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(10)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R37", bazarzad.at(11)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(11)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R38", bazarzad.at(12)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(12)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R39", bazarzad.at(13)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(13)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R40", bazarzad.at(14)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(14)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R41", bazarzad.at(15)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(15)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R42", bazarzad.at(16)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(16)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R43", bazarzad.at(17)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(17)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R44", bazarzad.at(18)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(18)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R45", bazarzad.at(19)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(19)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R46", bazarzad.at(20)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(20)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R47", bazarzad.at(21)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(21)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R48", bazarzad.at(22)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(22)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R49", bazarzad.at(23)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(23)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":R50", bazarzad.at(24)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(24)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":suma", bazarzad.at(25)->data(Qt::DisplayRole).toInt() -
+                           rzad.at(25)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":uzytkownik", user);
+            qry2.bindValue(":wprowadzono", rzad.at(33)->data(Qt::DisplayRole).toString());
+            qry2.bindValue(":realizacja", rzad.at(34)->data(Qt::DisplayRole).toString());
+            qry2.bindValue(":uwagi", rzad.at(35)->data(Qt::DisplayRole).toString());
+            qry2.bindValue(":uwagi2", rzad.at(36)->data(Qt::DisplayRole).toString());
+            qry2.bindValue(":handlowce_id",  rzad.at(46)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":modele_id", rzad.at(47)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":roznice_id", idRoznicy);
+            if (!qry2.exec()) {
+                qDebug() << "Bląd przy zapisie rozk poz222222" ;
+                vSuccess = false;
+                bazowepozycje->appendRow(bazarzad);
+            }
+        }
+    }
+    if (vSuccess == true) {
+        QSqlQuery qryx;
+        QString qryString("UPDATE `obuwie_db`.`zamowienia` SET `status`='DO WYSYŁKI' WHERE `id` in ( ");
+        qryString += currentIdZamRozkroje;
+        qryString += " )";
+        qryx.prepare(qryString);
+        if (!qryx.exec()) {
+            qDebug() << "Bląd przy zmiana stat do wys" ;
+            vSuccess = false;
+        }
+    }
+
+    if (vSuccess == true) {
+        db.commit();
+        setRozkroje();
+        mRozkroje->select();
+        if (bazowepozycje) {
+            setRoznice();
+            mRoznice->select();
+        }
+        return true;
+    } else {
+        db.rollback();
+        return false;
+    }
+    return true;
 }
 
 void BazaDanychManager::zachowajSpod(QString getNazwa, QString getProducent,
@@ -1232,15 +1399,6 @@ int BazaDanychManager::zwrocSumeZamowien() {
     for (int i = 0; i < mZamowienia->rowCount(); i++) {
         result += mZamowienia->data(mZamowienia->index(i,
                                     25)).toInt();
-    }
-    return result;
-}
-
-int BazaDanychManager::zwrocSumeZamowienSzczegoly() {
-    int result = 0;
-    for (int i = 0; i < mZamowieniaSzczegoly->rowCount(); i++) {
-        result += mZamowieniaSzczegoly->data(mZamowieniaSzczegoly->index(i,
-                                             25)).toInt();
     }
     return result;
 }

@@ -19,7 +19,6 @@ class EdycjaZamowieniaDialog : public QDialog {
         ~EdycjaZamowieniaDialog();
         void setNrZam(QString nrZami);
     private slots:
-        void obliczSume(QStandardItem *it);
         void refreshTable();
         void updateZamSum(const QModelIndex &topLeft, const QModelIndex &bot,
                           const QVector<int> &);
@@ -33,6 +32,8 @@ class EdycjaZamowieniaDialog : public QDialog {
         void SelectionOfTableChanged(
             const QItemSelection &aSelected,
             const QItemSelection &aDeselected);
+    signals:
+        void koniecEdycji();
     private:
         void setSumaZamowien();
         void showEvent(QShowEvent *e);

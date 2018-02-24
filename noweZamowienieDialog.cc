@@ -28,7 +28,6 @@ noweZamowienieDialog::noweZamowienieDialog(handlowceDialog *wybHandlDialog,
     setPlainTextEnabled(false);
     ui->calendarWidget->setSelectedDate(QDate::currentDate());
     ui->calendarWidgetRealizacja->setSelectedDate(QDate::currentDate().addDays(14));
-    ui->pushButton_10->setEnabled(false);
     NotEditableDelegate *del = new NotEditableDelegate(this);
     for (int i = 0; i < 6; i++) {
         ui->tableViewZam->setItemDelegateForColumn(i, del);
@@ -146,8 +145,8 @@ void noweZamowienieDialog::on_pushButtonModel_clicked() {
         zamowienie->insertRow(ktoraPozycja, rzad);
         ustawTabeleHeaders();
         QStringList listaZamowienia;
-        listaZamowienia << "WZÓR" <<
-                        "MATRYCA " << "OCIEP" << "SPÓD" << "KOLOR" << "WKŁADKA" << "R36" << "R37"
+        listaZamowienia << "WZÓR" << "SPÓD" << "KOLOR" <<
+                        "MATRYCA " << "OCIEP" << "WKŁADKA" << "R36" << "R37"
                         << "R38"    <<
                         "R39" << "R40"
                         << "R41" << "R42" << "R43"  << "R44"
@@ -169,6 +168,7 @@ void noweZamowienieDialog::on_pushButtonModel_clicked() {
 
 void noweZamowienieDialog::showEvent(QShowEvent *e) {
     Q_UNUSED(e);
+    ui->pushButton_10->setEnabled(false);
     int ostatniNumer = dbManager->getNumerOstatniegoZamKomputerowego();
     int numerZamowieniaNowego = ostatniNumer + 1;
     nr = QString("B%1").arg(numerZamowieniaNowego);

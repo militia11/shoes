@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1632</width>
+    <width>1738</width>
     <height>1104</height>
    </rect>
   </property>
@@ -1154,7 +1154,7 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>13</pointsize>
+          <pointsize>18</pointsize>
          </font>
         </property>
         <property name="text">
@@ -1384,7 +1384,6 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionDodajZamowienie"/>
-   <addaction name="actionDrukuj_zam_wienia"/>
    <addaction name="actionEdycja"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -1392,7 +1391,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1632</width>
+     <width>1738</width>
      <height>22</height>
     </rect>
    </property>
@@ -1487,18 +1486,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
-   </property>
-  </action>
-  <action name="actionDrukuj_zam_wienia">
-   <property name="icon">
-    <iconset resource="zasoby.qrc">
-     <normaloff>:/zasoby/print.png</normaloff>:/zasoby/print.png</iconset>
-   </property>
-   <property name="text">
-    <string>Drukuj zamówienia</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionEdycja">

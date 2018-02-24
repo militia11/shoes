@@ -56,7 +56,8 @@ SOURCES += \
     DoRozkrojuDialog.cc \
     RozkrojeDialog.cc \
     RozniceDialog.cc \
-    edycjazamowieniadialog.cpp
+    edycjazamowieniadialog.cpp \
+    NaglowkiZamowienia.cc
 
 HEADERS += \
 		MainWindow.h \
@@ -92,7 +93,8 @@ HEADERS += \
     DoRozkrojuDialog.h \
     RozkrojeDialog.h \
     RozniceDialog.h \
-    edycjazamowieniadialog.h
+    edycjazamowieniadialog.h \
+    NaglowkiZamowienia.h
 
 FORMS += \
 		MainWindow.ui \
