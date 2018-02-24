@@ -35,16 +35,18 @@ class EdycjaZamowieniaDialog : public QDialog {
     signals:
         void koniecEdycji();
     private:
+        void czysc();
         void setSumaZamowien();
         void showEvent(QShowEvent *e);
         void hideEvent(QHideEvent *e);
         Ui::EdycjaZamowieniaDialog *ui;
         BazaDanychManager *dbManager;
         QString nrZam;
+        int idKli;
+        QString kliSkrot;
         klienciDialog *dialogKlienci;
         handlowceDialog *dialogHandl;
         modeleDialog *dialogmodele;
-        int ktoraPozycja;
 };
 
 #endif // EDYCJAZAMOWIENIADIALOG_H

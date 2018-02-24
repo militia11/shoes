@@ -15,7 +15,6 @@ RozniceDialog::~RozniceDialog() {
 
 void RozniceDialog::SelectionOfTableChanged(const QItemSelection &aSelected, const QItemSelection &aDeselected) {
     bool vIsAnyItemSelected = aSelected.count() > 0;
-    // ui->pushButtonPrint->setEnabled(vIsAnyItemSelected);
     if (!vIsAnyItemSelected) {
         deleteOldModel();
     }
@@ -41,7 +40,6 @@ void RozniceDialog::on_tableView_clicked(const QModelIndex &index) {
     QSqlQueryModel *vModel = dbManager->getSqlModelForQuery(&query);
     if (vModel) {
         ui->tableViewSzczegoly->setModel(vModel);
-        //m->setHeaderData(1, Qt::Horizontal, QString("CENA"));
     }
     ui->tableViewSzczegoly->hideColumn(0);
     NaglowkiZamowienia::ustawNaglowki(ui->tableViewSzczegoly, vModel);

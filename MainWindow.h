@@ -92,6 +92,8 @@ class MainWindow : public QMainWindow {
         void on_actionRozkroje_triggered();
         void on_actionR_nice_rozkroje_triggered();
 
+        void on_radioButton_2_clicked();
+
     private:
         void keyPressEvent(QKeyEvent *event);
         void filtruj();
@@ -147,7 +149,7 @@ class MainWindow : public QMainWindow {
         void ustawCombo(QString tabela, QComboBox *com);
         void createCombos();
         void setSumaZamowien();
-
+        bool archiwumMode;
         QString getNrZam(QModelIndex idx);
         QString prepareRozkroj();
 };

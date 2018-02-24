@@ -39,7 +39,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ha = 80;
     daty = 88;
     spnazproc = 74;
-
     //ui->tableViewZam->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->toolBar->setIconSize(QSize(36, 36));
     dbManager = new BazaDanychManager();
@@ -76,14 +75,13 @@ MainWindow::MainWindow(QWidget *parent) :
     roznicerozkroje = new RozniceDialog(dbManager, this) ;
     proxy = new QSortFilterProxyModel(this);
     //logowanie();
-
+    archiwumMode = false;
     if (!dbManager->polacz()) {
         ustawieniaBazy();
     }
 
     ui->tableViewZam->setContextMenuPolicy(Qt::CustomContextMenu);
     podlaczSygnaly();
-    a();
     aktualizujTabele();
     createCombos();
     //dbManager->filterZamowien.status = QString("KRÓJ");
@@ -104,10 +102,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableViewZam->setItemDelegateForColumn(37, del);
     dialogEdycjaZam = new  EdycjaZamowieniaDialog(dialogKlienci, dialogHandl, dialogmodele, dbManager, this);
     connect(dialogEdycjaZam, SIGNAL(koniecEdycji()), this, SLOT(ustawIFiltruj()));
-
-    //ui->tableViewZam->selectRow(2);
-    //on_actionDrukuj_zam_wienia_triggered();
-    //exit(1);
+    a();
 }
 
 void MainWindow::aktualizujTabele() {
@@ -118,9 +113,12 @@ void MainWindow::aktualizujTabele() {
 }
 
 void MainWindow::a() {
+//    dialogEdycjaZam->setNrZam("B204");
+//    dialogEdycjaZam->exec();
     //if (dialogmodele->exec() == QDialog::Accepted) {
     //    if (  dialognowyModel->exec() == QDialog::Accepted) {
     //}
+    rozkroje->exec();
     //roznicerozkrojep->exec();
 }
 
@@ -138,79 +136,6 @@ void MainWindow::updateZamSum(const QModelIndex &topLeft, const QModelIndex &bot
     if (bot.column() != 46) {
         QTimer::singleShot(100, this, SLOT(refreshTable()));
     }
-}
-
-void MainWindow::stionResized(int logicalIndex, int oldSize, int newSize) {
-    switch (logicalIndex) {
-        case 1: {
-                nrkar = newSize;
-                ui->lineEditNrKarta->setFixedWidth(nrkar);
-                break;
-            }
-        case 2:
-            kl = newSize;
-            ui->lineEditKlientN->setFixedWidth(kl);
-            break;
-        case 3: {
-                klnr = newSize;
-                ui->lineEditKlient->setFixedWidth(klnr);
-                break;
-            }
-        case 4:
-            wz = newSize;
-            ui->lineEditWzor->setFixedWidth(wz);
-            break;
-        case 5:
-            sp = newSize;
-            ui->lineEditS->setFixedWidth(sp);
-            break;
-        case 6:
-            kol = newSize;
-            ui->lineEditKol->setFixedWidth(kol);
-            break;
-        case 7:
-            oc = newSize;
-            ui->lineEditO->setFixedWidth(oc);
-            break;
-        case 8:
-            ma = newSize;
-            ui->lineEditMa->setFixedWidth(ma);
-            break;
-        case 9:
-            wkl = newSize;
-            ui->lineEditWkl->setFixedWidth(wkl);
-            break;
-        case 26:
-            ui->lineEdits1->setFixedWidth(newSize);
-            break;
-        case 27:
-            ui->lineEdits2->setFixedWidth(newSize);
-            break;
-        case 28:
-            ui->lineEdits3->setFixedWidth(newSize);
-            break;
-        case 29:
-            ui->lineEditsnaz->setFixedWidth(newSize);
-            break;
-        case 30:
-            ui->lineEditsprod->setFixedWidth(newSize);
-            break;
-        case 31:
-            ui->lineEditUzy->setFixedWidth(newSize);
-            break;
-        case 32:
-            ui->lineEditHan->setFixedWidth(newSize);
-            break;
-        case 33:
-            ui->lineEditwpr->setFixedWidth(newSize);
-            break;
-        case 34:
-            ui->lineEditzre->setFixedWidth(newSize);
-            break;
-        default:
-            break;
-    }
-    this->repaint();
 }
 
 QString MainWindow::getNrZam(QModelIndex idx) {
@@ -236,6 +161,7 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
         QMenu myMenu;
         if (dbManager->filterZamowien.status == QString("WPROWADZONE")) {
             myMenu.addAction("KRÓJ");
+            //    myMenu.addAction("DO WYSYŁKI");
         } else if (dbManager->filterZamowien.status == QString("DO WYSYŁKI")) {
             myMenu.addAction("ZREALIZOWANO");
         }
@@ -285,15 +211,25 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
                     QString nr = prepareRozkroj();
                     dorozkroju->setNr(nr);
                     if (dorozkroju->exec() == QDialog::Accepted) {
-                        dbManager->rozkroj(dorozkroju->getModel(), dorozkroju->getBazowyModel());
-                        rozkroje->exec();
+                        dbManager->copyZamowienieArch(dorozkroju->getModel());
+                        if (dbManager->rozkroj(dorozkroju->getModel(), dorozkroju->getBazowyModel())) {
+                            dbManager->getModelZamowienia()->select();
+                            rozkroje->setDodanoRozkroj(true);
+                            rozkroje->exec();
+                        }
+
                     } else {
                         dbManager->usunSzkieletRozkroju();
+                        return;
                     }
                 } else {
                     prepareRozkroj();
-                    dbManager->rozkroj(dbManager->getDoRozkroju(zamowienia));
-                    rozkroje->exec();
+                    dbManager->copyZamowienieArch(dbManager->getDoRozkroju(zamowienia));
+                    if (dbManager->rozkroj(dbManager->getDoRozkroju(zamowienia))) {
+                        dbManager->getModelZamowienia()->select();
+                        rozkroje->setDodanoRozkroj(true);
+                        rozkroje->exec();
+                    }
                 }
             } else if (selectedItem->text() == QString("ZREALIZOWANE")) {
 
@@ -405,7 +341,7 @@ void MainWindow::rozciagnijWiersze() {
     QHeaderView *hv = ui->tableViewZam->horizontalHeader();
     hv->setSectionHidden(0, true);
     hv->setStretchLastSection(true);
-    for (int i = 37; i < 47; i++) {
+    for (int i = 37; i < 48; i++) {
         hv->setSectionHidden(i, true);
     }
 
@@ -513,28 +449,6 @@ void MainWindow::on_actionModele_triggered() {
     }
 }
 
-void MainWindow::ustawIFiltruj() {
-    dbManager->filterZamowien.nrZ = ui->lineEditNrKarta->text();
-    dbManager->filterZamowien.klNaz = ui->lineEditKlientN->text();
-    dbManager->filterZamowien.klNr = ui->lineEditKlient ->text();
-    dbManager->filterZamowien.ociep = ui->lineEditO->text();
-    dbManager->filterZamowien.wzor = ui->lineEditWzor->text();
-    dbManager->filterZamowien.kolor = ui->lineEditKol->text();
-    dbManager->filterZamowien.mat = ui->lineEditMa->text();
-    dbManager->filterZamowien.wkladka = ui->lineEditWkl ->text();
-    dbManager->filterZamowien.uzyt = ui->lineEditUzy->text();
-    dbManager->filterZamowien.sk1 = ui->lineEdits1 ->text();
-    dbManager->filterZamowien.sk2 = ui->lineEdits2 ->text();
-    dbManager->filterZamowien.sk3 = ui->lineEdits3 ->text();
-    dbManager->filterZamowien.ha = ui->lineEditHan ->text();
-    dbManager->filterZamowien.snaz = ui->lineEditsnaz ->text();
-    dbManager->filterZamowien.sprod = ui->lineEditsprod ->text();
-    dbManager->filterZamowien.wpr = ui->lineEditwpr ->text();
-    dbManager->filterZamowien.rea = ui->lineEditzre ->text();
-    dbManager->filterZamowien.spn = ui->lineEditS->text();
-    filtruj();
-}
-
 void MainWindow::on_pushButtonSzukaj_clicked() {
     ustawIFiltruj();
 }
@@ -545,11 +459,23 @@ void MainWindow::filtruj() {
 }
 
 void MainWindow::on_radioButton_clicked() {
+    if (archiwumMode) {
+        dbManager->setTableWidokZamowienia("vzam");
+        archiwumMode = false;
+        rozciagnijWiersze();
+        ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
+    }
     dbManager->filterZamowien.status = QString("WPROWADZONE");
     filtruj();
 }
 
 void MainWindow::on_radioButton_3_clicked() {
+    if (archiwumMode) {
+        dbManager->setTableWidokZamowienia("vzam");
+        archiwumMode = false;
+        rozciagnijWiersze();
+        ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
+    }
     dbManager->filterZamowien.status = QString("DO WYSYŁKI");
     filtruj();
 }
@@ -562,6 +488,12 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 }
 
 void MainWindow::on_radioButton_4_clicked() {
+    if (archiwumMode) {
+        dbManager->setTableWidokZamowienia("vzam");
+        rozciagnijWiersze();
+        archiwumMode = false;
+        ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
+    }
     dbManager->filterZamowien.status = QString("");
     filtruj();
 }
@@ -680,7 +612,13 @@ void MainWindow::on_actionOcieplenia_triggered() {
 }
 
 void MainWindow::on_radioButton_5_clicked() {
-    dbManager->filterZamowien.status = QString("ZREALIZOWANE");
+    if (archiwumMode) {
+        dbManager->setTableWidokZamowienia("vzam");
+        archiwumMode = false;
+        rozciagnijWiersze();
+        ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
+    }
+    dbManager->filterZamowien.status = QString("ZREALIZOWANO");
     filtruj();
 }
 
@@ -690,4 +628,108 @@ void MainWindow::on_actionRozkroje_triggered() {
 
 void MainWindow::on_actionR_nice_rozkroje_triggered() {
     roznicerozkroje->exec();
+}
+
+void MainWindow::stionResized(int logicalIndex, int oldSize, int newSize) {
+    switch (logicalIndex) {
+        case 1: {
+                nrkar = newSize;
+                ui->lineEditNrKarta->setFixedWidth(nrkar);
+                break;
+            }
+        case 2:
+            kl = newSize;
+            ui->lineEditKlientN->setFixedWidth(kl);
+            break;
+        case 3: {
+                klnr = newSize;
+                ui->lineEditKlient->setFixedWidth(klnr);
+                break;
+            }
+        case 4:
+            wz = newSize;
+            ui->lineEditWzor->setFixedWidth(wz);
+            break;
+        case 5:
+            sp = newSize;
+            ui->lineEditS->setFixedWidth(sp);
+            break;
+        case 6:
+            kol = newSize;
+            ui->lineEditKol->setFixedWidth(kol);
+            break;
+        case 7:
+            oc = newSize;
+            ui->lineEditO->setFixedWidth(oc);
+            break;
+        case 8:
+            ma = newSize;
+            ui->lineEditMa->setFixedWidth(ma);
+            break;
+        case 9:
+            wkl = newSize;
+            ui->lineEditWkl->setFixedWidth(wkl);
+            break;
+        case 26:
+            ui->lineEdits1->setFixedWidth(newSize);
+            break;
+        case 27:
+            ui->lineEdits2->setFixedWidth(newSize);
+            break;
+        case 28:
+            ui->lineEdits3->setFixedWidth(newSize);
+            break;
+        case 29:
+            ui->lineEditsnaz->setFixedWidth(newSize);
+            break;
+        case 30:
+            ui->lineEditsprod->setFixedWidth(newSize);
+            break;
+        case 31:
+            ui->lineEditUzy->setFixedWidth(newSize);
+            break;
+        case 32:
+            ui->lineEditHan->setFixedWidth(newSize);
+            break;
+        case 33:
+            ui->lineEditwpr->setFixedWidth(newSize);
+            break;
+        case 34:
+            ui->lineEditzre->setFixedWidth(newSize);
+            break;
+        default:
+            break;
+    }
+    this->repaint();
+}
+
+void MainWindow::ustawIFiltruj() {
+    dbManager->filterZamowien.nrZ = ui->lineEditNrKarta->text();
+    dbManager->filterZamowien.klNaz = ui->lineEditKlientN->text();
+    dbManager->filterZamowien.klNr = ui->lineEditKlient ->text();
+    dbManager->filterZamowien.ociep = ui->lineEditO->text();
+    dbManager->filterZamowien.wzor = ui->lineEditWzor->text();
+    dbManager->filterZamowien.kolor = ui->lineEditKol->text();
+    dbManager->filterZamowien.mat = ui->lineEditMa->text();
+    dbManager->filterZamowien.wkladka = ui->lineEditWkl ->text();
+    dbManager->filterZamowien.uzyt = ui->lineEditUzy->text();
+    dbManager->filterZamowien.sk1 = ui->lineEdits1 ->text();
+    dbManager->filterZamowien.sk2 = ui->lineEdits2 ->text();
+    dbManager->filterZamowien.sk3 = ui->lineEdits3 ->text();
+    dbManager->filterZamowien.ha = ui->lineEditHan ->text();
+    dbManager->filterZamowien.snaz = ui->lineEditsnaz ->text();
+    dbManager->filterZamowien.sprod = ui->lineEditsprod ->text();
+    dbManager->filterZamowien.wpr = ui->lineEditwpr ->text();
+    dbManager->filterZamowien.rea = ui->lineEditzre ->text();
+    dbManager->filterZamowien.spn = ui->lineEditS->text();
+    filtruj();
+}
+
+void MainWindow::on_radioButton_2_clicked() {
+    dbManager->setTableWidokZamowienia("vZamArch");
+    rozciagnijWiersze();
+    archiwumMode = true;
+    dbManager->filterZamowien.status = QString("");
+    filtruj();
+    ui->tableViewZam->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }

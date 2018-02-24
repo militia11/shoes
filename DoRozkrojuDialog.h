@@ -24,12 +24,13 @@ class DoRozkrojuDialog : public QDialog {
         void setNr(const QString &value);
 
         QStandardItemModel *getBazowyModel() const;
-
     private slots:
+        void obliczSume(QStandardItem *it);
         void on_buttonBox_accepted();
         void on_buttonBox_rejected();
 
     private:
+        void setSumaZamowien();
         void keyPressEvent(QKeyEvent *event);
         void showEvent(QShowEvent *e);
         Ui::DoRozkrojuDialog *ui;
@@ -37,6 +38,7 @@ class DoRozkrojuDialog : public QDialog {
         QStandardItemModel *model;
         QStandardItemModel *bazowyModel;
         QString nr;
+        void ustawSumaAll();
 };
 
 #endif // DOROZKROJUDIALOG_H

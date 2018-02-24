@@ -61,6 +61,7 @@ void DoRozkrojuDialog::showEvent(QShowEvent *e) {
     ui->tableViewZam->setModel(model);
     NaglowkiZamowienia::ustawNaglowki(ui->tableViewZam, model);
 
+    ustawSumaAll();
     bazowyModel->clear();
     for (int i = 0; i < model->rowCount(); i++) {
         QList<QStandardItem *> rzad;
@@ -76,6 +77,27 @@ QStandardItemModel *DoRozkrojuDialog::getBazowyModel() const {
     return bazowyModel;
 }
 
+void DoRozkrojuDialog::ustawSumaAll() {
+    int wszystkie = 0;
+    for (int j = 0; j <  model->rowCount(); j++) {
+        wszystkie += model->data(model->index(j, 25),
+                                 Qt::DisplayRole).toInt();
+    }
+    ui->lcdNumber->setText(QString::number(wszystkie));
+}
+
+void DoRozkrojuDialog::obliczSume(QStandardItem *it) {
+    int suma = 0;
+    int rzad = it->row();
+    for (int i = 10; i < 25; i++) {
+        suma += model->data(model->index(rzad, i),
+                            Qt::DisplayRole).toInt();
+    }
+    model->setData(model->index(rzad, 25), QVariant(suma));
+
+    ustawSumaAll();
+}
+
 void DoRozkrojuDialog::setNr(const QString &value) {
     nr = value;
 }
@@ -89,6 +111,8 @@ void DoRozkrojuDialog::setModel(QStandardItemModel *value) {
         delete model;
     }
     model = value;
+    connect(model, SIGNAL(itemChanged(QStandardItem *)), this,
+            SLOT(obliczSume(QStandardItem *)));
 }
 
 void DoRozkrojuDialog::setZamowienia(const std::vector<int> &value) {

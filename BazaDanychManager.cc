@@ -144,11 +144,39 @@ bool BazaDanychManager::polacz() {
     }
 }
 
-void BazaDanychManager::setZamowienia() {
-    mZamowienia = new QSqlTableModel();
-    mZamowienia->setTable("vzam");
+void BazaDanychManager::setTableWidokZamowienia(QString tabela) {
+    mZamowienia->setTable(tabela);
     setHeadersGlowneZamowienia();
     mZamowienia->select();
+}
+
+bool BazaDanychManager::copyZamowienieArch(QStandardItemModel *pozycje) {
+    int count = pozycje->rowCount();
+    db.transaction();
+    bool vSuccess = true;
+
+    for (int i = 0; i < count; i++) {
+        QSqlQuery qry;
+        qry.prepare("INSERT INTO zamowieniaArch SELECT z.* FROM zamowienia z WHERE z.id=:id");
+        qry.bindValue(":id", pozycje->data(pozycje->index(i, 0)).toInt());
+        if (!qry.exec()) {
+            qDebug() << "nie udalo copy";
+            vSuccess = false;
+        }
+    }
+    if (vSuccess == true) {
+        db.commit();
+        getModelZamowienia()->select();
+        return true;
+    } else {
+        db.rollback();
+        return false;
+    }
+}
+
+void BazaDanychManager::setZamowienia() {
+    mZamowienia = new QSqlTableModel();
+    setTableWidokZamowienia("vzam");
 }
 
 QSqlTableModel *BazaDanychManager::getModelZamowienia() {
@@ -185,6 +213,30 @@ QImage BazaDanychManager::getImageZamowienia(int id) {
     return image;
 }
 
+QString BazaDanychManager::getKlientSkrot(QString nr_zam) {
+    QSqlQuery vQuery(db);
+    QString res;
+    vQuery.prepare("select klnaz from vzam where nr_zamowienia=:nrZ");
+    vQuery.bindValue(":nrZ", nr_zam);
+    if (vQuery.exec()) {
+        vQuery.next();
+        res =  vQuery.value(0).toString();
+    }
+    return res;
+}
+
+QString BazaDanychManager::getHanlSkrot(QString nr_zam) {
+    QSqlQuery vQuery(db);
+    QString res;
+    vQuery.prepare("select skrot from vzam where nr_zamowienia=:nrZ");
+    vQuery.bindValue(":nrZ", nr_zam);
+    if (vQuery.exec()) {
+        vQuery.next();
+        res =  vQuery.value(0).toString();
+    }
+    return res;
+}
+
 QSqlTableModel *BazaDanychManager::getModelKlienci() {
     return mKlienci;
 }
@@ -202,11 +254,29 @@ void BazaDanychManager::oznaczDrukowano(int id) {
 //    }
 }
 
+void BazaDanychManager::removeZamowienie(int id) {
+    QSqlQuery qry;
+    qry.prepare("delete from `obuwie_db`.`zamowienia` where id=:id");
+    qry.bindValue(":id", id);
+    if (!qry.exec()) {
+        qDebug() << "Bląd przy usunieciu rozk" ;
+    }
+}
+
 void BazaDanychManager::ustawAktualnyModelId(const QModelIndex index) {
     idModelu = mModele->data(mModele->index(index.row(),
                                             0)).toInt();
     idModeluL.append(mModele->data(mModele->index(index.row(),
                                    0)).toInt());
+}
+
+int BazaDanychManager::getIdZamowieniaZTabeli(QModelIndex index) {
+    int id = -1;
+
+    id = mZamowienia->data(mZamowienia->index(
+                               index.row(),
+                               0)).toInt();
+    return id;
 }
 
 void BazaDanychManager::setHeadersGlowneZamowienia() {
@@ -242,7 +312,6 @@ QVariant BazaDanychManager::GetFirstValueForQuery(QSqlQuery *aQuery) {
 int BazaDanychManager::getNumerOstatniegoZamKomputerowego() {
     QSqlQuery vIdQuery(db);
     vIdQuery.exec("SELECT nr_zamowienia FROM zamowienia  WHERE nr_zamowienia LIKE 'B%' ORDER BY id DESC LIMIT 1;");
-
     QVariant vIdAsVariant = GetFirstValueForQuery(&vIdQuery);
     QString numer = vIdAsVariant.isNull() ? QString("B0") :
                     vIdAsVariant.toString();
@@ -653,7 +722,6 @@ QString BazaDanychManager::poberzOpis2(int id) {
     }
 }
 
-
 QString BazaDanychManager::pobierzAktualnaSkore(const QModelIndex index) {
     idSkory = mSkory->data(mSkory->index(index.row(),
                                          0)).toInt();
@@ -746,45 +814,46 @@ QString BazaDanychManager::getOstatniSelectZam() const {
 }
 
 zamowienieZRozmiaramiStruct BazaDanychManager::stworzZamowienieZBazy(int id) {
-    zamowienieZRozmiaramiStruct zam;
-    QSqlQuery qry;
-    qry.prepare("select *from vroz where zamowienia_id=:id;");
-    qry.bindValue(":id", id);
-    qry.exec();
-    if (qry.next()) {
-        zam.nrZ = qry.value(1).toString();
-        zam.klNaz = qry.value(2).toString();
-        zam.klNr = qry.value(3).toString();
-        zam.wzor = qry.value(4).toString();
-        zam.spn = qry.value(5).toString();
-        zam.kolor = qry.value(6).toString();
-        zam.ociep = qry.value(7).toString();
-        zam.mat = qry.value(8).toString();
-        zam.wkladka = qry.value(9).toString();
-        zam.rozmiary.append(qry.value(10).toInt());
-        zam.rozmiary.append(qry.value(11).toInt());
-        zam.rozmiary.append(qry.value(12).toInt());
-        zam.rozmiary.append(qry.value(13).toInt());
-        zam.rozmiary.append(qry.value(14).toInt());
-        zam.rozmiary.append(qry.value(15).toInt());
-        zam.rozmiary.append(qry.value(16).toInt());
-        zam.rozmiary.append(qry.value(17).toInt());
-        zam.rozmiary.append(qry.value(18).toInt());
-        zam.rozmiary.append(qry.value(19).toInt());
-        zam.rozmiary.append(qry.value(20).toInt());
-        zam.rozmiary.append(qry.value(21).toInt());
-        zam.rozmiary.append(qry.value(22).toInt());
-        zam.rozmiary.append(qry.value(23).toInt());
-        zam.rozmiary.append(qry.value(24).toInt());
-        zam.rozmiary.append(qry.value(25).toInt());
-        zam.uzyt = qry.value(32).toString();
-        zam.wpr = qry.value(33).toString();
-        zam.rea = qry.value(34).toString();
-        zam.uwagi = qry.value(35).toString();
-        zam.uwagi2 = qry.value(36).toString();
-        zam.rozkrojNr = qry.value(49).toString();
-    }
-    return zam;
+//    zamowienieZRozmiaramiStruct zam;
+//    QSqlQuery qry;
+//    qry.prepare("SELECT * FROM obuwie_db.vroz where zamowienia_id=:id;");
+//    qry.bindValue(":id", id);
+//    qry.exec();
+//    if (qry.next()) {
+//        qDebug() << qry.value(1).toString();
+//        zam.nrZ = qry.value(1).toString();
+//        zam.klNaz = qry.value(2).toString();
+//        zam.klNr = qry.value(3).toString();
+//        zam.wzor = qry.value(4).toString();
+//        zam.spn = qry.value(5).toString();
+//        zam.kolor = qry.value(6).toString();
+//        zam.ociep = qry.value(7).toString();
+//        zam.mat = qry.value(8).toString();
+//        zam.wkladka = qry.value(9).toString();
+//        zam.rozmiary.append(qry.value(10).toInt());
+//        zam.rozmiary.append(qry.value(11).toInt());
+//        zam.rozmiary.append(qry.value(12).toInt());
+//        zam.rozmiary.append(qry.value(13).toInt());
+//        zam.rozmiary.append(qry.value(14).toInt());
+//        zam.rozmiary.append(qry.value(15).toInt());
+//        zam.rozmiary.append(qry.value(16).toInt());
+//        zam.rozmiary.append(qry.value(17).toInt());
+//        zam.rozmiary.append(qry.value(18).toInt());
+//        zam.rozmiary.append(qry.value(19).toInt());
+//        zam.rozmiary.append(qry.value(20).toInt());
+//        zam.rozmiary.append(qry.value(21).toInt());
+//        zam.rozmiary.append(qry.value(22).toInt());
+//        zam.rozmiary.append(qry.value(23).toInt());
+//        zam.rozmiary.append(qry.value(24).toInt());
+//        zam.rozmiary.append(qry.value(25).toInt());
+//        zam.uzyt = qry.value(32).toString();
+//        zam.wpr = qry.value(33).toString();
+//        zam.rea = qry.value(34).toString();
+//        zam.uwagi = qry.value(35).toString();
+//        zam.uwagi2 = qry.value(36).toString();
+//        zam.rozkrojNr = qry.value(49).toString();
+//    }
+//    return zam;
 }
 
 void BazaDanychManager::setKlienci() {
@@ -1013,14 +1082,13 @@ void BazaDanychManager::aktualizujModel(QVector<QImage> images, QString rodzaj_m
 }
 
 bool BazaDanychManager::zamowienie(QDate zam,
-                                   QDate realizacji, QStandardItemModel *pozycje,
+                                   QDate realizacji,
                                    QStringList uwagi1,
                                    QString uwagi2,
-                                   QString nr_zam) {
+                                   QString nr_zam, QStandardItemModel *pozycje) {
     db.transaction();
     bool vSuccess = true;
     int count = pozycje->rowCount();
-    int sumaKlient = 0;
     for (int i = 0; i < count; i++) {
         QList<QStandardItem *> rzad = pozycje->takeRow(0);
         QSqlQuery qry;
@@ -1049,7 +1117,6 @@ bool BazaDanychManager::zamowienie(QDate zam,
         for (int i = 6; i < 21; i++) {
             suma += rzad.at(i)->data(Qt::DisplayRole).toInt();
         }
-        sumaKlient += suma;
         qry.bindValue(":suma", suma);
         qry.bindValue(":uwagi", uwagi1[i]);
         qry.bindValue(":uwagi2", uwagi2);
@@ -1074,6 +1141,23 @@ bool BazaDanychManager::zamowienie(QDate zam,
     } else {
         db.rollback();
         return false;
+    }
+}
+
+void BazaDanychManager::insertPozycjazamowienie(QString nr_zam, int idKlienta, int idHandlowca) {
+    QSqlQuery qry;
+    qry.prepare("INSERT INTO `obuwie_db`.`zamowienia` (nr_zamowienia, id_klienta, wprowadzono, realizacja, status, uzytkownik, modele_id, handlowce_id) VALUES ("
+                ":nr_zamowienia,:id_klienta, :wprowadzono ,:realizacja, :status, :uzytkownik, :modele_id, :handlowce_id)");
+    qry.bindValue(":nr_zamowienia", nr_zam);
+    qry.bindValue(":id_klienta", idKlienta);
+    qry.bindValue(":wprowadzono", QDate::currentDate());
+    qry.bindValue(":realizacja", QDate::currentDate().addDays(14));
+    qry.bindValue(":status", QString("WPROWADZONE"));
+    qry.bindValue(":uzytkownik", user);
+    qry.bindValue(":modele_id", idModelu);
+    qry.bindValue(":handlowce_id", idHandlowca);
+    if (!qry.exec()) {
+        qDebug() << "Bląd przy insert zam";
     }
 }
 
@@ -1219,7 +1303,6 @@ bool BazaDanychManager::rozkroj(QStandardItemModel *pozycje, QStandardItemModel 
         db.rollback();
         return false;
     }
-    return true;
 }
 
 void BazaDanychManager::zachowajSpod(QString getNazwa, QString getProducent,

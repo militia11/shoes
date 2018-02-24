@@ -7,7 +7,6 @@
 #include <QTextDocument>
 #include <QPageSetupDialog>
 #include <QPrinter>
-//#include <QPdfWriter>
 namespace Ui {
 class RozkrojeDialog;
 }
@@ -18,6 +17,8 @@ class RozkrojeDialog : public QDialog {
     public:
         explicit RozkrojeDialog(BazaDanychManager *db, QWidget *parent = 0);
         ~RozkrojeDialog();
+
+        void setDodanoRozkroj(bool value);
 
     private slots:
         void on_tableView_clicked(const QModelIndex &index);
@@ -41,13 +42,16 @@ class RozkrojeDialog : public QDialog {
         QString zamowienieTabelka(zamowienieZRozmiaramiStruct zamowienie);
         void oznaczDrukowano();
         void showEvent(QShowEvent *e);
-        //  void hideEvent(QHideEvent *e);
+        void hideEvent(QHideEvent *e);
         QVector<zamowienieZRozmiaramiStruct> zamowieniaDruk;
         QVector<int> idDrukowanychZam;
         BazaDanychManager *dbManager;
         Ui::RozkrojeDialog *ui;
         QSortFilterProxyModel *proxy;
         void deleteOldModel();
+        bool dodanoRozkroj;
+        QSqlQueryModel *vModel;
+        void wyczyscListy();
 };
 
 #endif // ROZKROJEDIALOG_H

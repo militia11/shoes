@@ -4,7 +4,7 @@ void NaglowkiZamowienia::ustawNaglowki(QTableView *tableView, QAbstractItemModel
     QHeaderView *hv = tableView->horizontalHeader();
     hv->setSectionHidden(0, true);
     hv->setStretchLastSection(true);
-    for (int i = 37; i < 47; i++) {
+    for (int i = 37; i < 48; i++) {
         hv->setSectionHidden(i, true);
     }
     hv->setDefaultAlignment(Qt::AlignLeft);

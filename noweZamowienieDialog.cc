@@ -102,8 +102,8 @@ void noweZamowienieDialog::on_buttonBox_accepted() {
                              QMessageBox::Ok);
     } else {
         if (dbManager->zamowienie(ui->calendarWidget->selectedDate(),
-                                  ui->calendarWidgetRealizacja->selectedDate(), zamowienie,
-                                  uwagi, ui->plainTextEditU2->toPlainText(), ui->lineEditPapier->text())) {
+                                  ui->calendarWidgetRealizacja->selectedDate(),
+                                  uwagi, ui->plainTextEditU2->toPlainText(), ui->lineEditPapier->text(), zamowienie)) {
             wyczysc();
             accept();
         } else {

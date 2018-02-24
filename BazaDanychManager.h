@@ -46,20 +46,23 @@ class BazaDanychManager {
         void zmienModellZam(int idzam);
         int zwrocSumeZamowien();
         bool aktualizujStatus(int id, QString status);
-        bool zamowienie(QDate zam, QDate realizacji, QStandardItemModel *pozycje,
+        bool zamowienie(QDate zam, QDate realizacji,
                         QStringList uwagi1,
-                        QString uwagi2, QString nr_zam);
+                        QString uwagi2, QString nr_zam, QStandardItemModel *pozycje);
+        void insertPozycjazamowienie(QString nr_zam, int idKlienta, int idHandlowca);
         bool rozkroj(QStandardItemModel *pozycje, QStandardItemModel *bazowepozycje = 0);
         void ustawAktualnyModelId(const QModelIndex index);
         QList<QStandardItem *> zwrocWierszModel();
         QString getOstatniSelectZam() const;
-
+        int getIdZamowieniaZTabeli(QModelIndex index);
         zamowienieZRozmiaramiStruct stworzZamowienieZBazy(int id);
-        void oznaczDrukowano(int id);
 
         QImage getImage(int id, int ktore, QString tab);
         bool updateImage(int id, int ktore, QImage im, QString tab);
         QImage getImageZamowienia(int id);
+
+        QString getKlientSkrot(QString nr_zam);
+        QString getHanlSkrot(QString nr_zam);
 
         void setHeadersGlowneZamowienia();
         void setUser(const QString &value);
@@ -82,6 +85,9 @@ class BazaDanychManager {
         KlientFilter filterKlientow;
         void setZamowieniaFilter();
         void setKlienciFilter();
+
+        void oznaczDrukowano(int id);
+        void removeZamowienie(int id);
 
         void ustawIdAktualnegoKlienta(const QModelIndex index);
         void ustawIdAktualnegoHandl(const QModelIndex index);
@@ -141,7 +147,6 @@ class BazaDanychManager {
         QSqlQueryModel *getSqlModelForQuery(QSqlQuery *aQuery);
         QAbstractItemModel *getModelForQuery(QSqlQuery *aQuery);
         QStandardItemModel *getDoRozkroju(const std::vector<int> &value);
-        QString filterZamString;
         void clearFilterZam();
         void setIdModelu(int value);
         int getNumerOstatniegoZamKomputerowego();
@@ -157,6 +162,8 @@ class BazaDanychManager {
         QSqlTableModel *getRoznice() const;
         void setRoznice();
 
+        void setTableWidokZamowienia(QString tabela);
+        bool copyZamowienieArch(QStandardItemModel *pozycje);
     private:
         QVariant GetFirstValueForQuery(QSqlQuery *aQuery);
         QSqlRecord getSqlRecordZModelu(const QAbstractItemModel *aItemModel);
