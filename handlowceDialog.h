@@ -20,7 +20,9 @@ class handlowceDialog : public QDialog
 		int selectExec();
 		QString getAktualnyHandlNazwa();
 
-	public slots:
+        void aktualizujTabele();
+
+public slots:
 		virtual int exec();
 
 	private slots:

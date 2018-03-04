@@ -24,7 +24,10 @@ class matryceDialog : public QDialog
 	public slots:
 		virtual int exec();
 
-	private slots:
+protected:
+                void aktualizujTabele();
+                
+private slots:
 		void on_pushButton_2_clicked();
 		void wybranoMatryce(const QModelIndex index);
 

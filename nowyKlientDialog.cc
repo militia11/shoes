@@ -1,7 +1,6 @@
 #include "nowyKlientDialog.h"
 #include "ui_nowyKlientDialog.h"
 #include <QMessageBox>
-#include <QDebug>
 
 void nowyKlientDialog::resetujPrzyciskiWymagane()
 {
@@ -11,13 +10,24 @@ void nowyKlientDialog::resetujPrzyciskiWymagane()
 	ui->lineEditMiasto->setStyleSheet("color:darkblue ;background-color: white;");
 	ui->lineEditKodPocztowy->setStyleSheet("color:darkblue ;background-color: white;");
 	ui->lineEditUlica->setStyleSheet("color:darkblue ;background-color: white;");
+    ui->lineEditW->setStyleSheet("color:darkblue ;background-color: white;");
+}
+
+QString nowyKlientDialog::getWoj() const
+{
+    return woj;
+}
+
+void nowyKlientDialog::setWoj(const QString &value)
+{
+    woj = value;
 }
 
 nowyKlientDialog::nowyKlientDialog(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::nowyKlientDialog) {
-	ui->setupUi(this);
-	resetujPrzyciskiWymagane();
+    QDialog(parent),
+    ui(new Ui::nowyKlientDialog) {
+    ui->setupUi(this);
+    resetujPrzyciskiWymagane();
 }
 
 nowyKlientDialog::~nowyKlientDialog() {
@@ -37,6 +47,7 @@ void nowyKlientDialog::wyczyscPola()
 	ui->lineEditNumerTelefonu->clear();
 	ui->lineEditMail->clear();
 	ui->lineEditUwagi->clear();
+    ui->lineEditW->clear();
 }
 
 void nowyKlientDialog::on_buttonBox_accepted() {
@@ -58,6 +69,11 @@ void nowyKlientDialog::on_buttonBox_accepted() {
 		wyswietlKomunikat = true;
 		ui->lineEditKodPocztowy->setFocus();
 	}
+    if (ui->lineEditW->text().isEmpty()) {
+        ui->lineEditW->setStyleSheet("color: blue; background-color:  #ff9999;border-style: outset; border-width: 1px; border-color: red;");
+        wyswietlKomunikat = true;
+        ui->lineEditW->setFocus();
+    }
 	if (ui->lineEditMiasto->text().isEmpty()) {
 		ui->lineEditMiasto->setStyleSheet("color: blue; background-color:  #ff9999;border-style: outset; border-width: 1px; border-color: red;");
 		wyswietlKomunikat = true;
@@ -93,18 +109,21 @@ void nowyKlientDialog::on_buttonBox_accepted() {
 		numerTelefonu = ui->lineEditNumerTelefonu->text();
 		mail = ui->lineEditMail->text();
 		uwagi = ui->lineEditUwagi->text();
-
-		wyczyscPola();
-		resetujPrzyciskiWymagane();
+woj = ui->lineEditW->text();
 		accept();
 	}
 }
 
 void nowyKlientDialog::on_buttonBox_rejected()
 {
-	wyczyscPola();
-	resetujPrzyciskiWymagane();
-	reject();
+   reject();
+}
+
+void nowyKlientDialog::showEvent(QShowEvent *e)
+{
+    wyczyscPola();
+    resetujPrzyciskiWymagane();
+ui->lineEditNazwa->setFocus();
 }
 
 

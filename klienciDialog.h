@@ -41,6 +41,7 @@ class klienciDialog : public QDialog
 		nowyKlientDialog *nowyKliDialog;
 		QSortFilterProxyModel *proxy;
 		void aktualizujTabele();
+        void aktualizujHeader();
 };
 
 #endif // KLIENCIDIALOG_H

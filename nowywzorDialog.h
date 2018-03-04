@@ -31,6 +31,7 @@ class nowywzorDialog : public QDialog
 		void on_buttonBox_rejected();
 
 	private:
+        void showEvent(QShowEvent *e);
 		Ui::nowywzorDialog *ui;
 		int wzor;
 		QString opis;

@@ -44,6 +44,15 @@ void skoryDialog::updateZamSum(const QModelIndex &, const QModelIndex &, const Q
 	getceny();
 }
 
+void skoryDialog::aktualizujTabele()
+{
+    QHeaderView *hv = ui->tableViewKlienci->horizontalHeader();
+    hv->setStretchLastSection(true);
+    hv->setSectionHidden(0, true);
+    hv->setDefaultAlignment(Qt::AlignLeft);
+    ui->tableViewKlienci->sortByColumn(0, Qt::AscendingOrder);
+}
+
 void skoryDialog::showEvent(QShowEvent *e) {
 	Q_UNUSED(e);
 	dbManager->setSkory();
@@ -58,11 +67,7 @@ void skoryDialog::showEvent(QShowEvent *e) {
 		ui->tableViewKlienci->horizontalHeader()->setSectionResizeMode(c,
 				QHeaderView::ResizeToContents);
 	}
-	QHeaderView *hv = ui->tableViewKlienci->horizontalHeader();
-	hv->setStretchLastSection(true);
-	hv->setSectionHidden(0, true);
-	hv->setDefaultAlignment(Qt::AlignLeft);
-	ui->tableViewKlienci->sortByColumn(0, Qt::AscendingOrder);
+    aktualizujTabele();
 }
 
 void skoryDialog::hideEvent(QHideEvent *e) {
@@ -81,6 +86,7 @@ QString skoryDialog::getAktualnaSkoraNazwa() const
 void skoryDialog::on_pushButton_2_clicked() {
 	if ( ns->exec() == QDialog::Accepted ) {
 		dbManager->zachowajSkore(ns->getNaz(), ns->getDos(), ns->getCena());
+        aktualizujTabele();
 	}
 }
 

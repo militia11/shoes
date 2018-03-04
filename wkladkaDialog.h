@@ -4,6 +4,7 @@
 #include <QtWidgets/QDialog>
 #include "BazaDanychManager.h"
 #include <QSortFilterProxyModel>
+#include "nowawkladkadialog.h"
 namespace Ui {
 class wkladkaDialog;
 }
@@ -13,7 +14,7 @@ class wkladkaDialog : public QDialog
 		Q_OBJECT
 
 	public:
-		explicit wkladkaDialog(BazaDanychManager *db, QWidget *parent = 0);
+        explicit wkladkaDialog(NowaWkladkaDialog *dialogNowaWkl, BazaDanychManager *db, QWidget *parent = 0);
 		~wkladkaDialog();
 		int selectExec();
 
@@ -30,6 +31,7 @@ class wkladkaDialog : public QDialog
 		void showEvent(QShowEvent *e);
 		void hideEvent(QHideEvent *e);
 		QString aktualnaWkladkaNazwa;
+        NowaWkladkaDialog *dialogNowaWkl;
 		BazaDanychManager *dbManager;
 		Ui::wkladkaDialog *ui;
 		QSortFilterProxyModel *proxy;

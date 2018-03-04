@@ -12,13 +12,112 @@
 #include <unistd.h>
 #include <QTimer>
 
+void MainWindow::csvexport() {
+//QAbstractItemModel *model = ui->tableViewZam->model();
+
+//QString linki =  QFileDialog::getSaveFileName(this, tr("Save File"),
+//                                              "C:\a.csv",
+//                                              tr("Comma Separated Values (*.csv)"));
+//        //QFileDialog::getSaveFileName(this, tr("Export CSV"),
+
+//int x = 0;
+//QString exportdata;
+
+//int counthidden=0, jint = 0;
+
+//while (jint < model->columnCount()) {
+
+//counthidden+=ui->tableViewZam->isColumnHidden(jint);
+//jint++;
+//}
+
+
+//int w = 1;
+//while (x < model->columnCount()){
+
+//if (!ui->tableViewZam->isColumnHidden(x)) {
+
+
+//exportdata.append(model->headerData(x,Qt::Horizontal,Qt::DisplayRole).toString());
+
+
+//if (model->columnCount() - w > counthidden)
+//exportdata.append(";");
+//else {
+//exportdata.append("\n");
+
+//}
+//w++;
+//}
+//x++;
+
+//}
+
+//int z = 0;
+
+//w = 1;
+//while (z < model->rowCount()) {
+
+//x = 0;
+
+//w = 1;
+//while (x < model->columnCount()) {
+//if (!ui->tableViewZam->isColumnHidden(x)) {
+
+
+//exportdata.append(model->data(model->index(z,x),Qt::DisplayRole).toString());
+
+//if (model->columnCount() - w > counthidden)
+//exportdata.append(";");
+//else
+//exportdata.append("\n");
+
+//w++;
+//}
+//x++;
+
+//}
+
+//z++;
+//}
+
+
+
+
+
+//   QFile file;
+//   if (!linki.isEmpty()) {
+// file.setFileName(linki);
+//        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+//            return;
+//}
+//QByteArray ttext;
+//ttext.append(exportdata);
+//file.write(ttext);
+}
+
+
+
 void MainWindow::logowanie() {
     QString text("");
     while (text == QString("")) {
-        text = QInputDialog::getText(this, tr("Logowanie"),
+        text = QInputDialog::getText(this, tr("Zaloguj"),
                                      tr("Nazwa użytkownika"), QLineEdit::Normal, QString(""));
     }
     dbManager->setUser(text);
+    QString l = QString("ABIS Manager - %1").arg(text);
+   this->setWindowTitle(l);
+}
+
+void MainWindow::wylogowanie()
+{
+    QString text = QInputDialog::getText(this, tr("Wylogowanie"),
+                                     tr("Nazwa użytkownika"), QLineEdit::Normal, QString(""));
+ if (text != QString("")) {
+    dbManager->setUser(text);
+    QString l = QString("ABIS Manager - %1").arg(text);
+   this->setWindowTitle(l);
+ }
 }
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -26,20 +125,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow) {
     ui->setupUi(this);
     nrkar = 58;
-    kl = 84;
+    kl = 62;
     klnr = 48;
-    wz = 50;
-    oc = 50;
-    ma = 50;
-    kol = 46;
-    sp = 46;
-    wkl = 52;
-    s123 = 56;
-    uz = 87;
-    ha = 80;
+    wz = 42;
+    oc = 42;
+    ma = 42;
+    kol = 42;
+    sp = 42;
+    wkl = 42;
+    s123 = 46;
+    uz = 36;
+    ha = 50;
     daty = 88;
     spnazproc = 74;
-    //ui->tableViewZam->setEditTriggers(QAbstractItemView::NoEditTriggers);
+wysylkaMode = false;
+    ui->tableViewZam->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->toolBar->setIconSize(QSize(36, 36));
     dbManager = new BazaDanychManager();
     dialog = new UstawieniaForm(dbManager, this);
@@ -49,20 +149,22 @@ MainWindow::MainWindow(QWidget *parent) :
     dialognowyHandl = new NowyHandlowiecDialog(this);
     dialogKlienci = new klienciDialog(dialognowyKlient, dbManager, this);
     dialogHandl = new handlowceDialog(dialognowyHandl, dbManager, this);
-    dialogwkladka = new wkladkaDialog(dbManager, this);
+    dialogNowaWkl = new NowaWkladkaDialog(this);
+    dialogwkladka = new wkladkaDialog(dialogNowaWkl, dbManager, this);
     dialognskora = new nowaSkoraDialog(this);
     dialogskory = new skoryDialog(dialognskora, dbManager, this);
     dilogNowyKolor = new nowyKolorDialog(this);
     dialogkolory = new koloryDialog(dilogNowyKolor, dbManager, this);
     dialognspod = new nowySpodDialog(this);
     dialogspody = new spodyDialog(dialogzdj, dialognspod, dbManager, this);
-    dialogocieplenie = new ocieplenieDialog(dbManager, this);
+    dno = new noweociepdialog(this);
+    dialogocieplenie = new ocieplenieDialog(dno,dbManager, this);
 
     nowaMatryca = new NowaMatrycaDialog(this);
     dialogmatryce = new matryceDialog(nowaMatryca, dbManager, this);
     dialonwzor = new nowywzorDialog(this);
     dialogwzory = new wzoryDialog(dialonwzor, dbManager, this);
-    dialognowyModel = new NowyModelDialog(dialogwkladka,
+    dialognowyModel = new owyModelDialog(dialogwkladka,
                                           dialogocieplenie, dialogwzory,
                                           dialogskory, dialogkolory,
                                           dialogspody, dialogmatryce, dbManager,
@@ -79,12 +181,13 @@ MainWindow::MainWindow(QWidget *parent) :
     if (!dbManager->polacz()) {
         ustawieniaBazy();
     }
+    ui->labelPodglad->setFixedHeight(196);
+    ui->labelPodglad->setFixedWidth(274);
+    ui->labelPodglad->setScaledContents(true);
 
     ui->tableViewZam->setContextMenuPolicy(Qt::CustomContextMenu);
     podlaczSygnaly();
-    aktualizujTabele();
     createCombos();
-    //dbManager->filterZamowien.status = QString("KRÓJ");
     dbManager->filterZamowien.status = QString("WPROWADZONE");
     filtruj();
     connect(dbManager->getModelZamowienia(), SIGNAL(dataChanged(const QModelIndex &,
@@ -100,9 +203,15 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableViewZam->setItemDelegateForColumn(i, del);
     }
     ui->tableViewZam->setItemDelegateForColumn(37, del);
-    dialogEdycjaZam = new  EdycjaZamowieniaDialog(dialogKlienci, dialogHandl, dialogmodele, dbManager, this);
+    dialogEdycjaZam = new EdycjaZamowieniaDialog(dialogKlienci, dialogHandl, dialogmodele, dbManager, this);
     connect(dialogEdycjaZam, SIGNAL(koniecEdycji()), this, SLOT(ustawIFiltruj()));
-    a();
+    aktualizujTabele();
+
+    ui->tableViewZam->setColumnWidth(35, 152);
+    QHeaderView *hv = ui->tableViewZam->horizontalHeader();
+    hv->setSectionHidden(48, true);
+    hv->setSectionHidden(49, true);
+    // rozkroje->exec();
 }
 
 void MainWindow::aktualizujTabele() {
@@ -110,16 +219,6 @@ void MainWindow::aktualizujTabele() {
     proxy->setDynamicSortFilter(true);
     ui->tableViewZam->setModel(proxy);
     rozciagnijWiersze();
-}
-
-void MainWindow::a() {
-//    dialogEdycjaZam->setNrZam("B204");
-//    dialogEdycjaZam->exec();
-    //if (dialogmodele->exec() == QDialog::Accepted) {
-    //    if (  dialognowyModel->exec() == QDialog::Accepted) {
-    //}
-    rozkroje->exec();
-    //roznicerozkrojep->exec();
 }
 
 void MainWindow::refreshTable() {
@@ -131,17 +230,14 @@ void MainWindow::setSumaZamowien() {
     ui->labelSuma->setText(QString::number(dbManager->zwrocSumeZamowien()));
 }
 
-void MainWindow::updateZamSum(const QModelIndex &topLeft, const QModelIndex &bot,
-                              const QVector<int> &) {
+void MainWindow::updateZamSum(const QModelIndex &topLeft, const QModelIndex &bot, const QVector<int> &) {
     if (bot.column() != 46) {
         QTimer::singleShot(100, this, SLOT(refreshTable()));
     }
 }
 
 QString MainWindow::getNrZam(QModelIndex idx) {
-    QString nr_zam =  dbManager->getModelZamowienia()->data(
-                          dbManager->getModelZamowienia()->index(idx.row(),
-                                  1)).toString();
+    QString nr_zam = dbManager->getModelZamowienia()->data(dbManager->getModelZamowienia()->index(idx.row(), 1)).toString();
 
     return nr_zam;
 }
@@ -151,62 +247,57 @@ QString MainWindow::prepareRozkroj() {
     int numerRozkrojuNowego = ostatniNumer + 1;
     QString nr = QString("R%1").arg(numerRozkrojuNowego);
     dbManager->stworzSzkieletRozkroju(nr);
+    return nr;
+}
 
+QString MainWindow::prepareZam() {
+    int ostatniNumer = dbManager->getNumerOstatniegoZamKomputerowego();
+    int numerZamowieniaNowego = ostatniNumer + 1;
+    QString nr = QString("B%1").arg(numerZamowieniaNowego);
+    dbManager->stworzSzkieletZam(nr);
     return nr;
 }
 
 void MainWindow::ShowContextMenu(const QPoint &pos) {
-    if (!ui->actionEdycja->isChecked()) {
+    if (ui->actionEdycja->isChecked()) {
         QPoint globalPos = ui->tableViewZam->mapToGlobal(pos);
         QMenu myMenu;
+        QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
         if (dbManager->filterZamowien.status == QString("WPROWADZONE")) {
             myMenu.addAction("KRÓJ");
-            //    myMenu.addAction("DO WYSYŁKI");
+            if (selection.length() == 1) {
+                myMenu.addSeparator();
+                myMenu.addAction("EDYTUJ ZAMÓWIENIE");
+            }
+
         } else if (dbManager->filterZamowien.status == QString("DO WYSYŁKI")) {
-            myMenu.addAction("ZREALIZOWANO");
-        }
-        myMenu.addSeparator();
-        QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
-        if (selection.length() == 1) {
-            myMenu.addAction("EDYTUJ ZAMÓWIENIE");
-            myMenu.addSeparator();
-            myMenu.addAction("ZMIEŃ MODEL");
-            myMenu.addAction("ZMIEŃ KLIENTA");
-            myMenu.addAction("ZMIEŃ HANDLOWCA");
+            if (selection.length() == 1) {
+                myMenu.addAction("PRZEJDŹ DO ROZKROJU");
+                QModelIndex index = proxy->mapToSource(selection.at(0));
+                if(dbManager->getCzyRoznicaZamowieniaZTabeli(index)) {
+                    myMenu.addAction("PRZEJDŹ DO RÓŻNICY");
+                }
+
+                myMenu.addSeparator();
+            }
+            myMenu.addAction("ZREALIZUJ");
         }
 
         QAction *selectedItem = myMenu.exec(globalPos);
         if (selectedItem) {
             QModelIndex idx = proxy->mapToSource(
                                   ui->tableViewZam->selectionModel()->currentIndex());
-            if (selectedItem->text() == QString("ZMIEŃ KLIENTA")) {
-                if (dialogKlienci->selectExec() == QDialog::Accepted) {
-                    QString nr_zam = getNrZam(idx);
-                    dbManager->zmienKlientaZam(nr_zam);
-                }
-            } else if (selectedItem->text() == QString("ZMIEŃ MODEL")) {
-                if (dialogmodele->selectExec() == QDialog::Accepted) {
-                    int id = dbManager->getModelZamowienia()->data(
-                                 dbManager->getModelZamowienia()->index(idx.row(),
-                                         0)).toInt();
-                    dbManager->zmienModellZam(id);
-                }
-            } else if (selectedItem->text() == QString("ZMIEŃ HANDLOWCA")) {
-                if (dialogHandl->selectExec() == QDialog::Accepted) {
-                    QString nr_zam = getNrZam(idx);
-                    dbManager->zmienHandlZam(nr_zam);
-                }
-            } else if (selectedItem->text() == QString("KRÓJ")) {
+
+            if (selectedItem->text() == QString("KRÓJ")) {
                 QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
                 std::vector<int> zamowienia;
                 int id = 0;
                 for (int i = 0; i < selection.count(); i++) {
                     QModelIndex index = proxy->mapToSource(selection.at(i));
-                    id = dbManager->getIdZamowieniaZTabeli(index);
+                    id =  dbManager->getIdZamowieniaZTabeli(index);
                     zamowienia.push_back(id);
                 }
-                if (QMessageBox::question(this, "ZMODYFIKOWAĆ?",
-                                          " <FONT COLOR='#000080'>Czy pomniejszyć o stany magazynowe?") == QMessageBox::Yes) {
+                if (QMessageBox::question(this, "MODYFIKACJA", "<FONT COLOR='#000080'>Czy pomniejszyć o stany magazynowe?") == QMessageBox::Yes) {
                     dorozkroju->setModel(dbManager->getDoRozkroju(zamowienia));
                     QString nr = prepareRozkroj();
                     dorozkroju->setNr(nr);
@@ -229,32 +320,37 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
                         dbManager->getModelZamowienia()->select();
                         rozkroje->setDodanoRozkroj(true);
                         rozkroje->exec();
+                    } else {
+                        dbManager->usunSzkieletRozkroju();
+                        return;
                     }
                 }
-            } else if (selectedItem->text() == QString("ZREALIZOWANE")) {
-
-
-            } else if (selectedItem->text() == QString("EDYTUJ ZAMÓWIENIE")) {
-                QString nr_zam = getNrZam(idx);
-                dialogEdycjaZam->setNrZam(nr_zam);
-                dialogEdycjaZam->exec();
-            } else {
+            } else if (selectedItem->text() == QString("ZREALIZUJ")) {
                 int id = 0;
                 bool sukces = true;
                 for (int i = 0; i < selection.count(); i++) {
                     QModelIndex index = selection.at(i);
                     id = dbManager->getIdZamowieniaZTabeli(index);
-                    if (dbManager->aktualizujStatus(id, selectedItem->text()) == false) {
+                    if (dbManager->aktualizujStatus(id, "ZREALIZOWANO") == false) {
                         sukces = false;
                     }
                 }
                 if (sukces) {
-                    QMessageBox::information(this, "ZAKTUALIZOWANO",
-                                             QString(" <FONT COLOR='#000080'>Przeniesiono %1 pozycji do <FONT COLOR='#0f00f0'><b>%2.").arg(
-                                                 QString::number(selection.count()), selectedItem->text().toLower()),
-                                             QMessageBox::Ok);
+                    QMessageBox::information(this, "REALIZACJA",
+                                             QString(" <FONT COLOR='#0f00f0'>Zrealizowano %1 pozycje.").arg(
+                                                 QString::number(selection.count())), QMessageBox::Ok);
                     dbManager->getModelZamowienia()->select();
                 }
+
+            } else if (selectedItem->text() == QString("EDYTUJ ZAMÓWIENIE")) {
+                QString nr_zam = getNrZam(idx);
+                dialogEdycjaZam->setNrZam(nr_zam);
+                dialogEdycjaZam->exec();
+            } else if(selectedItem->text() == QString("PRZEJDŹ DO ROZKROJU")) {
+                rozkroje->setWskazRozkroj(true);
+                rozkroje->exec();
+            } else if(selectedItem->text() == QString("PRZEJDŹ DO RÓŻNICY")) {
+
             }
         }
     }
@@ -291,20 +387,21 @@ void  MainWindow::edytuj() {
 }
 
 void MainWindow::dodajZam() {
+    QString nr = prepareZam();
+    dialogNoweZamowienie->setNr(nr);
     dialogNoweZamowienie->setFixedSize(dialogNoweZamowienie->size());
     if (dialogNoweZamowienie->exec() == QDialog::Accepted) {
-        ui->tableViewZam->sortByColumn(0, Qt::DescendingOrder);
-        QMessageBox::information(this, "POWODZENIE",
+         ui->tableViewZam->sortByColumn(0, Qt::AscendingOrder);
+        QMessageBox::information(this, "ZATWIERDZONO",
                                  " <FONT COLOR='#000080'>Dodano zamówienie. ",
                                  QMessageBox::Ok);
+    } else {
+        dbManager->usunSzkieletZam();
     }
 }
 
 void MainWindow::rozciagnijWiersze() {
-    for (int c = 9; c < 25;     ++c) {
-        ui->tableViewZam->setColumnWidth(c, 30);
-    }
-
+    ui->tableViewZam->horizontalHeader()->setMinimumSectionSize(15);
     ui->tableViewZam->setColumnWidth(1, nrkar);
     ui->lineEditNrKarta->setFixedWidth(nrkar);
 
@@ -314,6 +411,7 @@ void MainWindow::rozciagnijWiersze() {
     ui->tableViewZam->setColumnWidth(3, klnr);
     ui->lineEditKlientN->setFixedWidth(klnr);
 
+    ui->lineEditWzor->setFixedWidth(wz);
     ui->tableViewZam->setColumnWidth(4, wz);
     ui->tableViewZam->setColumnWidth(5, sp);
     ui->tableViewZam->setColumnWidth(6, kol);
@@ -321,8 +419,7 @@ void MainWindow::rozciagnijWiersze() {
     ui->tableViewZam->setColumnWidth(8, ma);
     ui->tableViewZam->setColumnWidth(9, wkl);
 
-    ui->tableViewZam->setColumnWidth(25, 43); // suma
-    ui->lineEditWzor->setFixedWidth(wz);
+    ui->tableViewZam->setColumnWidth(25, 51); // suma
     ui->lineEditO->setFixedWidth(oc);
     ui->lineEditMa->setFixedWidth(ma);
     ui->lineEditKol->setFixedWidth(kol);
@@ -357,10 +454,16 @@ void MainWindow::rozciagnijWiersze() {
     ui->lineEditsprod->setFixedWidth(spnazproc);
     ui->tableViewZam->setColumnWidth(33, daty);
     ui->tableViewZam->setColumnWidth(34, daty);
+
     ui->tableViewZam->setColumnWidth(37, 25);
     connect(hv, SIGNAL(sectionResized(int, int, int)), this,
             SLOT(stionResized(int,
                               int, int)));
+    for (int c = 10; c < 25;     ++c) {
+        ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
+                QHeaderView::Fixed);
+        ui->tableViewZam->setColumnWidth(c, 36);
+    }
 }
 
 MainWindow::~MainWindow() {
@@ -379,8 +482,12 @@ void MainWindow::on_tableViewZam_clicked(const QModelIndex &index) {
     int id =  dbManager->getModelZamowienia()->data(
                   dbManager->getModelZamowienia()->index(idx.row(),
                           0)).toInt();
+    ui->labelPodglad->setScaledContents(true);
     ui->labelPodglad->setPixmap(QPixmap::fromImage(
                                     dbManager->getImageZamowienia(id)));
+    ui->labelPodglad->setFixedHeight(196);
+    ui->labelPodglad->setFixedWidth(274);
+    ui->labelPodglad->setScaledContents(true);
 }
 
 void MainWindow::dodajKlienta() {
@@ -395,7 +502,8 @@ void MainWindow::dodajKlienta() {
             dialognowyKlient->getTel2(),
             dialognowyKlient->getFax(), dialognowyKlient->getMail(),
             dialognowyKlient->getUwagi(),
-            dialognowyKlient->getNumerTelefonu());
+            dialognowyKlient->getNumerTelefonu(),
+                    dialognowyKlient->getWoj());
         dbManager->zachowajKlienta(klient);
     }
 }
@@ -445,6 +553,8 @@ void MainWindow::on_actionKlienci_triggered() {
 
 void MainWindow::on_actionModele_triggered() {
     dialogmodele->setFixedSize(dialogmodele->size());
+    ui->labelPodglad->clear();
+    ui->tableViewZam->clearSelection();
     if (dialogmodele->exec() == QDialog::Accepted) {
     }
 }
@@ -464,9 +574,16 @@ void MainWindow::on_radioButton_clicked() {
         archiwumMode = false;
         rozciagnijWiersze();
         ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
-    }
+    }else if(wysylkaMode) {
+        ui->tableViewZam->setColumnWidth(35, 152);
+        QHeaderView *hv = ui->tableViewZam->horizontalHeader();
+        hv->setSectionHidden(48, true);
+        hv->setSectionHidden(49, true);
+        }
+
     dbManager->filterZamowien.status = QString("WPROWADZONE");
     filtruj();
+    ui->labelPodglad->clear();
 }
 
 void MainWindow::on_radioButton_3_clicked() {
@@ -476,8 +593,16 @@ void MainWindow::on_radioButton_3_clicked() {
         rozciagnijWiersze();
         ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
     }
+            ui->tableViewZam->setColumnWidth(35, 84);
+            ui->tableViewZam->setColumnWidth(36, 84);
+            ui->tableViewZam->setColumnWidth(48, 86);
+            QHeaderView *hv = ui->tableViewZam->horizontalHeader();
+            hv->setSectionHidden(48, false);
+            hv->setSectionHidden(49, false);
     dbManager->filterZamowien.status = QString("DO WYSYŁKI");
+    ui->labelPodglad->clear();
     filtruj();
+    wysylkaMode = true;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
@@ -494,7 +619,13 @@ void MainWindow::on_radioButton_4_clicked() {
         archiwumMode = false;
         ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
     }
-    dbManager->filterZamowien.status = QString("");
+    else if(wysylkaMode) {
+        ui->tableViewZam->setColumnWidth(35, 152);
+        QHeaderView *hv = ui->tableViewZam->horizontalHeader();
+        hv->setSectionHidden(48, true);
+        hv->setSectionHidden(49, true);
+        }
+    dbManager->filterZamowien.status = QString("");ui->labelPodglad->clear();
     filtruj();
 }
 
@@ -550,7 +681,6 @@ void MainWindow::on_comboBoxb2_activated(const QString &arg1) {
 void MainWindow::on_comboBoxb3_activated(const QString &arg1) {
     dbManager->filterZamowien.r3 = ui->comboBoxb3->currentText();
     filtruj();
-
 }
 
 void MainWindow::on_comboBoxb4_activated(const QString &arg1) {
@@ -570,41 +700,42 @@ void MainWindow::on_comboBoxb6_activated(const QString &arg1) {
 }
 
 void MainWindow::on_pushButton_clicked() {
-    ui->lineEditNrKarta->clear();
-    ui->lineEditWzor->clear();
-    ui->lineEditO->clear();
-    ui->lineEditKlientN->clear();
-    ui->lineEditKlient->clear();
-    ui->lineEditMa->clear();
-    ui->lineEditKol->clear();
-    ui->lineEditWkl->clear();
-    ui->lineEdits1->clear();
-    ui->lineEdits2->clear();
-    ui->lineEdits3->clear();
-    ui->lineEditUzy->clear();
-    ui->lineEditHan->clear();
-    ui->lineEditwpr->clear();
-    ui->lineEditzre->clear();
-    ui->lineEditS->clear();
-    ui->lineEditsnaz->clear();
-    ui->lineEditsprod->clear();
-    dbManager->filterZamowien.r1 = QString("");
-    dbManager->filterZamowien.r2 = QString("");
-    dbManager->filterZamowien.r3 = QString("");
-    dbManager->filterZamowien.r4 = QString("");
-    dbManager->filterZamowien.r5 = QString("");
-    dbManager->filterZamowien.r6 = QString("");
-    dbManager->filterZamowien.mont = QString("");
-    dbManager->filterZamowien.typ = QString("");
-    ui->comboBoxtyp->setCurrentIndex(0);
-    ui->comboBoxmont->setCurrentIndex(0);
-    ui->comboBoxb1->setCurrentIndex(0);
-    ui->comboBoxb2->setCurrentIndex(0);
-    ui->comboBoxb3->setCurrentIndex(0);
-    ui->comboBoxb4->setCurrentIndex(0);
-    ui->comboBoxb5->setCurrentIndex(0);
-    ui->comboBoxb6->setCurrentIndex(0);
-    ustawIFiltruj();
+    csvexport();
+//    ui->lineEditNrKarta->clear();
+//    ui->lineEditWzor->clear();
+//    ui->lineEditO->clear();
+//    ui->lineEditKlientN->clear();
+//    ui->lineEditKlient->clear();
+//    ui->lineEditMa->clear();
+//    ui->lineEditKol->clear();
+//    ui->lineEditWkl->clear();
+//    ui->lineEdits1->clear();
+//    ui->lineEdits2->clear();
+//    ui->lineEdits3->clear();
+//    ui->lineEditUzy->clear();
+//    ui->lineEditHan->clear();
+//    ui->lineEditwpr->clear();
+//    ui->lineEditzre->clear();
+//    ui->lineEditS->clear();
+//    ui->lineEditsnaz->clear();
+//    ui->lineEditsprod->clear();
+//    dbManager->filterZamowien.r1 = QString("");
+//    dbManager->filterZamowien.r2 = QString("");
+//    dbManager->filterZamowien.r3 = QString("");
+//    dbManager->filterZamowien.r4 = QString("");
+//    dbManager->filterZamowien.r5 = QString("");
+//    dbManager->filterZamowien.r6 = QString("");
+//    dbManager->filterZamowien.mont = QString("");
+//    dbManager->filterZamowien.typ = QString("");
+//    ui->comboBoxtyp->setCurrentIndex(0);
+//    ui->comboBoxmont->setCurrentIndex(0);
+//    ui->comboBoxb1->setCurrentIndex(0);
+//    ui->comboBoxb2->setCurrentIndex(0);
+//    ui->comboBoxb3->setCurrentIndex(0);
+//    ui->comboBoxb4->setCurrentIndex(0);
+//    ui->comboBoxb5->setCurrentIndex(0);
+//    ui->comboBoxb6->setCurrentIndex(0);
+//    ustawIFiltruj();
 }
 
 void MainWindow::on_actionOcieplenia_triggered() {
@@ -617,8 +748,13 @@ void MainWindow::on_radioButton_5_clicked() {
         archiwumMode = false;
         rozciagnijWiersze();
         ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
-    }
-    dbManager->filterZamowien.status = QString("ZREALIZOWANO");
+    }else if(wysylkaMode) {
+        ui->tableViewZam->setColumnWidth(35, 152);
+        QHeaderView *hv = ui->tableViewZam->horizontalHeader();
+        hv->setSectionHidden(48, true);
+        hv->setSectionHidden(49, true);
+        }
+    dbManager->filterZamowien.status = QString("ZREALIZOWANO");ui->labelPodglad->clear();
     filtruj();
 }
 
@@ -726,10 +862,25 @@ void MainWindow::ustawIFiltruj() {
 }
 
 void MainWindow::on_radioButton_2_clicked() {
+   if(wysylkaMode) {
+        ui->tableViewZam->setColumnWidth(35, 152);
+        QHeaderView *hv = ui->tableViewZam->horizontalHeader();
+        hv->setSectionHidden(48, true);
+        hv->setSectionHidden(49, true);
+        }
     dbManager->setTableWidokZamowienia("vZamArch");
     rozciagnijWiersze();
     archiwumMode = true;
     dbManager->filterZamowien.status = QString("");
     filtruj();
-    ui->tableViewZam->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tableViewZam->setEditTriggers(QAbstractItemView::NoEditTriggers);ui->labelPodglad->clear();
+}
+
+void MainWindow::on_actionWyloguj_triggered() {
+    wylogowanie();
+}
+
+void MainWindow::on_actionEdycja_triggered()
+{
+
 }

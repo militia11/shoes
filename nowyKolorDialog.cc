@@ -15,7 +15,7 @@ nowyKolorDialog::~nowyKolorDialog()
 }
 
 void nowyKolorDialog::wyczyscPola()
-{	ui->spinBox->setValue(0);
+{	ui->spinBox->clear();
 	ui->lineEditSk1->clear();
 	ui->lineEditSk1d->clear();
 	ui->lineEditSk2->clear();
@@ -26,8 +26,8 @@ void nowyKolorDialog::wyczyscPola()
 }
 
 void nowyKolorDialog::on_buttonBox_accepted() {
-	if (ui->spinBox->value() != 0) {
-		aktKolor = ui->spinBox->value();
+    if (!ui->spinBox->text().isEmpty()) {
+        aktKolor = ui->spinBox->text().toInt();
 		sk1 = ui->lineEditSk1->text();
 		sk1d = ui->lineEditSk1d->text();
 		sk2 = ui->lineEditSk2->text();
@@ -35,18 +35,23 @@ void nowyKolorDialog::on_buttonBox_accepted() {
 		sk3 = ui->lineEditSk3->text();
 		sk3d = ui->lineEditSk3d->text();
 		skdomin = ui->lineEditSkDominujacy->text();
-		wyczyscPola();
 		accept();
 	} else {
-		QMessageBox::warning(this, "BRAK WYMAGANEGO POLA",
+        QMessageBox::warning(this, "BRAK NUMERU KOLORU",
 					 QString(" <FONT COLOR='#000080'>Podaj wartość koloru."),
 					 QMessageBox::Ok);
 	}
 }
 
 void nowyKolorDialog::on_buttonBox_rejected()
-{	wyczyscPola();
-	reject();
+{
+    reject();
+}
+
+void nowyKolorDialog::showEvent(QShowEvent *e)
+{
+ wyczyscPola();
+ ui->spinBox->setFocus();
 }
 
 QString nowyKolorDialog::getSk1() const

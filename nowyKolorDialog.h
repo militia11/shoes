@@ -44,6 +44,7 @@ class nowyKolorDialog : public QDialog
 		void on_buttonBox_rejected();
 
 	private:
+         void showEvent(QShowEvent *e);
 		Ui::nowyKolorDialog *ui;
 		int aktKolor;
 		QString sk1;

@@ -10,6 +10,7 @@ void clickableLabel::mousePressEvent(QMouseEvent *e)
 
 clickableLabel::clickableLabel(QWidget *parent) : QLabel (parent)
 {
-	setFixedSize(QSize(155, 150));
-	setFrameStyle(QFrame::StyledPanel);
+    setFixedSize(QSize(201, 150));
+    setFrameStyle(QFrame::WinPanel);
+    setFrameShadow(QFrame::Raised);
 }

@@ -28,7 +28,10 @@ void ustawIFiltruj();
 
 	public slots:
 		virtual int exec();
-	private:
+protected:
+        void aktualHeader();
+
+private:
 		int aktualnyKolor;
 		void showEvent(QShowEvent *e);
 		void hideEvent(QHideEvent *e);

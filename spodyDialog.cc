@@ -96,22 +96,26 @@ void spodyDialog::zdj4()
 	}
 }
 
+void spodyDialog::aktualizujTabele()
+{
+    QHeaderView *hv = ui->tableView->horizontalHeader();
+    hv->setSectionHidden(0, true);
+    hv->setSectionHidden(5, true);
+    hv->setSectionHidden(6, true);
+    hv->setSectionHidden(7, true);
+    hv->setSectionHidden(8, true);
+    hv->setSectionHidden(9, true);
+    hv->setDefaultAlignment(Qt::AlignCenter);
+    hv->setStretchLastSection(true);
+}
+
 void spodyDialog::showEvent(QShowEvent *e) {
 	Q_UNUSED(e);
 	dbManager->setSpody();
 	proxy->setSourceModel(dbManager->getSpody());
 	proxy->setDynamicSortFilter(true);
 	ui->tableView->setModel(proxy);
-	QHeaderView *hv = ui->tableView->horizontalHeader();
-	hv->setSectionHidden(0, true);
-	hv->setSectionHidden(5, true);
-	hv->setSectionHidden(6, true);
-	hv->setSectionHidden(7, true);
-	hv->setSectionHidden(8, true);
-	hv->setSectionHidden(9, true);
-	hv->setDefaultAlignment(Qt::AlignCenter);
-	hv->setStretchLastSection(true);
-	//ui->tableView->sortByColumn(1, Qt::AscendingOrder);
+    aktualizujTabele();
 }
 
 void spodyDialog::hideEvent(QHideEvent *e)
@@ -136,9 +140,10 @@ QString spodyDialog::getAktualnySpodNazwa() const
 void spodyDialog::on_pushButton_2_clicked() {
 	dialogNSpod->setFixedSize(dialogNSpod->size());
 	if (dialogNSpod->exec() == QDialog::Accepted ) {
-		dbManager->zachowajSpod(dialogNSpod->getNazwa(), dialogNSpod->getProducent(),
+        dbManager->zachowajSpod(dialogNSpod->getNr() ,dialogNSpod->getNazwa(), dialogNSpod->getProducent(),
 					dialogNSpod->getImages(), dialogNSpod->getRodzaj(), dialogNSpod->getRozm(),
 					dialogNSpod->getUwagi());
+        aktualizujTabele();
 	}
 }
 

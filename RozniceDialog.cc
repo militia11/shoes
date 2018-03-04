@@ -6,6 +6,9 @@ RozniceDialog::RozniceDialog(BazaDanychManager *db, QWidget *parent) :
     ui(new Ui::RozniceDialog), dbManager(db) {
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
+    ui->lineEditNr->setFixedWidth(100);
+    ui->lineEditUz->setFixedWidth(100);
+    ui->lineEditWpr->setFixedWidth(100);
 }
 
 RozniceDialog::~RozniceDialog() {
@@ -18,6 +21,16 @@ void RozniceDialog::SelectionOfTableChanged(const QItemSelection &aSelected, con
     if (!vIsAnyItemSelected) {
         deleteOldModel();
     }
+}
+
+void RozniceDialog::ustawIFiltruj() {
+    dbManager->getRoznice()->setFilter(QString("nr_rozkroju LIKE '%1%' AND WPROWADZONO LIKE '%2%' AND UZYTKOWNIK LIKE '%3%'").arg(ui->lineEditNr->text(),ui->lineEditWpr->text(),ui->lineEditUz->text()));
+}
+
+void RozniceDialog::czysc() {
+    ui->lineEditNr->clear();
+    ui->lineEditWpr->clear();
+    ui->lineEditUz->clear();
 }
 
 void RozniceDialog::deleteOldModel() {
@@ -42,7 +55,10 @@ void RozniceDialog::on_tableView_clicked(const QModelIndex &index) {
         ui->tableViewSzczegoly->setModel(vModel);
     }
     ui->tableViewSzczegoly->hideColumn(0);
+     ui->tableViewSzczegoly->horizontalHeader()->setMinimumSectionSize(5);
     NaglowkiZamowienia::ustawNaglowki(ui->tableViewSzczegoly, vModel);
+       ui->tableViewSzczegoly->setColumnWidth(35, 110);
+       ui->tableViewSzczegoly->setColumnWidth(36, 110);
     ui->tableViewSzczegoly->update();
 }
 
@@ -53,10 +69,6 @@ void RozniceDialog::showEvent(QShowEvent *e) {
     proxy->setSourceModel(dbManager->getRoznice());
     ui->tableView->setModel(proxy);
     ui->tableView->setSortingEnabled(true);
-    for (int c = 0; c < ui->tableView->horizontalHeader()->count(); ++c) {
-        ui->tableView->horizontalHeader()->setSectionResizeMode(c,
-                QHeaderView::ResizeToContents);
-    }
     QHeaderView *hv = ui->tableView->horizontalHeader();
     hv->setStretchLastSection(true);
     hv->setSectionHidden(0, true);
@@ -68,6 +80,19 @@ void RozniceDialog::showEvent(QShowEvent *e) {
         SLOT(SelectionOfTableChanged(
                  const QItemSelection &,
                  const QItemSelection &)));
-//  ui->lineEdit->clear();
-//  ustawIFiltruj();
+    for (int c = 0; c < ui->tableView->horizontalHeader()->count(); ++c) {
+        ui->tableView->horizontalHeader()->setSectionResizeMode(c,
+                QHeaderView::Fixed);
+        ui->tableView->horizontalHeader()->setDefaultSectionSize(100);
+    }
+    ustawIFiltruj();
+}
+
+void RozniceDialog::hideEvent(QHideEvent *e) {
+    czysc();
+}
+
+void RozniceDialog::on_pushSzukaj_clicked()
+{
+    ustawIFiltruj();
 }

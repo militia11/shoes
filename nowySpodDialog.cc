@@ -1,6 +1,5 @@
 #include "nowySpodDialog.h"
 #include "ui_nowySpodDialog.h"
-#include <QDebug>
 nowySpodDialog::nowySpodDialog(QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::nowySpodDialog)
@@ -64,20 +63,17 @@ void nowySpodDialog::on_buttonBox_accepted() {
 					  "<br>Proszę uzupełnić podświetlone na czerwono pola.</FONT>",
 					  QMessageBox::Ok);
 	} else {
+        nr = ui->lineEditNr->text();
 		nazwa = ui->lineEditNaz->text();
 		producent = ui->lineEditProd->text();
 		rodzaj = ui->lineEditRodz->text();
 		uwagi = ui->plainTextEdit->toPlainText();
 		rozm = ui->lineEditRozm->text();
-		wyczyscPola();
-		resetujPrzyciskiWymagane();
 		accept();
 	}
 }
 
 void nowySpodDialog::on_buttonBox_rejected() {
-	wyczyscPola();
-	resetujPrzyciskiWymagane();
 	reject();
 }
 
@@ -86,10 +82,14 @@ void nowySpodDialog::showEvent(QShowEvent *e) {
 	for (int i = 0; i < 4; i++) {
 		images.append(QImage());
 	}
+    wyczyscPola();
+    resetujPrzyciskiWymagane();
+    ui->lineEditNaz->setFocus();
 }
 
 void nowySpodDialog::wyczyscPola() {
 	ui->lineEditNaz->clear();
+    ui->lineEditNr->clear();
 	ui->lineEditProd->clear();
 	ui->lineEditRodz->clear();
 	ui->plainTextEdit->clear();
@@ -103,11 +103,17 @@ void nowySpodDialog::wyczyscPola() {
 void nowySpodDialog::resetujPrzyciskiWymagane() {
 	ui->lineEditNaz->setStyleSheet("color:darkblue ;background-color: white;");
 	ui->lineEditProd->setStyleSheet("color:darkblue ;background-color: white;");
+    ui->lineEditNr->setStyleSheet("color:darkblue ;background-color: white;");
+}
+
+QString nowySpodDialog::getNr() const
+{
+    return nr;
 }
 
 QVector<QImage> nowySpodDialog::getImages() const
 {
-	return images;
+    return images;
 }
 
 QString nowySpodDialog::getRozm() const

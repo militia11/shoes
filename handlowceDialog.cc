@@ -43,6 +43,16 @@ void handlowceDialog::wybranoHandl(const QModelIndex index) {
 	accept();
 }
 
+void handlowceDialog::aktualizujTabele()
+{
+    QHeaderView *hv = ui->tableViewHandlowce->horizontalHeader();
+    hv->setStretchLastSection(true);
+    hv->setSectionHidden(0, true);
+    hv->setSectionHidden(5, true);
+    hv->setDefaultAlignment(Qt::AlignLeft);
+    ui->tableViewHandlowce->sortByColumn(0, Qt::AscendingOrder);
+}
+
 void handlowceDialog::showEvent(QShowEvent *e) {
 	Q_UNUSED(e);
 	dbManager->setHandlowce();
@@ -54,12 +64,7 @@ void handlowceDialog::showEvent(QShowEvent *e) {
 		ui->tableViewHandlowce->horizontalHeader()->setSectionResizeMode(c,
 				QHeaderView::ResizeToContents);
 	}
-	QHeaderView *hv = ui->tableViewHandlowce->horizontalHeader();
-	hv->setStretchLastSection(true);
-	hv->setSectionHidden(0, true);
-	hv->setSectionHidden(5, true);
-	hv->setDefaultAlignment(Qt::AlignLeft);
-	ui->tableViewHandlowce->sortByColumn(0, Qt::AscendingOrder);
+    aktualizujTabele();
 }
 
 void handlowceDialog::hideEvent(QHideEvent *e) {
@@ -69,9 +74,10 @@ void handlowceDialog::hideEvent(QHideEvent *e) {
 }
 
 void handlowceDialog::on_pushButton_3_clicked() {
-	if ( nowyKliDialog->exec() == QDialog::Accepted ) {
+    if (nowyKliDialog->exec() == QDialog::Accepted ) {
 		dbManager->zachowajHandlowca(nowyKliDialog->getImie(),
 						 nowyKliDialog->getNazwisko(), nowyKliDialog->getSkrot(),
 						 nowyKliDialog->getUwagi());
+        aktualizujTabele();
 	}
 }

@@ -13,7 +13,7 @@ void modeleDialog::resetRodzaje() {
 }
 
 modeleDialog::modeleDialog(ZdjecieDialog *zdj,
-                           NowyModelDialog *nowyModDialog,
+                           owyModelDialog *nowyModDialog,
                            BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::modeleDialog), dbManager(db), nowyModDialog(nowyModDialog),
@@ -80,10 +80,10 @@ int modeleDialog::selectExec() {
 
 void modeleDialog::ustawIFiltruj() {
     QString f = QString("nr_wzoru LIKE '%1%' AND nazwa LIKE '%2%' AND rodzaj LIKE '%3%' AND kolor LIKE '%4%'"
-                        "AND spnaz LIKE '%5%' AND wkrodzaj LIKE '%6%' AND typ LIKE '%7%' AND rodzaj_montazu LIKE '%8%'").arg(
+        "AND spnaz LIKE '%5%' AND wkrodzaj LIKE '%6%' AND typ LIKE '%7%' AND rodzaj_montazu LIKE '%8%'").arg(
                     ui->lineEditwz->text(), ui->lineEditma->text(), ui->lineEditoc->text(), ui->lineEditkol->text(),
                     ui->lineEditspna->text(), ui->lineEditwkl->text(), filtrRodzaje.typ, filtrRodzaje.mont);
-    f += QString(" AND rodzaj_buta LIKE '%1%'  AND rodzaj_buta_2 LIKE '%2%' AND rodzaj_buta_3 LIKE '%3%' AND rodzaj_buta_4 LIKE '%4%' AND rodzaj_buta_5 LIKE '%5%' AND rodzaj_buta_6 LIKE '%6%'").
+    f += QString(" AND rodzaj_buta LIKE '%1%' AND rodzaj_buta_2 LIKE '%2%' AND rodzaj_buta_3 LIKE '%3%' AND rodzaj_buta_4 LIKE '%4%' AND rodzaj_buta_5 LIKE '%5%' AND rodzaj_buta_6 LIKE '%6%'").
          arg(filtrRodzaje.r1,  filtrRodzaje.r2, filtrRodzaje.r3, filtrRodzaje.r4,  filtrRodzaje.r5, filtrRodzaje.r6);
     dbManager->getModele()->setFilter(f);
 }
@@ -208,9 +208,7 @@ void modeleDialog::showPhoto(QImage im) {
 
 void modeleDialog::on_pushButton_3_clicked() {
     int id = getId();
-    if (nowyModDialog->editExec(id) == QDialog::Accepted) {
-        // update model
-    }
+    nowyModDialog->editExec(id);
 }
 
 void modeleDialog::wyczyscPola() {
@@ -223,6 +221,7 @@ void modeleDialog::wyczyscPola() {
     image2 = QImage();
     image3 = QImage();
     image4 = QImage();
+    ui->checkBox1->setChecked(true);
 }
 
 void modeleDialog::on_tableView_clicked(const QModelIndex &index) {
@@ -323,6 +322,5 @@ void modeleDialog::on_comboBoxb5_activated(int index) {
 void modeleDialog::on_comboBoxb6_activated(int index) {
     filtrRodzaje.r6 = ui->comboBoxb6->currentText();
     ustawIFiltruj();
-
 }
 

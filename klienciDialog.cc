@@ -36,6 +36,22 @@ void klienciDialog::wybranoKli(const QModelIndex index) {
 	accept();
 }
 
+void klienciDialog::aktualizujHeader() {
+    QHeaderView *hv = ui->tableViewKlienci->horizontalHeader();
+    hv->setStretchLastSection(true);
+    hv->setSectionHidden(12, true);
+    hv->setSectionHidden(13, true);
+    hv->setSectionHidden(14, true);
+    hv->setSectionHidden(15, true);
+    hv->setDefaultAlignment(Qt::AlignLeft);
+    ui->lineEditMi->setFixedWidth(132);
+    ui->lineEditNr->setFixedWidth(132);
+    ui->lineEditNazwaSkrot->setFixedWidth(132);
+    ui->lineEditSkrot->setFixedWidth(132);
+    ui->tableViewKlienci->sortByColumn(0, Qt::AscendingOrder);
+    ui->tableViewKlienci->horizontalHeader()->setDefaultSectionSize(132);
+}
+
 void klienciDialog::aktualizujTabele() {
 	proxy->setDynamicSortFilter(true);
 	proxy->setSourceModel(dbManager->getModelKlienci());
@@ -43,18 +59,9 @@ void klienciDialog::aktualizujTabele() {
 	ui->tableViewKlienci->setSortingEnabled(true);
 	for (int c = 0; c < ui->tableViewKlienci->horizontalHeader()->count(); ++c) {
 		ui->tableViewKlienci->horizontalHeader()->setSectionResizeMode(c,
-				QHeaderView::Stretch);
+                QHeaderView::Fixed);
 	}
-	QHeaderView *hv = ui->tableViewKlienci->horizontalHeader();
-	hv->setStretchLastSection(true);
-	hv->setSectionHidden(13, true);
-	hv->setSectionHidden(14, true);
-	hv->setSectionHidden(15, true);
-	hv->setDefaultAlignment(Qt::AlignLeft);
-	ui->lineEditMi->setFixedWidth(126);
-	ui->lineEditNazwaSkrot->setFixedWidth(126);
-	ui->lineEditSkrot->setFixedWidth(126);
-	ui->tableViewKlienci->sortByColumn(0, Qt::AscendingOrder);
+    aktualizujHeader();
 }
 
 void klienciDialog::showEvent(QShowEvent *e) {
@@ -64,6 +71,7 @@ void klienciDialog::showEvent(QShowEvent *e) {
 	ui->lineEditNazwaSkrot->clear();
 	ui->lineEditSkrot->clear();
 	ui->lineEditMi->clear();
+    ui->lineEditNr->clear();
 	ustawIFiltruj();
 }
 
@@ -80,6 +88,7 @@ void klienciDialog::ustawIFiltruj() {
 	dbManager->filterKlientow.miasto = ui->lineEditMi->text();
 	dbManager->filterKlientow.nazwa = ui->lineEditSkrot->text();
 	dbManager->filterKlientow.skrot = ui->lineEditNazwaSkrot->text();
+    dbManager->filterKlientow.nr = ui->lineEditNr->text();
 	dbManager->setKlienciFilter();
 }
 
@@ -93,8 +102,10 @@ void klienciDialog::on_pushButton_2_clicked() {
 				  nowyKliDialog->getTel2(),
 				  nowyKliDialog->getFax(), nowyKliDialog->getMail(),
 				  nowyKliDialog->getUwagi(),
-				  nowyKliDialog->getNumerTelefonu());
+                  nowyKliDialog->getNumerTelefonu(),
+                      nowyKliDialog->getWoj());
 		dbManager->zachowajKlienta(klient);
+        aktualizujHeader();
 	}
 }
 
@@ -103,7 +114,9 @@ void klienciDialog::on_pushSzukaj_clicked() {
 }
 
 void klienciDialog::on_pushButton_clicked() {
+    ui->lineEditNr->clear();
 	ui->lineEditNazwaSkrot->setText("");
 	ui->lineEditSkrot->setText("");
+    ui->lineEditMi->setText("");
 	ui->tableViewKlienci->setModel(dbManager->getModelKlienci());
 }

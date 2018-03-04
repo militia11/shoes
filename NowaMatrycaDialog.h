@@ -33,6 +33,7 @@ class NowaMatrycaDialog : public QDialog
 		void on_buttonBox_rejected();
 
 	private:
+         void showEvent(QShowEvent *e);
 		Ui::NowaMatrycaDialog *ui;
 		QString nazwa;
 		QString infonazwa;

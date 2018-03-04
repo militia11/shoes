@@ -39,6 +39,7 @@ class skoryDialog : public QDialog
 		QString aktualnaSkoraNazwa;
 		QSqlQueryModel *m ;
 		void getceny();
+                void aktualizujTabele();
 };
 
 #endif // SKORYDIALOG_H

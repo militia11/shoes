@@ -81,6 +81,7 @@ void EdycjaZamowieniaDialog::on_pushButton_10_clicked() {
 }
 
 void EdycjaZamowieniaDialog::showEvent(QShowEvent *e) {
+    ui->tableViewZam->horizontalHeader()->setMinimumSectionSize(5);
     NaglowkiZamowienia::ustawNaglowki(ui->tableViewZam, dbManager->getModelZamowienia());
     ui->tableViewZam->sortByColumn(0, Qt::AscendingOrder);
     setSumaZamowien();

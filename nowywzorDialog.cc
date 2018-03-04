@@ -26,16 +26,14 @@ int nowywzorDialog::getWzor() const
 
 void nowywzorDialog::wyczyscPola()
 	{
-		ui->spinBox->setValue(0);
+        ui->spinBox->clear();
 		ui->textEdit->clear();
 	}
 
-void nowywzorDialog::on_buttonBox_accepted()
-{
-		if (ui->spinBox->value() != 0) {
-				wzor = ui->spinBox->value();
+void nowywzorDialog::on_buttonBox_accepted() {
+        if (!ui->spinBox->text().isEmpty()) {
+                wzor = ui->spinBox->text().toInt();
 				opis = ui->textEdit->toPlainText();
-				wyczyscPola();
 			accept();
 		} else {
 			QMessageBox::warning(this, "BRAK WYMAGANEGO POLA",
@@ -45,6 +43,12 @@ void nowywzorDialog::on_buttonBox_accepted()
 }
 
 void nowywzorDialog::on_buttonBox_rejected()
-{wyczyscPola();
-	reject();
+{
+    reject();
+}
+
+void nowywzorDialog::showEvent(QShowEvent *e)
+{
+ wyczyscPola();
+ ui->spinBox->setFocus();
 }

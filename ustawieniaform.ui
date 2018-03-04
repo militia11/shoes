@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>418</width>
-    <height>246</height>
+    <height>204</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,7 +22,7 @@
      <x>20</x>
      <y>50</y>
      <width>381</width>
-     <height>132</height>
+     <height>111</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -1355,7 +1355,7 @@
    <property name="geometry">
     <rect>
      <x>120</x>
-     <y>200</y>
+     <y>170</y>
      <width>285</width>
      <height>28</height>
     </rect>

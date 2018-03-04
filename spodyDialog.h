@@ -65,6 +65,7 @@ class spodyDialog : public QDialog
 		QSortFilterProxyModel *proxy;
 		void showPhoto(QImage im);
 		int getId();
+                void aktualizujTabele();
 };
 
 #endif // SPODYDIALOG_H

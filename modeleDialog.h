@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QDialog>
 #include "BazaDanychManager.h"
-#include "NowyModelDialog.h"
+#include "owyModelDialog.h"
 
 #include <QSortFilterProxyModel>
 #include "clickableLabel.h"
@@ -26,7 +26,7 @@ class modeleDialog : public QDialog {
 		Q_OBJECT
 
 	public:
-		explicit modeleDialog( ZdjecieDialog *zdj, NowyModelDialog *nowyModDialog,
+        explicit modeleDialog( ZdjecieDialog *zdj, owyModelDialog *nowyModDialog,
 					   BazaDanychManager *db,
 					   QWidget *parent = 0);
 		~modeleDialog();
@@ -71,7 +71,7 @@ class modeleDialog : public QDialog {
 		QImage image3;
 		QImage image4;
 		BazaDanychManager *dbManager;
-		NowyModelDialog *nowyModDialog;
+        owyModelDialog *nowyModDialog;
 		ZdjecieDialog *dialogZdj;
 		QSortFilterProxyModel *proxy;
 		modelRodzaje filtrRodzaje;

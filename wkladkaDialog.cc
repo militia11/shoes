@@ -1,9 +1,8 @@
 #include "wkladkaDialog.h"
 #include "ui_wkladkaDialog.h"
-#include <QInputDialog>
 #include <QMessageBox>
-wkladkaDialog::wkladkaDialog(BazaDanychManager *db, QWidget *parent) :
-	QDialog(parent), dbManager(db),
+wkladkaDialog::wkladkaDialog(NowaWkladkaDialog *dialogNowaWkl,BazaDanychManager *db, QWidget *parent) :
+    QDialog(parent),dialogNowaWkl(dialogNowaWkl), dbManager(db),
 	ui(new Ui::wkladkaDialog)
 {
 	ui->setupUi(this);
@@ -24,8 +23,7 @@ int wkladkaDialog::selectExec()
 
 }
 
-int wkladkaDialog::exec()
-{
+int wkladkaDialog::exec() {
 	ui->tableView->setEditTriggers(QAbstractItemView::DoubleClicked);
 	return QDialog::exec();
 
@@ -33,7 +31,7 @@ int wkladkaDialog::exec()
 
 void wkladkaDialog::wybranoWkl(const QModelIndex index)
 {
-	QModelIndex  idx = proxy->mapToSource(
+    QModelIndex idx = proxy->mapToSource(
 				   ui->tableView->selectionModel()->currentIndex());
 	aktualnaWkladkaNazwa = dbManager->pobierzNazweAktualejWkladki(idx);
 	accept();
@@ -72,16 +70,8 @@ void wkladkaDialog::aktualizujTabele() {
 	hv->setDefaultAlignment(Qt::AlignLeft);
 }
 
-void wkladkaDialog::on_pushButton_2_clicked()
-{
-	QString text = QInputDialog::getText(this, tr("Dodaj wkładkę"),
-						 tr("Podaj rodzaj wkładki"), QLineEdit::Normal, QString(""));
-
-	if (text != QString("")) {
-		dbManager->zachowajWkla(text);
-	} else {
-		QMessageBox::warning( this, "BRAK WYMAGANYCH PÓL",
-					  " <FONT COLOR='#000080'>Nie można dodać wkładki bez podania rodzaju. ",
-					  QMessageBox::Ok);
-	}
+void wkladkaDialog::on_pushButton_2_clicked() {
+    if(dialogNowaWkl->exec() == QDialog::Accepted) {
+        dbManager->zachowajWkla(dialogNowaWkl->getRodzaj(),dialogNowaWkl->getOpis());
+    }
 }

@@ -16,426 +16,11 @@
     <height>0</height>
    </size>
   </property>
-  <property name="palette">
-   <palette>
-    <active>
-     <colorrole role="WindowText">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Button">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>52</red>
-        <green>101</green>
-        <blue>164</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Light">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>78</red>
-        <green>152</green>
-        <blue>246</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Midlight">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>65</red>
-        <green>126</green>
-        <blue>205</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Dark">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>26</red>
-        <green>50</green>
-        <blue>82</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Mid">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>34</red>
-        <green>67</green>
-        <blue>109</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Text">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="BrightText">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="ButtonText">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Base">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Window">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>52</red>
-        <green>101</green>
-        <blue>164</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Shadow">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="AlternateBase">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>153</red>
-        <green>178</green>
-        <blue>209</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="ToolTipBase">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>220</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="ToolTipText">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </colorrole>
-    </active>
-    <inactive>
-     <colorrole role="WindowText">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Button">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>52</red>
-        <green>101</green>
-        <blue>164</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Light">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>78</red>
-        <green>152</green>
-        <blue>246</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Midlight">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>65</red>
-        <green>126</green>
-        <blue>205</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Dark">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>26</red>
-        <green>50</green>
-        <blue>82</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Mid">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>34</red>
-        <green>67</green>
-        <blue>109</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Text">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="BrightText">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="ButtonText">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Base">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Window">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>52</red>
-        <green>101</green>
-        <blue>164</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Shadow">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="AlternateBase">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>153</red>
-        <green>178</green>
-        <blue>209</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="ToolTipBase">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>220</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="ToolTipText">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </colorrole>
-    </inactive>
-    <disabled>
-     <colorrole role="WindowText">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>26</red>
-        <green>50</green>
-        <blue>82</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Button">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>52</red>
-        <green>101</green>
-        <blue>164</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Light">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>78</red>
-        <green>152</green>
-        <blue>246</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Midlight">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>65</red>
-        <green>126</green>
-        <blue>205</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Dark">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>26</red>
-        <green>50</green>
-        <blue>82</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Mid">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>34</red>
-        <green>67</green>
-        <blue>109</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Text">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>26</red>
-        <green>50</green>
-        <blue>82</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="BrightText">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="ButtonText">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>26</red>
-        <green>50</green>
-        <blue>82</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Base">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>52</red>
-        <green>101</green>
-        <blue>164</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Window">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>52</red>
-        <green>101</green>
-        <blue>164</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Shadow">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="AlternateBase">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>52</red>
-        <green>101</green>
-        <blue>164</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="ToolTipBase">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>220</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="ToolTipText">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </colorrole>
-    </disabled>
-   </palette>
-  </property>
   <property name="windowTitle">
    <string>ABIS Manager</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout_9">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
@@ -448,8 +33,8 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>270</width>
-          <height>220</height>
+          <width>274</width>
+          <height>196</height>
          </size>
         </property>
         <property name="frameShape">
@@ -485,48 +70,22 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
          <number>4</number>
         </property>
-        <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>41</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QLabel" name="label">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>STATUS:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
+        <property name="bottomMargin">
+         <number>73</number>
+        </property>
         <item>
          <widget class="QRadioButton" name="radioButton">
           <property name="font">
            <font>
-            <pointsize>13</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
+            <family>MS Shell Dlg 2</family>
+            <pointsize>11</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
            </font>
           </property>
           <property name="text">
@@ -547,13 +106,14 @@
          <widget class="QRadioButton" name="radioButton_3">
           <property name="font">
            <font>
-            <pointsize>13</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
+            <family>MS Shell Dlg 2</family>
+            <pointsize>11</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
            </font>
           </property>
           <property name="text">
-           <string>DO WYSŁYŁKI</string>
+           <string>DO WYSŁANIA</string>
           </property>
           <property name="iconSize">
            <size>
@@ -567,9 +127,10 @@
          <widget class="QRadioButton" name="radioButton_5">
           <property name="font">
            <font>
-            <pointsize>13</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
+            <family>MS Shell Dlg 2</family>
+            <pointsize>11</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
            </font>
           </property>
           <property name="text">
@@ -587,9 +148,10 @@
          <widget class="QRadioButton" name="radioButton_4">
           <property name="font">
            <font>
-            <pointsize>13</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
+            <family>MS Shell Dlg 2</family>
+            <pointsize>11</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
            </font>
           </property>
           <property name="text">
@@ -607,153 +169,16 @@
          <widget class="QRadioButton" name="radioButton_2">
           <property name="font">
            <font>
-            <pointsize>13</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
+            <family>MS Shell Dlg 2</family>
+            <pointsize>11</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
            </font>
           </property>
           <property name="text">
            <string>ARCHIWUM</string>
           </property>
          </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>41</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>18</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <property name="spacing">
-           <number>1</number>
-          </property>
-          <property name="topMargin">
-           <number>12</number>
-          </property>
-          <property name="bottomMargin">
-           <number>7</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="label_19">
-            <property name="font">
-             <font>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Typ:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_21">
-            <property name="font">
-             <font>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Montaż:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_22">
-            <property name="font">
-             <font>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Rodzaj buta :</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_23">
-            <property name="font">
-             <font>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Rodzaj buta 2:</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <widget class="QComboBox" name="comboBoxtyp">
-            <property name="minimumSize">
-             <size>
-              <width>140</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="comboBoxmont">
-            <property name="minimumSize">
-             <size>
-              <width>140</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="comboBoxb1">
-            <property name="minimumSize">
-             <size>
-              <width>140</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="comboBoxb2">
-            <property name="minimumSize">
-             <size>
-              <width>140</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-         </layout>
         </item>
        </layout>
       </item>
@@ -767,30 +192,113 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>39</width>
+          <width>11</width>
           <height>20</height>
          </size>
         </property>
        </spacer>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
           <property name="spacing">
            <number>1</number>
           </property>
           <property name="topMargin">
-           <number>11</number>
+           <number>0</number>
           </property>
           <property name="bottomMargin">
-           <number>7</number>
+           <number>0</number>
           </property>
           <item>
-           <widget class="QLabel" name="label_27">
+           <widget class="QLabel" name="label_19">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="font">
              <font>
-              <pointsize>13</pointsize>
+              <family>MS Shell Dlg 2</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Typ:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_21">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>MS Shell Dlg 2</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Montaż:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_22">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>MS Shell Dlg 2</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Rodzaj buta :</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_23">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>MS Shell Dlg 2</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Rodzaj buta 2:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_27">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>MS Shell Dlg 2</family>
+              <pointsize>10</pointsize>
              </font>
             </property>
             <property name="text">
@@ -800,9 +308,16 @@
           </item>
           <item>
            <widget class="QLabel" name="label_25">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="font">
              <font>
-              <pointsize>13</pointsize>
+              <family>MS Shell Dlg 2</family>
+              <pointsize>10</pointsize>
              </font>
             </property>
             <property name="text">
@@ -812,9 +327,16 @@
           </item>
           <item>
            <widget class="QLabel" name="label_26">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="font">
              <font>
-              <pointsize>13</pointsize>
+              <family>MS Shell Dlg 2</family>
+              <pointsize>10</pointsize>
              </font>
             </property>
             <property name="text">
@@ -824,9 +346,16 @@
           </item>
           <item>
            <widget class="QLabel" name="label_24">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="font">
              <font>
-              <pointsize>13</pointsize>
+              <family>MS Shell Dlg 2</family>
+              <pointsize>10</pointsize>
              </font>
             </property>
             <property name="text">
@@ -837,7 +366,91 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QComboBox" name="comboBoxtyp">
+            <property name="minimumSize">
+             <size>
+              <width>140</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBoxmont">
+            <property name="minimumSize">
+             <size>
+              <width>140</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBoxb1">
+            <property name="minimumSize">
+             <size>
+              <width>140</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBoxb2">
+            <property name="minimumSize">
+             <size>
+              <width>140</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+           </widget>
+          </item>
           <item>
            <widget class="QComboBox" name="comboBoxb3">
             <property name="minimumSize">
@@ -845,6 +458,14 @@
               <width>140</width>
               <height>0</height>
              </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
             </property>
            </widget>
           </item>
@@ -856,6 +477,14 @@
               <height>0</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
            </widget>
           </item>
           <item>
@@ -865,6 +494,14 @@
               <width>140</width>
               <height>0</height>
              </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
             </property>
            </widget>
           </item>
@@ -876,6 +513,14 @@
               <height>0</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
            </widget>
           </item>
          </layout>
@@ -883,13 +528,16 @@
        </layout>
       </item>
       <item>
-       <spacer name="horizontalSpacer_6">
+       <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Minimum</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
+          <width>0</width>
           <height>20</height>
          </size>
         </property>
@@ -913,7 +561,7 @@
         <property name="minimumSize">
          <size>
           <width>58</width>
-          <height>0</height>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -929,7 +577,7 @@
         <property name="minimumSize">
          <size>
           <width>84</width>
-          <height>0</height>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -945,7 +593,7 @@
         <property name="minimumSize">
          <size>
           <width>51</width>
-          <height>0</height>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -953,15 +601,15 @@
       <item>
        <widget class="QLineEdit" name="lineEditWzor">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>0</height>
+          <width>42</width>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -976,8 +624,8 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>0</height>
+          <width>42</width>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -992,8 +640,8 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>0</height>
+          <width>42</width>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -1008,8 +656,8 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>0</height>
+          <width>42</width>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -1024,8 +672,8 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>0</height>
+          <width>42</width>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -1040,8 +688,8 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>0</height>
+          <width>42</width>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -1056,85 +704,11 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>202</width>
+          <width>185</width>
           <height>20</height>
          </size>
         </property>
        </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonSzukaj">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>35</width>
-          <height>32</height>
-         </size>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="zasoby.qrc">
-          <normaloff>:/zasoby/find.png</normaloff>:/zasoby/find.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>26</width>
-          <height>26</height>
-         </size>
-        </property>
-        <property name="autoDefault">
-         <bool>true</bool>
-        </property>
-        <property name="default">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_9">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Minimum</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>12</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton">
-        <property name="minimumSize">
-         <size>
-          <width>35</width>
-          <height>32</height>
-         </size>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="zasoby.qrc">
-          <normaloff>:/zasoby/reset.png</normaloff>:/zasoby/reset.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>26</width>
-          <height>26</height>
-         </size>
-        </property>
-       </widget>
       </item>
       <item>
        <spacer name="horizontalSpacer_4">
@@ -1146,7 +720,7 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>94</width>
+          <width>299</width>
           <height>20</height>
          </size>
         </property>
@@ -1192,7 +766,7 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>8</width>
+          <width>7</width>
           <height>20</height>
          </size>
         </property>
@@ -1209,7 +783,7 @@
         <property name="minimumSize">
          <size>
           <width>70</width>
-          <height>0</height>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -1225,7 +799,7 @@
         <property name="minimumSize">
          <size>
           <width>70</width>
-          <height>0</height>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -1240,8 +814,8 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>0</height>
+          <width>46</width>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -1256,8 +830,8 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>0</height>
+          <width>46</width>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -1272,8 +846,8 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>0</height>
+          <width>46</width>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -1288,8 +862,8 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>0</height>
+          <width>36</width>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -1304,8 +878,8 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>0</height>
+          <width>50</width>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -1320,8 +894,8 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>88</width>
-          <height>0</height>
+          <width>68</width>
+          <height>31</height>
          </size>
         </property>
        </widget>
@@ -1336,24 +910,85 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>88</width>
-          <height>0</height>
+          <width>68</width>
+          <height>31</height>
          </size>
         </property>
        </widget>
       </item>
       <item>
-       <spacer name="horizontalSpacer_3">
+       <spacer name="horizontalSpacer_6">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>1</width>
+          <width>34</width>
           <height>20</height>
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonSzukaj">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>35</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="zasoby.qrc">
+          <normaloff>:/zasoby/find.png</normaloff>:/zasoby/find.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>26</width>
+          <height>26</height>
+         </size>
+        </property>
+        <property name="autoDefault">
+         <bool>true</bool>
+        </property>
+        <property name="default">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="minimumSize">
+         <size>
+          <width>35</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="zasoby.qrc">
+          <normaloff>:/zasoby/reset.png</normaloff>:/zasoby/reset.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>26</width>
+          <height>26</height>
+         </size>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -1382,6 +1017,7 @@
       </attribute>
      </widget>
     </item>
+   
    </layout>
   </widget>
   <widget class="QToolBar" name="toolBar">
@@ -1398,6 +1034,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionDodajZamowienie"/>
+   <addaction name="separator"/>
    <addaction name="actionEdycja"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -1406,14 +1043,14 @@
      <x>0</x>
      <y>0</y>
      <width>1738</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPlik">
     <property name="title">
      <string>Plik</string>
     </property>
-    <addaction name="separator"/>
+    <addaction name="actionWyloguj"/>
     <addaction name="separator"/>
     <addaction name="akcjaZamknij"/>
     <addaction name="separator"/>
@@ -1434,7 +1071,6 @@
     <addaction name="actionMatryce"/>
     <addaction name="actionModele"/>
     <addaction name="actionOcieplenia"/>
-    <addaction name="actionSk_ry"/>
     <addaction name="actionSpody"/>
     <addaction name="actionWk_adki"/>
     <addaction name="actionWzory"/>
@@ -1563,8 +1199,24 @@
     <string>Różnice rozkroje</string>
    </property>
   </action>
+  <action name="actionWyloguj">
+   <property name="icon">
+    <iconset resource="zasoby.qrc">
+     <normaloff>:/zasoby/button_logoff.png</normaloff>:/zasoby/button_logoff.png</iconset>
+   </property>
+   <property name="text">
+    <string>Wyloguj</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QAxWidget</class>
+   <extends>QWidget</extends>
+   <header>qaxwidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="zasoby.qrc"/>
  </resources>

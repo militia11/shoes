@@ -23,6 +23,7 @@ struct KlientFilter {
     QString nazwa;
     QString skrot;
     QString miasto;
+    QString nr;
 };
 
 class BazaDanychManager {
@@ -43,7 +44,6 @@ class BazaDanychManager {
 
         void zmienKlientaZam(QString nrzam);
         void zmienHandlZam(QString nrzam);
-        void zmienModellZam(int idzam);
         int zwrocSumeZamowien();
         bool aktualizujStatus(int id, QString status);
         bool zamowienie(QDate zam, QDate realizacji,
@@ -55,8 +55,7 @@ class BazaDanychManager {
         QList<QStandardItem *> zwrocWierszModel();
         QString getOstatniSelectZam() const;
         int getIdZamowieniaZTabeli(QModelIndex index);
-        zamowienieZRozmiaramiStruct stworzZamowienieZBazy(int id);
-
+        bool getCzyRoznicaZamowieniaZTabeli(QModelIndex index);
         QImage getImage(int id, int ktore, QString tab);
         bool updateImage(int id, int ktore, QImage im, QString tab);
         QImage getImageZamowienia(int id);
@@ -110,7 +109,7 @@ class BazaDanychManager {
                            QString s3, QString s3d, QString sdomi);
         void zachowajSkore(QString naz, QString dost, double cena);
         void zachowajMatryce(QString naz, QString infonaz);
-        void zachowajWkla(QString naz);
+        void zachowajWkla(QString naz, QString o);
         void zachowajKlienta(const Klient &klient);
         void zachowajHandlowca(QString im, QString nz, QString skr, QString uwagi);
         void zachowajModel(QVector<QImage> images, QString rodzaj_montazu,  QString typ,
@@ -124,11 +123,11 @@ class BazaDanychManager {
                              QString    rodzaj_buta_5, QString  rodzaj_buta_6, QString opis, QString opis2,
                              int zdj);
 
-        void zachowajSpod(QString getNazwa, QString getProducent,
+        void zachowajSpod(QString nr, QString getNazwa, QString getProducent,
                           QVector<QImage> images, QString getRodzaj, QString getRozm,
                           QString getUwagi);
         void dodajWzor(int w, QString opis);
-        void dodajOciep(QString w);
+        void dodajOciep(QString w, QString o);
 
         QSqlTableModel *getSkory() const;
         QSqlTableModel *getOciep() const;
@@ -148,12 +147,14 @@ class BazaDanychManager {
         QAbstractItemModel *getModelForQuery(QSqlQuery *aQuery);
         QStandardItemModel *getDoRozkroju(const std::vector<int> &value);
         void clearFilterZam();
-        void setIdModelu(int value);
         int getNumerOstatniegoZamKomputerowego();
         int getNumerOstatniegoRozkroju();
         void stworzSzkieletRozkroju(QString nr);
+        void stworzSzkieletZam(QString nr);
         void usunSzkieletRozkroju();
+        void usunSzkieletZam();
         QVector<QString> zwrocListeModel(int id);
+        QVector<int> zwrocListeIdSkladowychModelu(int id);
         void setZamowieniaSzczegolyFilter(QString f);
 
         QSqlTableModel *getRozkroje() const;
@@ -164,12 +165,26 @@ class BazaDanychManager {
 
         void setTableWidokZamowienia(QString tabela);
         bool copyZamowienieArch(QStandardItemModel *pozycje);
-    private:
+        void setIdKoloru(int value);
+
+        void setIdSpodu(int value);
+
+        void setIdWzoru(int value);
+
+        void setIdWkladki(int value);
+
+        void setIdOciep(int value);
+
+        void setIdSkory(int value);
+
+        void setIdMatrycy(int value);
+
+        void setIdModelu(int value);
+
+private:
         QVariant GetFirstValueForQuery(QSqlQuery *aQuery);
         QSqlRecord getSqlRecordZModelu(const QAbstractItemModel *aItemModel);
 
-        bool wystapilBlad(const QSqlQuery &aQuery);
-        void obsluzSqlError(const QSqlQuery &aQuery);
         void removeSqlModels();
 
         void aktualizujHeaderyKlient(QAbstractItemModel *model);
@@ -202,12 +217,14 @@ class BazaDanychManager {
         int idSkory;
         int idMatrycy;
         int idRozkroju;
+        int idZam;
         int idRoznicy;
 
         QVector<int> idModeluL;
         QString nazwaKlienta;
         QString nazwaHandlowca;
         QString currentIdZamRozkroje;
+        QString nrRozkroju;
 
         bool firstRun;
         QString ostatniSelectZam;

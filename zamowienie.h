@@ -34,6 +34,7 @@ struct zamowienieStruct {
     QString uwagi;
     QString uwagi2;
     QString rozkrojNr;
+    QString suma;
 };
 
 struct zamowienieZRozmiaramiStruct : public zamowienieStruct {

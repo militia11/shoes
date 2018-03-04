@@ -3,7 +3,6 @@
 #include "Delegate.h"
 #include <QMessageBox>
 #include <QKeyEvent>
-#include <QDebug>
 #include <QModelIndex>
 #include "DelegateArrows.h"
 
@@ -91,6 +90,11 @@ void noweZamowienieDialog::wyczysc() {
     ui->plainTextEditU2->clear();
 }
 
+void noweZamowienieDialog::setNr(const QString &value)
+{
+    nr = value;
+}
+
 void noweZamowienieDialog::on_buttonBox_accepted() {
     if (ui->labelKlient->text().isEmpty()) {
         QMessageBox::warning(this, "BRAK WYMAGANYCH PÓL",
@@ -169,9 +173,6 @@ void noweZamowienieDialog::on_pushButtonModel_clicked() {
 void noweZamowienieDialog::showEvent(QShowEvent *e) {
     Q_UNUSED(e);
     ui->pushButton_10->setEnabled(false);
-    int ostatniNumer = dbManager->getNumerOstatniegoZamKomputerowego();
-    int numerZamowieniaNowego = ostatniNumer + 1;
-    nr = QString("B%1").arg(numerZamowieniaNowego);
     ui->lineEditPapier->setText(nr);
     ui->lineEditPapier->setReadOnly(true);
     ktoraPozycja = 0;

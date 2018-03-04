@@ -29,17 +29,22 @@ int wzoryDialog::exec()
 	return QDialog::exec();
 }
 
+void wzoryDialog::aktualizujTabele()
+{
+    QHeaderView *hv = ui->tableView->horizontalHeader();
+    hv->setSectionHidden(0, true);
+    hv->setDefaultAlignment(Qt::AlignCenter);
+    hv->setStretchLastSection(true);
+    ui->tableView->sortByColumn(0, Qt::AscendingOrder);
+}
+
 void wzoryDialog::showEvent(QShowEvent *e) {
 	Q_UNUSED(e);
 	dbManager->setWzory();
 	proxy->setSourceModel(dbManager->getWzory());
 	proxy->setDynamicSortFilter(true);
 	ui->tableView->setModel(proxy);
-	QHeaderView *hv = ui->tableView->horizontalHeader();
-	hv->setSectionHidden(0, true);
-	hv->setDefaultAlignment(Qt::AlignCenter);
-	hv->setStretchLastSection(true);
-	ui->tableView->sortByColumn(0, Qt::AscendingOrder);
+    aktualizujTabele();
 }
 
 void wzoryDialog::hideEvent(QHideEvent *e) {
@@ -55,6 +60,7 @@ void wzoryDialog::on_pushButton_2_clicked() {
 		if (nw->exec() == QDialog::Accepted) {
 				dbManager->dodajWzor(nw->getWzor(), nw->getOpis());
 				dbManager->getWzory()->select();
+                aktualizujTabele();
 		}
 
 }

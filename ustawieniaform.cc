@@ -1,7 +1,6 @@
 #include "ustawieniaform.h"
 #include "ui_ustawieniaform.h"
 #include "BazaDanychManager.h"
-#include <QDebug>
 #include <QSettings>
 #include <QMessageBox>
 

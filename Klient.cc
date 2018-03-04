@@ -1,8 +1,8 @@
 #include "Klient.h"
 
 Klient::Klient(QString nazwa, QString skrot, QString ulica, QString numerDomu,
-		   QString miasto, QString kodPocztowy, QString tel1, QString tel2,
-		   QString fax, QString mail, QString uwagi, QString numerTelefon)
+           QString miasto, QString kodPocztowy, QString tel1, QString tel2,
+           QString fax, QString mail, QString uwagi, QString numerTelefon, QString woj)
 	: nazwa(nazwa),
 	  skrot(skrot),
 	  ulica(ulica),
@@ -14,7 +14,8 @@ Klient::Klient(QString nazwa, QString skrot, QString ulica, QString numerDomu,
 	  fax(fax),
 	  mail(mail),
 	  uwagi(uwagi),
-	  numerTelefonu(numerTelefon) {}
+      numerTelefonu(numerTelefon),
+woj(woj){}
 
 QString Klient::getNazwa() const
 {
@@ -163,4 +164,14 @@ int Klient::getNieodebrane() const
 void Klient::setNieodebrane(int value)
 {
 	nieodebrane = value;
+}
+
+QString Klient::getWoj() const
+{
+    return woj;
+}
+
+void Klient::setWoj(const QString &value)
+{
+    woj = value;
 }

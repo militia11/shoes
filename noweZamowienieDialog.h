@@ -5,7 +5,7 @@
 
 #include "klienciDialog.h"
 #include "nowyKlientDialog.h"
-#include "NowyModelDialog.h"
+#include "owyModelDialog.h"
 #include "BazaDanychManager.h"
 #include "modeleDialog.h"
 #include "NowyHandlowiecDialog.h"
@@ -27,8 +27,10 @@ class noweZamowienieDialog : public QDialog
 			QWidget *parent = 0);
 		~noweZamowienieDialog();
 
-	private slots:
-		void obliczSume(QStandardItem *it);
+    void setNr(const QString &value);
+
+private slots:
+    void obliczSume(QStandardItem *it);
 		void on_pushButton_5_clicked();
 
 		void on_buttonBox_accepted();
@@ -62,7 +64,7 @@ class noweZamowienieDialog : public QDialog
 		Ui::noweZamowienieDialog *ui;
 		QStandardItemModel *zamowienie;
 		int ktoraPozycja;
-		QString nr;
+        QString nr;
 		void ustawTabeleHeaders();
 		void setPlainTextEnabled(bool aEnable);
 };

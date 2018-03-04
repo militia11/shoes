@@ -34,7 +34,6 @@ DoRozkrojuDialog::~DoRozkrojuDialog() {
 }
 
 void DoRozkrojuDialog::on_buttonBox_accepted() {
-
     accept();
 }
 
@@ -45,7 +44,6 @@ void DoRozkrojuDialog::on_buttonBox_rejected() {
 void DoRozkrojuDialog::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Escape) {
         return;
-        // wyczysc();
     }
     QDialog::keyPressEvent(event);
 }
@@ -59,6 +57,7 @@ void DoRozkrojuDialog::showEvent(QShowEvent *e) {
         old = 0;
     }
     ui->tableViewZam->setModel(model);
+     ui->tableViewZam->horizontalHeader()->setMinimumSectionSize(5);
     NaglowkiZamowienia::ustawNaglowki(ui->tableViewZam, model);
 
     ustawSumaAll();

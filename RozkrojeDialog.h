@@ -1,12 +1,13 @@
-#ifndef ROZKROJEDIALOG_H
-#define ROZKROJEDIALOG_H
+#ifndef ROZKROJEDIALOG_H_
+#define ROZKROJEDIALOG_H_
 
 #include <QtWidgets/QDialog>
 #include "BazaDanychManager.h"
 #include <QSortFilterProxyModel>
 #include <QTextDocument>
-#include <QPageSetupDialog>
 #include <QPrinter>
+#include <QPageSetupDialog>
+
 namespace Ui {
 class RozkrojeDialog;
 }
@@ -19,8 +20,11 @@ class RozkrojeDialog : public QDialog {
         ~RozkrojeDialog();
 
         void setDodanoRozkroj(bool value);
+        void setWskazRozkroj(bool value);
 
-    private slots:
+        void setNrRozkrojuWskaz(const QString &value);
+
+private slots:
         void on_tableView_clicked(const QModelIndex &index);
 
         void on_pushButtonPrint_clicked();
@@ -32,7 +36,11 @@ class RozkrojeDialog : public QDialog {
             const QItemSelection &aDeselected);
         void on_pushButtonPrint_2_clicked();
 
-    private:
+        void on_pushSzukaj_clicked();
+
+private:
+        void ustawIFiltruj();
+        void czysc();
         void drukuj();
         bool pageSetup(QPrinter *printer);
         void dodajZamowieniaDoHtml(QTextDocument *document);
@@ -40,6 +48,7 @@ class RozkrojeDialog : public QDialog {
         void stworzListeCaleZamowienie();
         void stworzListeZamowienSzczegoly();
         QString zamowienieTabelka(zamowienieZRozmiaramiStruct zamowienie);
+        QString nrRozkrojuWskaz;
         void oznaczDrukowano();
         void showEvent(QShowEvent *e);
         void hideEvent(QHideEvent *e);
@@ -50,8 +59,10 @@ class RozkrojeDialog : public QDialog {
         QSortFilterProxyModel *proxy;
         void deleteOldModel();
         bool dodanoRozkroj;
+        bool wskazRozkroj;
         QSqlQueryModel *vModel;
         void wyczyscListy();
+        zamowienieZRozmiaramiStruct prepareZamowienieDruk(int i);
 };
 
-#endif // ROZKROJEDIALOG_H
+#endif // ROZKROJEDIALOG_H_

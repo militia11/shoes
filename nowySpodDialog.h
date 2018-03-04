@@ -30,8 +30,10 @@ class nowySpodDialog : public QDialog
 
 		QVector<QImage> getImages() const;
 
-	private slots:
-		void on_pushButton_14_clicked();
+        QString getNr() const;
+
+private slots:
+        void on_pushButton_14_clicked();
 
 		void on_pushButton_15_clicked();
 
@@ -55,6 +57,7 @@ class nowySpodDialog : public QDialog
 		void resetujPrzyciskiWymagane();
 
 	private:
+        QString nr;
 		QString nazwa;
 		QString producent;
 		QString rodzaj;

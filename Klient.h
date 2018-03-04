@@ -10,7 +10,7 @@ class Klient {
 		Klient(QString nazwa, QString skrot, QString ulica, QString numerDomu,
 			   QString miasto, QString kodPocztowy,
 			   QString tel1 , QString tel2, QString fax, QString mail, QString uwagi,
-			   QString numerTelefon);
+               QString numerTelefon, QString woj);
 
 		QString getNazwa() const;
 		void setNazwa(QString noweImie);
@@ -57,12 +57,16 @@ class Klient {
 		int getNieodebrane() const;
 		void setNieodebrane(int value);
 
-	private:
-		QString nazwa;
-		QString skrot;
-		QString ulica;
-		QString numerDomu;
+        QString getWoj() const;
+        void setWoj(const QString &value);
+
+private:
+        QString nazwa;
+        QString skrot;
+        QString ulica;
+        QString numerDomu;
 		QString miasto;
+        QString woj;
 		QString kodPocztowy;
 		QString tel1;
 		QString tel2;

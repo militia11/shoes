@@ -1,12 +1,17 @@
 #include "RozkrojeDialog.h"
 #include "ui_RozkrojeDialog.h"
 #include "NaglowkiZamowienia.h"
+
 RozkrojeDialog::RozkrojeDialog(BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::RozkrojeDialog), dbManager(db), vModel(nullptr) {
+    ui(new Ui::RozkrojeDialog), dbManager(db) {
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
     dodanoRozkroj = false;
+    wskazRozkroj = false;
+    ui->lineEditNr->setFixedWidth(100);
+    ui->lineEditUz->setFixedWidth(100);
+    ui->lineEditWpr->setFixedWidth(100);
 }
 
 RozkrojeDialog::~RozkrojeDialog() {
@@ -24,8 +29,17 @@ void RozkrojeDialog::deleteOldModel() {
     }
 }
 
+void RozkrojeDialog::setWskazRozkroj(bool value)
+{
+    wskazRozkroj = value;
+}
+
 void RozkrojeDialog::setDodanoRozkroj(bool value) {
     dodanoRozkroj = value;
+}
+
+void RozkrojeDialog::ustawIFiltruj() {
+    dbManager->getRozkroje()->setFilter(QString("nr_rozkroju LIKE '%1%' AND WPROWADZONO LIKE '%2%' AND UZYTKOWNIK LIKE '%3%'").arg(ui->lineEditNr->text(),ui->lineEditWpr->text(),ui->lineEditUz->text()));
 }
 
 void RozkrojeDialog::on_tableView_clicked(const QModelIndex &index) {
@@ -42,7 +56,12 @@ void RozkrojeDialog::on_tableView_clicked(const QModelIndex &index) {
         ui->tableViewSzczegoly->setModel(vModel);
     }
     ui->tableViewSzczegoly->hideColumn(0);
+    ui->tableViewSzczegoly->horizontalHeader()->setMinimumSectionSize(5);
+    QHeaderView *hv = ui->tableViewSzczegoly->horizontalHeader();
     NaglowkiZamowienia::ustawNaglowki(ui->tableViewSzczegoly, vModel);
+       ui->tableViewSzczegoly->setColumnWidth(35, 80);
+       ui->tableViewSzczegoly->setColumnWidth(36, 80);
+    hv->setSectionHidden(41, false);
     connect(
         ui->tableViewSzczegoly->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
@@ -61,10 +80,6 @@ void RozkrojeDialog::showEvent(QShowEvent *e) {
     proxy->setSourceModel(dbManager->getRozkroje());
     ui->tableView->setModel(proxy);
     ui->tableView->setSortingEnabled(true);
-    for (int c = 0; c < ui->tableView->horizontalHeader()->count(); ++c) {
-        ui->tableView->horizontalHeader()->setSectionResizeMode(c,
-                QHeaderView::ResizeToContents);
-    }
     QHeaderView *hv = ui->tableView->horizontalHeader();
     hv->setStretchLastSection(true);
     hv->setSectionHidden(0, true);
@@ -82,17 +97,25 @@ void RozkrojeDialog::showEvent(QShowEvent *e) {
         ui->tableView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
         on_tableView_clicked(index);
         dodanoRozkroj = false;
+    } else if(wskazRozkroj) {
+        //dbManager->pobierzIdRozkrojuWskaz(nrRozkrojuWskaz);
     }
-    QString q = QString("select *from vroz where rozkroje_id=%1").arg(1);
-    QSqlQuery query(q);
-    vModel = dbManager->getSqlModelForQuery(&query);
-    on_pushButtonPrint_clicked();
-    exit(1);
-//  ui->lineEdit->clear();
-    //  ustawIFiltruj();
+    for (int c = 0; c < ui->tableView->horizontalHeader()->count(); ++c) {
+        ui->tableView->horizontalHeader()->setSectionResizeMode(c,
+                QHeaderView::Fixed);
+    }
+    ui->tableView->horizontalHeader()->setDefaultSectionSize(100);
+    ustawIFiltruj();
+
+//    QString q = QString("select * from vroz where rozkroje_id=%1").arg(1);
+//    QSqlQuery query(q);
+//    vModel = dbManager->getSqlModelForQuery(&query);
+//    on_pushButtonPrint_clicked();
+//    exit(1);
 }
 
 void RozkrojeDialog::hideEvent(QHideEvent *e) {
+    czysc();
     setDodanoRozkroj(false);
 }
 
@@ -124,13 +147,13 @@ void RozkrojeDialog::drukuj() {
     ma.setRight(0);
     printer.setPageMargins(ma);
     printer.setFullPage(true);
-    //if (pageSetup(&printer)) {
+    if (pageSetup(&printer)) {
     printDocument(&printer);
     oznaczDrukowano();
 
-    //  } else {
-    //    qDebug() << "anulowane";
-    //  }
+      } else {
+        qDebug() << "anulowane";
+      }
     zamowieniaDruk.clear();
     idDrukowanychZam.clear();
 }
@@ -155,46 +178,6 @@ void RozkrojeDialog::wyczyscListy() {
     idDrukowanychZam.clear();
 }
 
-void RozkrojeDialog::stworzListeCaleZamowienie() {
-    wyczyscListy();
-    int count = vModel->rowCount();
-    for (int i = 0; i < count; i++) {
-        zamowienieZRozmiaramiStruct zam;
-        zam.nrZ = vModel->data(vModel->index(i, 1)).toString();
-        zam.klNaz = vModel->data(vModel->index(i, 2)).toString();
-        zam.klNr = vModel->data(vModel->index(i, 3)).toString();
-        zam.wzor = vModel->data(vModel->index(i, 4)).toString();
-        zam.spn = vModel->data(vModel->index(i, 5)).toString();
-        zam.kolor = vModel->data(vModel->index(i, 6)).toString();
-        zam.ociep = vModel->data(vModel->index(i, 7)).toString();
-        zam.mat = vModel->data(vModel->index(i, 8)).toString();
-        zam.wkladka = vModel->data(vModel->index(i, 9)).toString();
-        zam.rozmiary.append(vModel->data(vModel->index(i, 10)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 11)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 12)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 13)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 14)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 15)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 16)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 17)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 18)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 19)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 20)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 21)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 22)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 23)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 24)).toInt());
-        zam.rozmiary.append(vModel->data(vModel->index(i, 25)).toInt());
-        zam.uzyt = vModel->data(vModel->index(i, 32)).toString();
-        zam.wpr = vModel->data(vModel->index(i, 33)).toString();
-        zam.rea = vModel->data(vModel->index(i, 34)).toString();
-        zam.uwagi = vModel->data(vModel->index(i, 35)).toString();
-        zam.uwagi2 = vModel->data(vModel->index(i, 36)).toString();
-        zam.rozkrojNr = vModel->data(vModel->index(i, 49)).toString();
-        zamowieniaDruk.append(zam);
-        idDrukowanychZam.append(vModel->data(vModel->index(i, 0)).toInt());
-    }
-}
 
 void RozkrojeDialog::stworzListeZamowienSzczegoly() {
     wyczyscListy();
@@ -202,19 +185,60 @@ void RozkrojeDialog::stworzListeZamowienSzczegoly() {
     std::vector<zamowienieZRozmiaramiStruct> zamowienia;
     int id = 0;
     for (int i = 0; i < selection.count(); i++) {
-        QModelIndex index = proxy->mapToSource(selection.at(i));
-        id = ui->tableViewSzczegoly->model()->data(ui->tableViewSzczegoly->model()->index(
-                    index.row(),
-                    0)).toInt();
-        zamowieniaDruk.append(dbManager->stworzZamowienieZBazy(id));
-        idDrukowanychZam.append(id);
+        int row = selection.at(i).row();
+        zamowieniaDruk.append(prepareZamowienieDruk(row));
+        idDrukowanychZam.append(vModel->data(vModel->index(row, 0)).toInt());
+    }
+}
+
+zamowienieZRozmiaramiStruct RozkrojeDialog::prepareZamowienieDruk(int i) {
+    zamowienieZRozmiaramiStruct zam;
+    zam.nrZ = vModel->data(vModel->index(i, 1)).toString();
+    zam.klNaz = vModel->data(vModel->index(i, 2)).toString();
+    zam.klNr = vModel->data(vModel->index(i, 3)).toString();
+    zam.wzor = vModel->data(vModel->index(i, 4)).toString();
+    zam.spn = vModel->data(vModel->index(i, 5)).toString();
+    zam.kolor = vModel->data(vModel->index(i, 6)).toString();
+    zam.ociep = vModel->data(vModel->index(i, 7)).toString();
+    zam.mat = vModel->data(vModel->index(i, 8)).toString();
+    zam.wkladka = vModel->data(vModel->index(i, 9)).toString();
+    zam.rozmiary.append(vModel->data(vModel->index(i, 10)).toInt());
+    zam.rozmiary.append(vModel->data(vModel->index(i, 11)).toInt());
+    zam.rozmiary.append(vModel->data(vModel->index(i, 12)).toInt());
+    zam.rozmiary.append(vModel->data(vModel->index(i, 13)).toInt());
+    zam.rozmiary.append(vModel->data(vModel->index(i, 14)).toInt());
+    zam.rozmiary.append(vModel->data(vModel->index(i, 15)).toInt());
+    zam.rozmiary.append(vModel->data(vModel->index(i, 16)).toInt());
+    zam.rozmiary.append(vModel->data(vModel->index(i, 17)).toInt());
+    zam.rozmiary.append(vModel->data(vModel->index(i, 18)).toInt());
+    zam.rozmiary.append(vModel->data(vModel->index(i, 19)).toInt());
+    zam.rozmiary.append(vModel->data(vModel->index(i, 20)).toInt());
+    zam.rozmiary.append(vModel->data(vModel->index(i, 21)).toInt());
+    zam.rozmiary.append(vModel->data(vModel->index(i, 22)).toInt());
+    zam.rozmiary.append(vModel->data(vModel->index(i, 23)).toInt());
+    zam.rozmiary.append(vModel->data(vModel->index(i, 24)).toInt());
+    zam.suma = vModel->data(vModel->index(i, 25)).toString();
+    zam.uzyt = vModel->data(vModel->index(i, 31)).toString();
+    zam.wpr = vModel->data(vModel->index(i, 33)).toString();
+    zam.rea = vModel->data(vModel->index(i, 34)).toString();
+    zam.uwagi = vModel->data(vModel->index(i, 35)).toString();
+    zam.uwagi2 = vModel->data(vModel->index(i, 36)).toString();
+    zam.rozkrojNr = vModel->data(vModel->index(i, 40)).toString();
+
+    return zam;
+}
+
+void RozkrojeDialog::stworzListeCaleZamowienie() {
+    wyczyscListy();
+    int count = vModel->rowCount();
+    for (int i = 0; i < count; i++) {
+        zamowieniaDruk.append(prepareZamowienieDruk(i));
+        idDrukowanychZam.append(vModel->data(vModel->index(i, 0)).toInt());
     }
 }
 
 void RozkrojeDialog::dodajZamowieniaDoHtml(QTextDocument *document) {
-    QString html("<html><head><meta content=\"text/html\"><style type=\"text/css\"></style></head><body><div>"
-                 "    <table><tr>"
-                );
+    QString html("<html><head><meta content=\"text/html\"><style type=\"text/css\"></style></head><body><div><table><tr>");
     int counter = 0;
     for (zamowienieZRozmiaramiStruct zamowienie : zamowieniaDruk) {
         if (counter % 2 == 0) {
@@ -228,123 +252,115 @@ void RozkrojeDialog::dodajZamowieniaDoHtml(QTextDocument *document) {
         }
         counter++;
     }
-    html +=
-        "</table>"
-        "<P STYLE=\"margin-right: -0.51in; margin-bottom: 0in; background: transparent; line-height: 100%; page-break-before: auto\"><BR></P> "
-        " </body> </html > ";
 
-    //            "</table>"
-    //            "<p><span class = rvts3><br> </span > </p > "
-
+    html += "</table></div><p><span class = rvts3><br></span ></p></body></html>";
     document->setHtml(html);
-
-    // ///////////////
-//    QString html("<html><head><meta content=\"text/html\"><style type=\"text/css\"></style></head><body><div>"
-//                 "    <table>"
-//                 "<tr>");
-//    int counter = 0;
-//    for (zamowienieZRozmiaramiStruct zamowienie : zamowieniaDruk) {
-//        if (counter % 2 == 0) {
-//            html += "<tr>\n";
-//        }
-//        if (!zamowienie.rozmiary.isEmpty()) {
-//            html += zamowienieTabelka(zamowienie);
-//        }
-//        if (counter % 2 != 0) {
-//            html += " < / tr > \n";
-//        }
-//        counter++;
-//    }
-
-//    html += "</table></div > "
-//            "<p><span class = rvts3><br> </span > </p > "
-//            " </body> </html > ";
-//    document->setHtml(html);</td >
-    // /////
 }
 
 
 QString RozkrojeDialog::zamowienieTabelka(zamowienieZRozmiaramiStruct zamowienie) {
-//padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in\"
     QString wynik =
-        QString("<td><TABLE border=1  WIDTH=340 CELLPADDING=0 CELLSPACING=-1 style=\"border-width: 1px; border-collapse: collapse;font-family:'Times New Roman', serif;font-size: 9px;\">"
-                "<COL WIDTH=52>	<COL WIDTH=45>	<COL WIDTH=48>	<COL WIDTH=38>	<COL WIDTH=37>	<COL WIDTH=70>	<TR VALIGN=TOP>		"
-                "<TD WIDTH=52 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">"
-                "<P>DATA:</P>"
-                " <p style=\"font-size: 9px;\">20-02-1986%1</p>"
-                " <p style=\"font-size: 9px;\">%220-02-1986</p>"
+        QString("<td><TABLE border=1 WIDTH=460 CELLPADDING=0 CELLSPACING=-1 style=\"border-width: 1px; border-collapse: collapse;font-family:'Times New Roman', serif;font-size: 13px;\">"
+                "<TR VALIGN=TOP><TD WIDTH=63>"
+                "<p style=\"font-size: 13px;margin: 3;\">%1</p><p style=\"font-size: 13px;margin: 3;line-height:22px;\">%2</p>"
+                "</TD><TD WIDTH=74>"
+                "<P style=\"margin: 3;\">KLI &nbsp;&nbsp;&nbsp;<b>%3</b></P><P align=\"center\" style=\"font-size:17px;margin: 3;line-height:23px;\"><b>%4</b></P></TD>"
+                "<TD WIDTH=69>"
+                "<p style=\"margin: 3;\">NR ZAM</p>"
+                "<P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%5</b></P></TD>"
+                "<TD COLSPAN=2 WIDTH=112>"
+                "<P style=\"margin: 3;\">NR ROZKROJU</P><P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%6</b></P></TD>"
+                "<TD WIDTH=78>"
+                "<P style=\"margin: 3;\">ZLECAJĄCY</P><P align=\"center\" style=\"font-size:19px;margin: 3;\"><b>%7</b></P></TD></TR>"
+                "<TR VALIGN=TOP>"
+                "<TD WIDTH=65>"
+                "<P style=\"margin: 3;\">WZÓR</P><P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%8</b></P></TD>"
+                "<TD WIDTH=65 >"
+                "<P style=\"margin: 3;\">SPÓD</P>	<P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%9</b></P></TD>").
+        arg(zamowienie.wpr.toHtmlEscaped(), zamowienie.rea.toHtmlEscaped(), zamowienie.klNr,
+            zamowienie.klNaz.toHtmlEscaped(), zamowienie.nrZ.toHtmlEscaped(), zamowienie.rozkrojNr.toHtmlEscaped(), zamowienie.uzyt.toHtmlEscaped(),
+            zamowienie.wzor.toHtmlEscaped(), zamowienie.spn.toHtmlEscaped());
+    wynik += QString("<TD WIDTH = 68>"
+                "<P style=\"margin: 3;\">KOLOR</P><P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%1</b></P></TD>"
+                "<TD WIDTH=58 >"
+                "<P style=\"margin: 3;\">OCIE</P><P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%2</b></P></TD>"
+                "<TD WIDTH=69 >"
+                "<P style=\"margin: 3;\">MAT</P><P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%3</b></P></TD>"
+                "<TD WIDTH=70 >"
+                "<P style=\"margin: 3;\">WKŁ</P><P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%4</b></P></TD></TR>"
+               ).arg(zamowienie.kolor.toHtmlEscaped(), zamowienie.ociep.toHtmlEscaped(), zamowienie.mat.toHtmlEscaped(), zamowienie.wkladka.toHtmlEscaped());
 
-                "<P><BR></P></TD><TD WIDTH=45 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">"
-                "<P>KLIENT:</P>"
-                "</TD>		"
+    QMap<QString, int> rozm;
+    for (int i = 0; i < 15; i++) {
+        int id = 36 + i;
+        rozm.insert(QString("R%1").arg(id),
+                    zamowienie.rozmiary[i]);
+    }
 
-                "<TD WIDTH=53 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px;  border-right: none;\"><p>NR ZAM:</p>"
-                "<P>NR ZAMxxxxxxxxxx:</P>		</TD>		"
+    for (QMap<QString, int>::iterator it = rozm.begin(); it != rozm.end();) {
+        if ((*it) == 0) {
+            rozm.erase(it++);
+        } else {
+            ++it;
+        }
+    }
 
-                "<TD COLSPAN=2 WIDTH=83 STYLE=\"border-top: 1px solid #000000; border-bottom: 1px solid #000000; "
-                "border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in\">	"
-                "		<P>NR ROZKROJU</P>		</TD>		<TD WIDTH=70 STYLE=\"border: 1px solid #000000; padding: 0.04in\">			"
-                "<P>ZLECAJĄCY</P>		</TD>	</TR>"
-
-
-                "	<TR VALIGN=TOP>		"
-                "<TD WIDTH=52 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\""
-                "<P>WZÓR</P><P>xxx</P></TD>		"
-
-                "<TD WIDTH=45 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">"
-                "<P>SPÓD</P>	<P>SPÓDx</P>	</TD>	"
-
-                "	<TD WIDTH=48 STYLE=\"border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in\">"
-                "	<P>KOLOR</P>	<P>KOLORx</P>	</TD>		"
-
-                "<TD WIDTH=38 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">"
-                "<P>OCIE</P>	<P>OCIEx</P>	</TD>		"
-
-                "<TD WIDTH=37 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">			<P>MAT</P>		<P>MATx</P>	</TD>		"
-
-                "<TD WIDTH=70 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">			<P>WKŁ</P>	<P>WKŁx</P>	</TD>	</TR>"
-
-
-
-                "<TR VALIGN=TOP>		"
-                "<TD ROWSPAN=3 COLSPAN=4 WIDTH=207 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">	"
-                "<P><BR></P></TD>		"
-
-                "<TD ROWSPAN=3 WIDTH=37 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">	"
-                "<P>SUMA</P>	<P>SUMAxx</P>	</TD>	"
-
-
-                "<TD WIDTH=70 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">			"
-                "<P>KROJ</P>		</TD>	</TR>"
-
-
-                "<TR VALIGN=TOP>	"
-                "	<TD WIDTH=70 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">			<P>SZWALNIA</P>		</TD>	</TR>	"
-
-
-
-                "<TR VALIGN=TOP>	"
-                "<TD WIDTH=70 STYLE=\"border-width : 1px; border-color: #000000; border-style: solid; padding: 1px; border-right: none;\">			<P>MONTAŻ</P>		</TD>	</TR>	<TR>"
-
-                "<TD COLSPAN=6 WIDTH=330 VALIGN=TOP STYLE=\"border-top: none;"
-                " border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in\">	"
-                "<P>U1</P>	<P>U1xxxxxx</P>	</TD>	</TR>	<TR>		"
-
-                "<TD COLSPAN=6 WIDTH=330 VALIGN=TOP STYLE=\"border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid"
-                " #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in\">			<P>U2</P><P>U2xxxxxxxxxxx</P>		</TD>	</TR></TABLE></td>"
-               );
+    wynik += "<TR VALIGN=TOP><TD ROWSPAN=3 COLSPAN=4 WIDTH=220>"
+                     "<table border=1 cellpadding=4 cellspacing=-1 style=\"border-collapse: none;font-family:'Times New Roman', serif;font-size: 15px;\"><tr>";
+    int counter =1;
+    for (QMap<QString, int>::iterator it = rozm.begin(); it != rozm.end(); it++) {
+        wynik += QString("<td align=\"center\"><p><u>%1</u></p><p>%2</p></td>").arg(it.key()).arg(it.value());
+       if(counter==8) {
+           wynik +="<tr>";
+       }
+       counter++;
+    }
+    if(counter<8) {
+       wynik += "<tr><td align=\"center\"><p>&nbsp;&nbsp;&nbsp;</p><p>&nbsp;&nbsp;&nbsp;</p></td>";
+    }
+    wynik += QString("</tr></table></TD>"
+                     "<TD ROWSPAN=3 WIDTH=57>"
+                     "<P>SUMA</P><P style=\"font-size:26px;font-family:'Times New Roman'\"><b><center>%1</center></b></P></TD>"
+                     "<TD WIDTH=80>"
+                     "<P>KROJ <br></br></P></TD></TR>"
+                     "<TR VALIGN=TOP>"
+                     "<TD WIDTH=80>"
+                     "<P>SZWALNIA <br></br></P></TD></TR>"
+                     "<TR VALIGN=TOP>"
+                     "<TD WIDTH=80>"
+                     "<P>MONTAŻ <br></br></P></TD></TR><TR>"
+                     "<TD COLSPAN=6 WIDTH=360 VALIGN=TOP>"
+                     "<P style=\"font-family:'Times New Roman'\">UWAGI 1</P><P>%2</P></TD></TR><TR>"
+                     "<TD COLSPAN=6 WIDTH=360 VALIGN=TOP>"
+                     "<P style=\"font-family:'Times New Roman'\">UWAGI 2</P><P>%3</P></TD></TR></TABLE></td>"
+                    ).arg(zamowienie.suma.toHtmlEscaped(), zamowienie.uwagi.toHtmlEscaped(), zamowienie.uwagi2.toHtmlEscaped());
 
     return wynik;
+}
+
+void RozkrojeDialog::setNrRozkrojuWskaz(const QString &value)
+{
+    nrRozkrojuWskaz = value;
 }
 
 void RozkrojeDialog::oznaczDrukowano() {
     for (int i : idDrukowanychZam) {
         dbManager->oznaczDrukowano(i);
     }
-    dbManager->getModelZamowienia()->select();
 }
 
 void RozkrojeDialog::on_pushButtonPrint_2_clicked() {
     stworzListeZamowienSzczegoly();
     drukuj();
+}
+
+void RozkrojeDialog::czysc() {
+      ui->lineEditNr->clear();
+      ui->lineEditWpr->clear();
+      ui->lineEditUz->clear();
+}
+
+void RozkrojeDialog::on_pushSzukaj_clicked()
+{
+    ustawIFiltruj();
 }

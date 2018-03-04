@@ -44,17 +44,19 @@ void NowyHandlowiecDialog::on_buttonBox_accepted() {
 		nazwisko = ui->lineEditNazwisko->text();
 		skrot = ui->lineEditSkrot_2->text();
 		uwagi = ui->plainTextEdit->toPlainText();
-
-		wyczyscPola();
-		resetujPrzyciskiWymagane();
 		accept();
 	}
 }
 
 void NowyHandlowiecDialog::on_buttonBox_rejected() {
-	wyczyscPola();
-	resetujPrzyciskiWymagane();
-	reject();
+    reject();
+}
+
+void NowyHandlowiecDialog::showEvent(QShowEvent *e)
+{
+ wyczyscPola();
+ resetujPrzyciskiWymagane();
+ ui->lineEditImie->setFocus();
 }
 
 void NowyHandlowiecDialog::wyczyscPola() {

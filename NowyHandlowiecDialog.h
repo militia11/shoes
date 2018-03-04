@@ -34,6 +34,7 @@ class NowyHandlowiecDialog : public QDialog
 			}
 			QDialog::keyPressEvent(event);
 		}
+         void showEvent(QShowEvent *e);
 		void wyczyscPola();
 		void resetujPrzyciskiWymagane();
 

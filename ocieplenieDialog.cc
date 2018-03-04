@@ -1,9 +1,9 @@
 #include "ocieplenieDialog.h"
 #include "ui_ocieplenieDialog.h"
-#include <QInputDialog>
-ocieplenieDialog::ocieplenieDialog(BazaDanychManager *db, QWidget *parent) :
+
+ocieplenieDialog::ocieplenieDialog(noweociepdialog *dno, BazaDanychManager *db, QWidget *parent) :
 	QDialog(parent),
-	ui(new Ui::ocieplenieDialog), dbManager(db) {
+    ui(new Ui::ocieplenieDialog),dno(dno), dbManager(db) {
 	ui->setupUi(this);
 	proxy = new QSortFilterProxyModel(this);
 }
@@ -11,6 +11,15 @@ ocieplenieDialog::ocieplenieDialog(BazaDanychManager *db, QWidget *parent) :
 ocieplenieDialog::~ocieplenieDialog() {
 	delete ui;
 	delete proxy;
+}
+
+void ocieplenieDialog::aktualizujTabele()
+{
+    QHeaderView *hv = ui->tableView->horizontalHeader();
+    hv->setStretchLastSection(true);
+    hv->setSectionHidden(0, true);
+    hv->setDefaultAlignment(Qt::AlignLeft);
+    ui->tableView->sortByColumn(0, Qt::AscendingOrder);
 }
 
 void ocieplenieDialog::showEvent(QShowEvent *e) {
@@ -24,11 +33,7 @@ void ocieplenieDialog::showEvent(QShowEvent *e) {
 		ui->tableView->horizontalHeader()->setSectionResizeMode(c,
 				QHeaderView::ResizeToContents);
 	}
-	QHeaderView *hv = ui->tableView->horizontalHeader();
-	hv->setStretchLastSection(true);
-	hv->setSectionHidden(0, true);
-	hv->setDefaultAlignment(Qt::AlignLeft);
-	ui->tableView->sortByColumn(0, Qt::AscendingOrder);
+    aktualizujTabele();
 }
 
 void ocieplenieDialog::hideEvent(QHideEvent *e)
@@ -51,13 +56,10 @@ int ocieplenieDialog::selectExec()
 }
 
 void ocieplenieDialog::on_pushButton_2_clicked() {
-	QString wzor = 0;
-
-	wzor = QInputDialog::getText(this, tr("Dodaj ocieplenie"),
-					 tr("Podaj rodzaj."), QLineEdit::Normal);
-	if (wzor != 0) {
-		dbManager->dodajOciep(wzor);
+if(dno->exec() == QDialog::Accepted) {
+    dbManager->dodajOciep(dno->getRodz(),dno->getOpis());
 		dbManager->getOciep()->select();
+            aktualizujTabele();
 	}
 }
 

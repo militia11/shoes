@@ -8,7 +8,7 @@ koloryDialog::koloryDialog(nowyKolorDialog *dilogNowyKolor,
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
     aktualnyKolor = -1;
-    ui->lineEdit->setFixedWidth(94);
+    ui->lineEdit->setFixedWidth(74);
 }
 
 koloryDialog::~koloryDialog() {
@@ -27,6 +27,17 @@ int koloryDialog::selectExec() {
     return QDialog::exec();
 }
 
+void koloryDialog::aktualHeader()
+{
+    QHeaderView *hv = ui->tableView->horizontalHeader();
+    hv->setStretchLastSection(true);
+    hv->setSectionHidden(0, true);
+    hv->setDefaultAlignment(Qt::AlignLeft);
+    ui->tableView->sortByColumn(0, Qt::AscendingOrder);
+    ui->lineEdit->clear();
+    ui->lineEdit->setFixedWidth(60);
+}
+
 void koloryDialog::showEvent(QShowEvent *e) {
     Q_UNUSED(e);
     dbManager->setKolory();
@@ -38,12 +49,8 @@ void koloryDialog::showEvent(QShowEvent *e) {
         ui->tableView->horizontalHeader()->setSectionResizeMode(c,
                 QHeaderView::ResizeToContents);
     }
-    QHeaderView *hv = ui->tableView->horizontalHeader();
-    hv->setStretchLastSection(true);
-    hv->setSectionHidden(0, true);
-    hv->setDefaultAlignment(Qt::AlignLeft);
-    ui->tableView->sortByColumn(0, Qt::AscendingOrder);
-    ui->lineEdit->clear();
+    aktualHeader();
+
     ustawIFiltruj();
 }
 
@@ -58,6 +65,7 @@ void koloryDialog::on_pushButton_2_clicked() {
                                  nowyKolor->getSk1d(),
                                  nowyKolor->getSk2(), nowyKolor->getSk2d(), nowyKolor->getSk3(),
                                  nowyKolor->getSk3d(), nowyKolor->getSkdomi());
+        aktualHeader();
     }
 }
 

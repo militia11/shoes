@@ -3,6 +3,7 @@
 
 #include <QtWidgets/QDialog>
 #include <QKeyEvent>
+
 namespace Ui {
 class nowyKlientDialog;
 }
@@ -60,9 +61,12 @@ class nowyKlientDialog : public QDialog
 		int getNieodebrane() const;
 		void setNieodebrane(int value);
 
-	private slots:
-		void on_buttonBox_accepted();
-		void on_buttonBox_rejected();
+        QString getWoj() const;
+        void setWoj(const QString &value);
+
+private slots:
+        void on_buttonBox_accepted();
+        void on_buttonBox_rejected();
 
 	private:
 		void keyPressEvent(QKeyEvent *event) {
@@ -72,6 +76,7 @@ class nowyKlientDialog : public QDialog
 			}
 			QDialog::keyPressEvent(event);
 		}
+ void showEvent(QShowEvent *e);
 		void wyczyscPola();
 		void resetujPrzyciskiWymagane();
 
@@ -81,6 +86,7 @@ class nowyKlientDialog : public QDialog
 		QString numerTelefonu;
 		QString numerDomu;
 		QString miasto;
+        QString woj;
 		QString kodPocztowy;
 		QString ulica;
 		QString tel1;

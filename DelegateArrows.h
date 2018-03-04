@@ -6,7 +6,6 @@
 #include <QStyledItemDelegate>
 
 #include <QKeyEvent>
-#include <QDebug>
 
 class DelegateArrows : public QStyledItemDelegate
 {

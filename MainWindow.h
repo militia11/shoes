@@ -1,8 +1,7 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAINWINDOW_H_
+#define MAINWINDOW_H_
 
 #include <QtWidgets/QMainWindow>
-#include <QDebug>
 #include <QString>
 #include <QTableView>
 #include <QHeaderView>
@@ -20,7 +19,7 @@
 #include "spodyDialog.h"
 #include "ocieplenieDialog.h"
 #include "matryceDialog.h"
-#include "NowyModelDialog.h"
+#include "owyModelDialog.h"
 #include "wzoryDialog.h"
 #include "NowaMatrycaDialog.h"
 #include "nowySpodDialog.h"
@@ -29,9 +28,12 @@
 #include "nowyKolorDialog.h"
 #include "nowywzorDialog.h"
 #include "DoRozkrojuDialog.h"
-#include "RozkrojeDialog.h"
 #include "RozniceDialog.h"
 #include "edycjazamowieniadialog.h"
+#include "RozkrojeDialog.h"
+#include "nowawkladkadialog.h"
+#include "noweociepdialog.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -45,7 +47,6 @@ class MainWindow : public QMainWindow {
         ~MainWindow();
 
         void aktualizujTabele();
-        void a();
 
     public slots:
         void ustawIFiltruj();
@@ -94,15 +95,19 @@ class MainWindow : public QMainWindow {
 
         void on_radioButton_2_clicked();
 
-    private:
+        void on_actionWyloguj_triggered();
+
+        void on_actionEdycja_triggered();
+
+private:
         void keyPressEvent(QKeyEvent *event);
         void filtruj();
         void logowanie();
+        void wylogowanie();
         void rozciagnijWiersze();
         void podlaczSygnaly();
 
         Ui::MainWindow *ui;
-        QPageSetupDialog *dialogPrint;
         BazaDanychManager *dbManager;
         UstawieniaForm *dialog;
         ZdjecieDialog *dialogzdj;
@@ -111,6 +116,7 @@ class MainWindow : public QMainWindow {
         NowyHandlowiecDialog *dialognowyHandl;
         klienciDialog *dialogKlienci;
         handlowceDialog *dialogHandl;
+        NowaWkladkaDialog *dialogNowaWkl;
         wkladkaDialog *dialogwkladka;
         nowaSkoraDialog *dialognskora;
         skoryDialog *dialogskory;
@@ -118,18 +124,21 @@ class MainWindow : public QMainWindow {
         koloryDialog *dialogkolory;
         nowySpodDialog *dialognspod;
         spodyDialog *dialogspody;
+        noweociepdialog * dno;
         ocieplenieDialog *dialogocieplenie;
         NowaMatrycaDialog *nowaMatryca;
         matryceDialog *dialogmatryce;
         nowywzorDialog *dialonwzor;
         wzoryDialog *dialogwzory;
-        NowyModelDialog *dialognowyModel;
+        owyModelDialog *dialognowyModel;
         modeleDialog *dialogmodele;
         RozkrojeDialog *rozkroje;
         DoRozkrojuDialog *dorozkroju;
         RozniceDialog *roznicerozkroje;
         EdycjaZamowieniaDialog *dialogEdycjaZam;
         QSortFilterProxyModel *proxy;
+
+        void csvexport();
 
         int nrkar;
         int kl;
@@ -150,8 +159,10 @@ class MainWindow : public QMainWindow {
         void createCombos();
         void setSumaZamowien();
         bool archiwumMode;
+        bool wysylkaMode;
         QString getNrZam(QModelIndex idx);
         QString prepareRozkroj();
+        QString prepareZam();
 };
 
-#endif // MAINWINDOW_H
+#endif // MAINWINDOW_H_

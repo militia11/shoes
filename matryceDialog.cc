@@ -18,6 +18,15 @@ matryceDialog::~matryceDialog()
 	delete proxy;
 }
 
+void matryceDialog::aktualizujTabele()
+{
+    QHeaderView *hv = ui->tableView->horizontalHeader();
+    hv->setStretchLastSection(true);
+    hv->setSectionHidden(0, true);
+    hv->setDefaultAlignment(Qt::AlignLeft);
+    ui->tableView->sortByColumn(0, Qt::AscendingOrder);
+}
+
 void matryceDialog::showEvent(QShowEvent *e) {
 	Q_UNUSED(e);
 	dbManager->setMatryce();
@@ -28,11 +37,7 @@ void matryceDialog::showEvent(QShowEvent *e) {
 		ui->tableView->horizontalHeader()->setSectionResizeMode(c,
 				QHeaderView::ResizeToContents);
 	}
-	QHeaderView *hv = ui->tableView->horizontalHeader();
-	hv->setStretchLastSection(true);
-	hv->setSectionHidden(0, true);
-	hv->setDefaultAlignment(Qt::AlignLeft);
-	ui->tableView->sortByColumn(0, Qt::AscendingOrder);
+    aktualizujTabele();
 }
 
 void matryceDialog::hideEvent(QHideEvent *e) {
@@ -47,7 +52,7 @@ QString matryceDialog::getAktualnaMatrycaNazwa() const {
 void matryceDialog::on_pushButton_2_clicked() {
 	if ( nowamat->exec() == QDialog::Accepted ) {
 		dbManager->zachowajMatryce(nowamat->getNazwa(),
-					   nowamat->getInfonazwa());
+                       nowamat->getInfonazwa());aktualizujTabele();
 	}
 }
 

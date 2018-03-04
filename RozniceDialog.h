@@ -20,9 +20,13 @@ class RozniceDialog : public QDialog {
             const QItemSelection &aSelected,
             const QItemSelection &aDeselected);
 
-    private:
+        void on_pushSzukaj_clicked();
+
+private:
+        void ustawIFiltruj();
+         void czysc();
         void showEvent(QShowEvent *e);
-        //void hideEvent(QHideEvent *e);
+        void hideEvent(QHideEvent *e);
         BazaDanychManager *dbManager;
         Ui::RozniceDialog *ui;
         QSortFilterProxyModel *proxy;

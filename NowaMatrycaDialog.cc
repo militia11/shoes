@@ -44,7 +44,6 @@ void NowaMatrycaDialog::on_buttonBox_accepted()
 	if (!ui->lineEdit->text().isEmpty()) {
 		nazwa = ui->lineEdit->text();
 		infonazwa = ui->plainTextEdit->toPlainText();
-		wyczyscPola();
 		accept();
 	} else {
 		QMessageBox::warning(this, "BRAK WYMAGANEGO POLA",
@@ -53,8 +52,11 @@ void NowaMatrycaDialog::on_buttonBox_accepted()
 	}
 }
 
-void NowaMatrycaDialog::on_buttonBox_rejected()
-{
-	wyczyscPola();
-	reject();
+void NowaMatrycaDialog::on_buttonBox_rejected() {
+    reject();
+}
+
+void NowaMatrycaDialog::showEvent(QShowEvent *e) {
+    wyczyscPola();
+    ui->lineEdit->setFocus();
 }

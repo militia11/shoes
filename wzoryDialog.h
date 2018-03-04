@@ -34,6 +34,7 @@ class wzoryDialog : public QDialog
 		Ui::wzoryDialog *ui;
 		BazaDanychManager *dbManager;nowywzorDialog * nw;
 		QSortFilterProxyModel *proxy;
+                void aktualizujTabele();
 };
 
 #endif // WZORYDIALOG_H

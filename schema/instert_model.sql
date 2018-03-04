@@ -1,1 +1,0 @@
-INSERT INTO `obuwie_db`.`modele` ( `wzory_id`,  `matryce_id`,  `ocieplenie`, `kolor`, `wkladka`, `skora_id`, `spody_id`, `rodzaj_id`, `rodzaj_montazu`, `rodzaj_buta`, `rodzaj_buta_2`, `rodzaj_buta_3`, `rodzaj_buta_4`, `rodzaj_buta_5`, `rodzaj_buta_6`) VALUES (1,1, 1,1, 1,1,1,1,1,1,1,1,1,1,1);
