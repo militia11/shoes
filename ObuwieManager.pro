@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = ObuwieManager
+TARGET = "ABIS Manager"
 INCLUDEPATH += .
 QT += sql core widgets sql gui printsupport
 # The following define makes your compiler warn you if you use any
@@ -54,7 +54,8 @@ HEADERS += BazaDanychManager.h \
            ZdjecieDialog.h \
            RozkrojeDialog.h \
     nowawkladkadialog.h \
-    noweociepdialog.h
+    noweociepdialog.h \
+    logowaniedialog.h
 
 FORMS += DoRozkrojuDialog.ui \
          edycjazamowieniadialog.ui \
@@ -83,7 +84,8 @@ FORMS += DoRozkrojuDialog.ui \
          ZdjecieDialog.ui \
          RozkrojeDialog.ui \
     nowawkladkadialog.ui \
-    noweociepdialog.ui
+    noweociepdialog.ui \
+    logowaniedialog.ui
 
 SOURCES += BazaDanychManager.cc \
            clickableLabel.cc \
@@ -120,7 +122,8 @@ SOURCES += BazaDanychManager.cc \
            ZdjecieDialog.cc \
            RozkrojeDialog.cc \
     nowawkladkadialog.cpp \
-    noweociepdialog.cpp
+    noweociepdialog.cpp \
+    logowaniedialog.cpp
 
 RESOURCES += zasoby.qrc
 

@@ -78,6 +78,10 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>pushButton_3</tabstop>
+  <tabstop>tableViewHandlowce</tabstop>
+ </tabstops>
  <resources>
   <include location="zasoby.qrc"/>
  </resources>

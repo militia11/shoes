@@ -6,9 +6,11 @@ RozniceDialog::RozniceDialog(BazaDanychManager *db, QWidget *parent) :
     ui(new Ui::RozniceDialog), dbManager(db) {
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
-    ui->lineEditNr->setFixedWidth(100);
-    ui->lineEditUz->setFixedWidth(100);
-    ui->lineEditWpr->setFixedWidth(100);
+    ui->lineEditNr->setFixedWidth(110);
+    ui->lineEditUz->setFixedWidth(110);
+    ui->lineEditWpr->setFixedWidth(110);
+    wskazRoznice = false;
+    this->setWindowFlags(Qt::Window);
 }
 
 RozniceDialog::~RozniceDialog() {
@@ -41,6 +43,14 @@ void RozniceDialog::deleteOldModel() {
     }
 }
 
+void RozniceDialog::setNrRoznicy(const QString &value) {
+    nrRoznicy = value;
+}
+
+void RozniceDialog::setWskazRoznice(bool value) {
+    wskazRoznice = value;
+}
+
 void RozniceDialog::on_tableView_clicked(const QModelIndex &index) {
     deleteOldModel();
     QModelIndex  idx = proxy->mapToSource(
@@ -55,10 +65,10 @@ void RozniceDialog::on_tableView_clicked(const QModelIndex &index) {
         ui->tableViewSzczegoly->setModel(vModel);
     }
     ui->tableViewSzczegoly->hideColumn(0);
-     ui->tableViewSzczegoly->horizontalHeader()->setMinimumSectionSize(5);
+    ui->tableViewSzczegoly->horizontalHeader()->setMinimumSectionSize(5);
     NaglowkiZamowienia::ustawNaglowki(ui->tableViewSzczegoly, vModel);
-       ui->tableViewSzczegoly->setColumnWidth(35, 110);
-       ui->tableViewSzczegoly->setColumnWidth(36, 110);
+    ui->tableViewSzczegoly->setColumnWidth(35, 110);
+    ui->tableViewSzczegoly->setColumnWidth(36, 110);
     ui->tableViewSzczegoly->update();
 }
 
@@ -73,7 +83,7 @@ void RozniceDialog::showEvent(QShowEvent *e) {
     hv->setStretchLastSection(true);
     hv->setSectionHidden(0, true);
     hv->setDefaultAlignment(Qt::AlignLeft);
-    ui->tableView->sortByColumn(0, Qt::AscendingOrder);
+    ui->tableView->sortByColumn(0, Qt::DescendingOrder);
     connect(
         ui->tableView->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
@@ -83,16 +93,28 @@ void RozniceDialog::showEvent(QShowEvent *e) {
     for (int c = 0; c < ui->tableView->horizontalHeader()->count(); ++c) {
         ui->tableView->horizontalHeader()->setSectionResizeMode(c,
                 QHeaderView::Fixed);
-        ui->tableView->horizontalHeader()->setDefaultSectionSize(100);
+        ui->tableView->horizontalHeader()->setDefaultSectionSize(110);
     }
     ustawIFiltruj();
+    if(wskazRoznice) {
+        QAbstractItemModel * model = ui->tableView->model();
+        ui->tableView->setFocus();
+        for(int i=0; i < model->rowCount(); i++) {
+            if(model->data(model->index(i, 1))==nrRoznicy) {
+                QModelIndex index = ui->tableView->model()->index(i, 1);
+                ui->tableView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+                on_tableView_clicked(index);
+            }
+        }
+        wskazRoznice = false;
+    }
+    ui->tableView->sortByColumn(1, Qt::DescendingOrder);
 }
 
 void RozniceDialog::hideEvent(QHideEvent *e) {
     czysc();
 }
 
-void RozniceDialog::on_pushSzukaj_clicked()
-{
+void RozniceDialog::on_pushSzukaj_clicked() {
     ustawIFiltruj();
 }

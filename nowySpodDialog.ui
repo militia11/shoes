@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>899</width>
-    <height>501</height>
+    <height>521</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,9 @@
    <property name="geometry">
     <rect>
      <x>550</x>
-     <y>460</y>
+     <y>480</y>
      <width>341</width>
-     <height>32</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="orientation">
@@ -33,7 +33,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>220</y>
+     <y>250</y>
      <width>881</width>
      <height>231</height>
     </rect>
@@ -376,7 +376,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>881</width>
+     <width>311</width>
      <height>234</height>
     </rect>
    </property>
@@ -384,7 +384,7 @@
     <item row="1" column="0">
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>Nazwa:                 </string>
+       <string>Nazwa:    </string>
       </property>
      </widget>
     </item>
@@ -404,7 +404,7 @@
     <item row="2" column="0">
      <widget class="QLabel" name="label_3">
       <property name="text">
-       <string>Producent:                                                  </string>
+       <string>Producent:  </string>
       </property>
      </widget>
     </item>
@@ -445,6 +445,7 @@
   </widget>
  </widget>
  <tabstops>
+  <tabstop>lineEditNr</tabstop>
   <tabstop>lineEditNaz</tabstop>
   <tabstop>lineEditProd</tabstop>
   <tabstop>lineEditRozm</tabstop>

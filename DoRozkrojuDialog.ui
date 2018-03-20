@@ -49,6 +49,9 @@
        <property name="title">
         <string/>
        </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
        <widget class="QFrame" name="frame">
         <property name="geometry">
          <rect>
@@ -59,7 +62,7 @@
          </rect>
         </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::WinPanel</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
@@ -75,7 +78,7 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>70</pointsize>
+           <pointsize>60</pointsize>
           </font>
          </property>
          <property name="autoFillBackground">

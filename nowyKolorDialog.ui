@@ -149,6 +149,16 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>spinBox</tabstop>
+  <tabstop>lineEditSk1</tabstop>
+  <tabstop>lineEditSk1d</tabstop>
+  <tabstop>lineEditSk2</tabstop>
+  <tabstop>lineEditSk2d</tabstop>
+  <tabstop>lineEditSk3</tabstop>
+  <tabstop>lineEditSk3d</tabstop>
+  <tabstop>lineEditSkDominujacy</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

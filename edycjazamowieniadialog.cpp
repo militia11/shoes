@@ -31,6 +31,7 @@ EdycjaZamowieniaDialog::EdycjaZamowieniaDialog(klienciDialog * dialogKlienci, ha
 
     ui->tableViewZam->setItemDelegateForColumn(37, del);
     idKli = -1;
+    this->setWindowFlags(Qt::Window);
 }
 
 EdycjaZamowieniaDialog::~EdycjaZamowieniaDialog() {

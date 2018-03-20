@@ -91,7 +91,7 @@
      </rect>
     </property>
     <property name="editTriggers">
-     <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+     <set>QAbstractItemView::AllEditTriggers</set>
     </property>
     <property name="alternatingRowColors">
      <bool>true</bool>
@@ -100,7 +100,10 @@
      <enum>QAbstractItemView::SingleSelection</enum>
     </property>
     <property name="selectionBehavior">
-     <enum>QAbstractItemView::SelectItems</enum>
+     <enum>QAbstractItemView::SelectRows</enum>
+    </property>
+    <property name="sortingEnabled">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="label_11">
@@ -114,8 +117,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Times New Roman</family>
-      <pointsize>12</pointsize>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="frameShadow">
@@ -128,10 +131,10 @@
    <widget class="QLineEdit" name="lcdNumber">
     <property name="geometry">
      <rect>
-      <x>870</x>
+      <x>890</x>
       <y>370</y>
-      <width>241</width>
-      <height>41</height>
+      <width>221</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -148,7 +151,9 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>17</pointsize>
+      <pointsize>15</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
      </font>
     </property>
     <property name="alignment">
@@ -161,43 +166,6 @@
      <string>suma zamówienia</string>
     </property>
     <property name="clearButtonEnabled">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_10">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>10</y>
-      <width>41</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset resource="zasoby.qrc">
-      <normaloff>:/zasoby/trash2.png</normaloff>:/zasoby/trash2.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>40</width>
-      <height>40</height>
-     </size>
-    </property>
-    <property name="autoDefault">
      <bool>false</bool>
     </property>
    </widget>
@@ -230,7 +198,7 @@
      <rect>
       <x>130</x>
       <y>10</y>
-      <width>231</width>
+      <width>221</width>
       <height>41</height>
      </rect>
     </property>
@@ -242,14 +210,14 @@
     </property>
     <property name="font">
      <font>
-      <family>Times New Roman</family>
-      <pointsize>12</pointsize>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string>background: transparent;  color:  #40ff00</string>
+     <string notr="true">background: transparent; </string>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
@@ -306,14 +274,14 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>121</width>
+      <width>111</width>
       <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Times New Roman</family>
-      <pointsize>12</pointsize>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="frameShadow">
@@ -344,7 +312,7 @@
      <rect>
       <x>130</x>
       <y>10</y>
-      <width>231</width>
+      <width>221</width>
       <height>41</height>
      </rect>
     </property>
@@ -356,14 +324,14 @@
     </property>
     <property name="font">
      <font>
-      <family>Times New Roman</family>
-      <pointsize>12</pointsize>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string>background: transparent;  color:  #40ff00</string>
+     <string notr="true">background: transparent; </string>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
@@ -426,8 +394,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Times New Roman</family>
-      <pointsize>12</pointsize>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="frameShadow">
@@ -464,8 +432,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Times New Roman</family>
-      <pointsize>12</pointsize>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="frameShadow">
@@ -489,8 +457,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Times New Roman</family>
-      <pointsize>12</pointsize>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="frameShadow">
@@ -585,15 +553,15 @@
     </property>
     <property name="font">
      <font>
-      <family>Times New Roman</family>
-      <pointsize>12</pointsize>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
     <property name="text">
-     <string>Opis 1</string>
+     <string>Rekord</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -610,15 +578,15 @@
     </property>
     <property name="font">
      <font>
-      <family>Times New Roman</family>
-      <pointsize>12</pointsize>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
     <property name="text">
-     <string>Opis 2</string>
+     <string>Całe zamówienie</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -632,6 +600,11 @@
       <width>441</width>
       <height>131</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
     </property>
     <property name="tabChangesFocus">
      <bool>true</bool>
@@ -652,6 +625,14 @@
       <height>131</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">b</string>
+    </property>
     <property name="tabChangesFocus">
      <bool>true</bool>
     </property>
@@ -666,9 +647,80 @@
   <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
-     <x>570</x>
+     <x>1000</x>
      <y>10</y>
-     <width>551</width>
+     <width>121</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::WinPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>111</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QCheckBox" name="checkBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="font">
+        <font>
+         <family>MS Shell Dlg 2</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Papierowe</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame_6">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>10</y>
+     <width>361</width>
      <height>131</height>
     </rect>
    </property>
@@ -689,8 +741,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Times New Roman</family>
-      <pointsize>70</pointsize>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>60</pointsize>
       <weight>50</weight>
       <bold>false</bold>
      </font>
@@ -714,58 +766,6 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>390</x>
-      <y>0</y>
-      <width>161</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="leftMargin">
-      <number>41</number>
-     </property>
-     <item>
-      <widget class="QCheckBox" name="checkBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>13</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_5">
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Papierowe</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
   </widget>
  </widget>
  <tabstops>
@@ -778,7 +778,6 @@
   <tabstop>plainTextEditU2</tabstop>
   <tabstop>tableViewZam</tabstop>
   <tabstop>lcdNumber</tabstop>
-  <tabstop>pushButton_10</tabstop>
   <tabstop>lineEditPapier</tabstop>
  </tabstops>
  <resources>

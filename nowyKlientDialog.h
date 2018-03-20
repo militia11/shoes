@@ -8,96 +8,72 @@ namespace Ui {
 class nowyKlientDialog;
 }
 
-class nowyKlientDialog : public QDialog
-{
-		Q_OBJECT
+class nowyKlientDialog : public QDialog {
+    Q_OBJECT
 
-	public:
-		explicit nowyKlientDialog(QWidget *parent = 0);
-		~nowyKlientDialog();
+public:
+    explicit nowyKlientDialog(QWidget *parent = 0);
+    ~nowyKlientDialog();
 
-		QString getNazwa() const;
-		void setNazwa(QString noweImie);
+    QString getNazwa() const;
 
-		QString getSkrot() const;
-		void setSkrot(QString noweNazwisko);
+    QString getSkrot() const;
 
-		QString getNumerTelefonu() const;
-		void setNumerTelefonu(QString nowyNumerTel);
+    QString getNumerTelefonu() const;
 
-		QString getUlica() const;
-		void setUlica(QString nowaUlica);
+    QString getUlica() const;
 
-		QString getNumerDomu() const;
-		void setNumerDomu(QString nowyNumerDomu);
+    QString getNumerDomu() const;
 
-		QString getMiasto() const;
-		void setMiasto(QString noweMiasto);
+    QString getMiasto() const;
 
-		QString getKodPocztowy() const;
-		void setKodPocztowy(QString nowyKodPocztowy);
+    QString getKodPocztowy() const;
 
-		QString getTel1() const;
-		void setTel1(const QString &value);
+    QString getTel1() const;
 
-		QString getTel2() const;
-		void setTel2(const QString &value);
+    QString getTel2() const;
 
-		QString getFax() const;
-		void setFax(const QString &value);
+    QString getFax() const;
 
-		QString getMail() const;
-		void setMail(const QString &value);
+    QString getMail() const;
 
-		QString getUwagi() const;
-		void setUwagi(const QString &value);
+    QString getUwagi() const;
 
-		int getZamowione() const;
-		void setZamowione(int value);
+    QString getWoj() const;
 
-		int getOdebrane() const;
-		void setOdebrane(int value);
-
-		int getNieodebrane() const;
-		void setNieodebrane(int value);
-
-        QString getWoj() const;
-        void setWoj(const QString &value);
+    QString getKraj() const;
 
 private slots:
-        void on_buttonBox_accepted();
-        void on_buttonBox_rejected();
+    void on_buttonBox_accepted();
+    void on_buttonBox_rejected();
 
-	private:
-		void keyPressEvent(QKeyEvent *event) {
-			if (event->key() == Qt::Key_Escape) {
-				wyczyscPola();
-				resetujPrzyciskiWymagane();
-			}
-			QDialog::keyPressEvent(event);
-		}
- void showEvent(QShowEvent *e);
-		void wyczyscPola();
-		void resetujPrzyciskiWymagane();
+private:
+    void keyPressEvent(QKeyEvent *event) {
+        if (event->key() == Qt::Key_Escape) {
+            wyczyscPola();
+            resetujPrzyciskiWymagane();
+        }
+        QDialog::keyPressEvent(event);
+    }
+    void showEvent(QShowEvent *e);
+    void wyczyscPola();
+    void resetujPrzyciskiWymagane();
 
-		Ui::nowyKlientDialog *ui;
-		QString nazwa;
-		QString skrot;
-		QString numerTelefonu;
-		QString numerDomu;
-		QString miasto;
-        QString woj;
-		QString kodPocztowy;
-		QString ulica;
-		QString tel1;
-		QString tel2;
-		QString fax;
-		QString mail;
-		QString uwagi;
-		int zamowione;
-		int odebrane;
-		int nieodebrane;
-
+    Ui::nowyKlientDialog *ui;
+    QString nazwa;
+    QString skrot;
+    QString numerTelefonu;
+    QString numerDomu;
+    QString miasto;
+    QString woj;
+    QString kodPocztowy;
+    QString ulica;
+    QString tel1;
+    QString tel2;
+    QString fax;
+    QString mail;
+    QString uwagi;
+    QString kraj;
 };
 
 #endif // NOWYKLIENTDIALOG_H

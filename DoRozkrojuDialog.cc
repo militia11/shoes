@@ -12,15 +12,15 @@ DoRozkrojuDialog::DoRozkrojuDialog(QWidget *parent) :
     for (int i = 0; i < 10; i++) {
         ui->tableViewZam->setItemDelegateForColumn(i, del);
     }
-    for (int i = 25; i < 33; i++) {
+    for (int i = 25; i < 37; i++) {
         ui->tableViewZam->setItemDelegateForColumn(i, del);
     }
-    ui->tableViewZam->setItemDelegateForColumn(37, del);
     DelegateArrows *delArrow = new DelegateArrows(this);
     for (int i = 10; i < 25; i++) {
         ui->tableViewZam->setItemDelegateForColumn(i, delArrow);
     }
     bazowyModel = new QStandardItemModel();
+    this->setWindowFlags(Qt::Window);
 }
 
 DoRozkrojuDialog::~DoRozkrojuDialog() {
@@ -57,7 +57,7 @@ void DoRozkrojuDialog::showEvent(QShowEvent *e) {
         old = 0;
     }
     ui->tableViewZam->setModel(model);
-     ui->tableViewZam->horizontalHeader()->setMinimumSectionSize(5);
+    ui->tableViewZam->horizontalHeader()->setMinimumSectionSize(5);
     NaglowkiZamowienia::ustawNaglowki(ui->tableViewZam, model);
 
     ustawSumaAll();

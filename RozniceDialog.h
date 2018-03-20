@@ -14,8 +14,12 @@ class RozniceDialog : public QDialog {
     public:
         explicit RozniceDialog(BazaDanychManager *db, QWidget *parent = 0);
         ~RozniceDialog();
-    private slots:
-        void on_tableView_clicked(const QModelIndex &index);
+    void setWskazRoznice(bool value);
+
+    void setNrRoznicy(const QString &value);
+
+private slots:
+    void on_tableView_clicked(const QModelIndex &index);
         void SelectionOfTableChanged(
             const QItemSelection &aSelected,
             const QItemSelection &aDeselected);
@@ -31,6 +35,8 @@ private:
         Ui::RozniceDialog *ui;
         QSortFilterProxyModel *proxy;
         void deleteOldModel();
+        bool wskazRoznice;
+        QString nrRoznicy;
 };
 
 #endif // ROZNICEDIALOG_H

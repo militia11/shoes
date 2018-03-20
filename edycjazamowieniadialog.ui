@@ -60,14 +60,14 @@
        </property>
        <property name="font">
         <font>
-         <family>Times New Roman</family>
-         <pointsize>12</pointsize>
+         <family>MS Shell Dlg 2</family>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true"> color:  #40ff00</string>
+        <string notr="true">\</string>
        </property>
        <property name="text">
         <string/>
@@ -127,8 +127,8 @@
        </property>
        <property name="font">
         <font>
-         <family>Times New Roman</family>
-         <pointsize>12</pointsize>
+         <family>MS Shell Dlg 2</family>
+         <pointsize>10</pointsize>
         </font>
        </property>
        <property name="text">
@@ -168,14 +168,14 @@
        </property>
        <property name="font">
         <font>
-         <family>Times New Roman</family>
-         <pointsize>12</pointsize>
+         <family>MS Shell Dlg 2</family>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true"> color:  #40ff00</string>
+        <string notr="true">\</string>
        </property>
        <property name="text">
         <string/>
@@ -235,8 +235,8 @@
        </property>
        <property name="font">
         <font>
-         <family>Times New Roman</family>
-         <pointsize>12</pointsize>
+         <family>MS Shell Dlg 2</family>
+         <pointsize>10</pointsize>
         </font>
        </property>
        <property name="text">
@@ -282,8 +282,8 @@
        </property>
        <property name="font">
         <font>
-         <family>Times New Roman</family>
-         <pointsize>70</pointsize>
+         <family>MS Shell Dlg 2</family>
+         <pointsize>60</pointsize>
         </font>
        </property>
        <property name="autoFillBackground">

@@ -60,6 +60,8 @@ modeleDialog::modeleDialog(ZdjecieDialog *zdj,
     ui->lineEditwkl->setFixedWidth(124);
     ui->lineEditwz->setFixedWidth(124);
     resetRodzaje();
+    this->setWindowFlags(Qt::Window);
+    ui->tableView->installEventFilter(this);
 }
 
 modeleDialog::~modeleDialog() {
@@ -80,7 +82,7 @@ int modeleDialog::selectExec() {
 
 void modeleDialog::ustawIFiltruj() {
     QString f = QString("nr_wzoru LIKE '%1%' AND nazwa LIKE '%2%' AND rodzaj LIKE '%3%' AND kolor LIKE '%4%'"
-        "AND spnaz LIKE '%5%' AND wkrodzaj LIKE '%6%' AND typ LIKE '%7%' AND rodzaj_montazu LIKE '%8%'").arg(
+                        "AND spnaz LIKE '%5%' AND wkrodzaj LIKE '%6%' AND typ LIKE '%7%' AND rodzaj_montazu LIKE '%8%'").arg(
                     ui->lineEditwz->text(), ui->lineEditma->text(), ui->lineEditoc->text(), ui->lineEditkol->text(),
                     ui->lineEditspna->text(), ui->lineEditwkl->text(), filtrRodzaje.typ, filtrRodzaje.mont);
     f += QString(" AND rodzaj_buta LIKE '%1%' AND rodzaj_buta_2 LIKE '%2%' AND rodzaj_buta_3 LIKE '%3%' AND rodzaj_buta_4 LIKE '%4%' AND rodzaj_buta_5 LIKE '%5%' AND rodzaj_buta_6 LIKE '%6%'").
@@ -159,12 +161,64 @@ void modeleDialog::hideEvent(QHideEvent *e) {
                SLOT(wybranoModel(const QModelIndex)));
 }
 
+bool modeleDialog::eventFilter(QObject *object, QEvent *event) {
+    if (object == ui->tableView) {
+        if (event->type() == QEvent::KeyPress) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if (keyEvent->key() == Qt::Key_Up) {
+                upButtonUpdateZdj();
+                return QDialog::eventFilter(object, event);
+            } else if (keyEvent->key() == Qt::Key_Down) {
+                downButtonUpdateZdj();
+                return QDialog::eventFilter(object, event);
+            } else {
+                return QDialog::eventFilter(object, event);
+            }
+        } else {
+            return QDialog::eventFilter(object, event);
+        }
+    } else {
+        return QDialog::eventFilter(object, event);
+    }
+
+}
+
 int modeleDialog::getId() {
     QModelIndex  idx = proxy->mapToSource(
                            ui->tableView->selectionModel()->currentIndex());
     return  dbManager->getModele()->data(
                 dbManager->getModele()->index(idx.row(),
                         0)).toInt();
+}
+
+int modeleDialog::getIdUp() {
+    QModelIndex  idx = proxy->mapToSource(
+                           ui->tableView->selectionModel()->currentIndex());
+
+    if(idx.row()==0) {
+        return dbManager->getModele()->data(
+                   dbManager->getModele()->index(idx.row(),
+                           0)).toInt();
+    } else {
+        return dbManager->getModele()->data(
+                   dbManager->getModele()->index(idx.row()-1,
+                           0)).toInt();
+    }
+}
+
+int modeleDialog::getIdDown() {
+    QModelIndex  idx = proxy->mapToSource(
+                           ui->tableView->selectionModel()->currentIndex());
+
+    if(idx.row()==ui->tableView->model()->rowCount()-1) {
+        return dbManager->getModele()->data(
+                   dbManager->getModele()->index(idx.row(),
+                           0)).toInt();
+    } else {
+        return dbManager->getModele()->data(
+                   dbManager->getModele()->index(idx.row()+1,
+                           0)).toInt();
+    }
 }
 
 void modeleDialog::ustawCombo(QString tabela, QComboBox *com) {
@@ -224,7 +278,7 @@ void modeleDialog::wyczyscPola() {
     ui->checkBox1->setChecked(true);
 }
 
-void modeleDialog::on_tableView_clicked(const QModelIndex &index) {
+void modeleDialog::updateModel(int id) {
     if (ui->pushButton_3->isEnabled() == false) {
         ui->pushButton_3->setEnabled(true);
     }
@@ -232,7 +286,6 @@ void modeleDialog::on_tableView_clicked(const QModelIndex &index) {
     label2->clear();
     label3->clear();
     label4->clear();
-    int id = getId();
     image1 = dbManager->getImage(id, 1, QString("modele"));
     image2 = dbManager->getImage(id, 2, QString("modele"));
     image3 = dbManager->getImage(id, 3, QString("modele"));
@@ -244,19 +297,35 @@ void modeleDialog::on_tableView_clicked(const QModelIndex &index) {
     label4->setPixmap(QPixmap::fromImage(image4));
     int wysZdj = dbManager->getWysZdj(id);
     switch (wysZdj) {
-        case 1:
-            ui->checkBox1->setChecked(true);
-            break;
-        case 2:
-            ui->checkBox2->setChecked(true);
-            break;
-        case 3:
-            ui->checkBox3->setChecked(true);
-            break;
-        case 4:
-            ui->checkBox4->setChecked(true);
-            break;
+    case 1:
+        ui->checkBox1->setChecked(true);
+        break;
+    case 2:
+        ui->checkBox2->setChecked(true);
+        break;
+    case 3:
+        ui->checkBox3->setChecked(true);
+        break;
+    case 4:
+        ui->checkBox4->setChecked(true);
+        break;
     }
+}
+
+void modeleDialog::upButtonUpdateZdj() {
+    int id = getIdUp();
+    updateModel(id);
+}
+
+void modeleDialog::downButtonUpdateZdj() {
+    int id = getIdDown();
+    updateModel(id);
+}
+
+void modeleDialog::on_tableView_clicked(const QModelIndex &index) {
+    int id = getId();
+
+    updateModel(id);
 }
 
 void modeleDialog::on_pushButtonSzukaj_clicked() {
@@ -279,6 +348,7 @@ void modeleDialog::on_pushButton_clicked() {
     ui->lineEditwkl->clear();
     ui->lineEditwz->clear();
     resetRodzaje();
+    ui->tableView->hideColumn(0);
     ustawIFiltruj();
 }
 

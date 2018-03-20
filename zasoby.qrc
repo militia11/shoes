@@ -15,5 +15,7 @@
         <file>zasoby/trash2.png</file>
         <file>zasoby/print2.png</file>
         <file>zasoby/button_logoff.png</file>
+        <file>zasoby/cut.png</file>
+        <file>zasoby/Excel.png</file>
     </qresource>
 </RCC>

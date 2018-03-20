@@ -7,11 +7,11 @@
 
 #include <QKeyEvent>
 
-class DelegateArrows : public QStyledItemDelegate
-{
-	public:
-		DelegateArrows(QObject *parent = Q_NULLPTR);
-		bool eventFilter(QObject *object, QEvent *event);
+class DelegateArrows : public QStyledItemDelegate {
+
+public:
+    DelegateArrows(QObject *parent = Q_NULLPTR);
+    bool eventFilter(QObject *object, QEvent *event);
 };
 
 #endif // DELEGATEARROWS_H

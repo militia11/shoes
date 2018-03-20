@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>694</width>
-    <height>460</height>
+    <width>318</width>
+    <height>513</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,12 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QFormLayout" name="formLayout">
+     <property name="horizontalSpacing">
+      <number>7</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>7</number>
+     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="label_7">
        <property name="text">
@@ -49,44 +55,44 @@
      <item row="2" column="1">
       <widget class="QLineEdit" name="lineEditMiasto"/>
      </item>
-     <item row="4" column="0">
+     <item row="5" column="0">
       <widget class="QLabel" name="label_9">
        <property name="text">
         <string>Kod pocztowy:</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="5" column="1">
       <widget class="QLineEdit" name="lineEditKodPocztowy"/>
      </item>
-     <item row="5" column="0">
+     <item row="6" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
         <string>Ulica:</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item row="6" column="1">
       <widget class="QLineEdit" name="lineEditUlica"/>
      </item>
-     <item row="6" column="0">
+     <item row="7" column="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
         <string>Mieszkanie/lokal:</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item row="7" column="1">
       <widget class="QLineEdit" name="lineEditNrDomu"/>
      </item>
-     <item row="7" column="0">
+     <item row="8" column="0">
       <widget class="QLabel" name="label_10">
        <property name="text">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tel stacjonarny:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
-     <item row="7" column="1">
+     <item row="8" column="1">
       <widget class="QLineEdit" name="lineEditNumerTelefonu">
        <property name="styleSheet">
         <string notr="true">color: blue; background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
@@ -96,73 +102,66 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="0">
+     <item row="9" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tel komórkowy 1:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
-     <item row="8" column="1">
+     <item row="9" column="1">
       <widget class="QLineEdit" name="lineEditTel1">
        <property name="styleSheet">
         <string notr="true">color: blue; background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
        </property>
       </widget>
      </item>
-     <item row="9" column="0">
+     <item row="10" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Tel komórkowy 2:</string>
        </property>
       </widget>
      </item>
-     <item row="9" column="1">
+     <item row="10" column="1">
       <widget class="QLineEdit" name="lineEditTel2">
        <property name="styleSheet">
         <string notr="true">color: blue; background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
        </property>
       </widget>
      </item>
-     <item row="10" column="0">
+     <item row="11" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>Fax:</string>
        </property>
       </widget>
      </item>
-     <item row="10" column="1">
+     <item row="11" column="1">
       <widget class="QLineEdit" name="lineEditFax">
        <property name="styleSheet">
         <string notr="true">color: blue; background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
        </property>
       </widget>
      </item>
-     <item row="11" column="0">
+     <item row="12" column="0">
       <widget class="QLabel" name="label_11">
        <property name="text">
         <string>E-mail:</string>
        </property>
       </widget>
      </item>
-     <item row="11" column="1">
+     <item row="12" column="1">
       <widget class="QLineEdit" name="lineEditMail">
        <property name="styleSheet">
         <string notr="true">color: blue; background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
        </property>
       </widget>
      </item>
-     <item row="12" column="0">
+     <item row="13" column="0">
       <widget class="QLabel" name="label_12">
        <property name="text">
         <string>Uwagi:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="1">
-      <widget class="QLineEdit" name="lineEditUwagi">
-       <property name="styleSheet">
-        <string notr="true">color: blue; background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
        </property>
       </widget>
      </item>
@@ -175,6 +174,26 @@
      </item>
      <item row="3" column="1">
       <widget class="QLineEdit" name="lineEditW"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_14">
+       <property name="text">
+        <string>Kraj:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="lineEditKraj"/>
+     </item>
+     <item row="13" column="1">
+      <widget class="QPlainTextEdit" name="lineEditUwagi">
+       <property name="styleSheet">
+        <string notr="true">color: blue; background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
+       </property>
+       <property name="tabChangesFocus">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -194,6 +213,8 @@
   <tabstop>lineEditNazwa</tabstop>
   <tabstop>lineEditSkrot</tabstop>
   <tabstop>lineEditMiasto</tabstop>
+  <tabstop>lineEditW</tabstop>
+  <tabstop>lineEditKraj</tabstop>
   <tabstop>lineEditKodPocztowy</tabstop>
   <tabstop>lineEditUlica</tabstop>
   <tabstop>lineEditNrDomu</tabstop>

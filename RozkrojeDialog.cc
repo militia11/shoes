@@ -9,16 +9,15 @@ RozkrojeDialog::RozkrojeDialog(BazaDanychManager *db, QWidget *parent) :
     proxy = new QSortFilterProxyModel(this);
     dodanoRozkroj = false;
     wskazRozkroj = false;
-    ui->lineEditNr->setFixedWidth(100);
-    ui->lineEditUz->setFixedWidth(100);
-    ui->lineEditWpr->setFixedWidth(100);
+    ui->lineEditNr->setFixedWidth(110);
+    ui->lineEditUz->setFixedWidth(110);
+    ui->lineEditWpr->setFixedWidth(110);
+    this->setWindowFlags(Qt::Window);
 }
 
 RozkrojeDialog::~RozkrojeDialog() {
     delete ui;
     delete proxy;
-    if (vModel)
-        delete vModel;
 }
 
 void RozkrojeDialog::deleteOldModel() {
@@ -29,8 +28,7 @@ void RozkrojeDialog::deleteOldModel() {
     }
 }
 
-void RozkrojeDialog::setWskazRozkroj(bool value)
-{
+void RozkrojeDialog::setWskazRozkroj(bool value) {
     wskazRozkroj = value;
 }
 
@@ -58,9 +56,9 @@ void RozkrojeDialog::on_tableView_clicked(const QModelIndex &index) {
     ui->tableViewSzczegoly->hideColumn(0);
     ui->tableViewSzczegoly->horizontalHeader()->setMinimumSectionSize(5);
     QHeaderView *hv = ui->tableViewSzczegoly->horizontalHeader();
-    NaglowkiZamowienia::ustawNaglowki(ui->tableViewSzczegoly, vModel);
-       ui->tableViewSzczegoly->setColumnWidth(35, 80);
-       ui->tableViewSzczegoly->setColumnWidth(36, 80);
+    // NaglowkiZamowienia::ustawNaglowki(ui->tableViewSzczegoly, vModel);
+    ui->tableViewSzczegoly->setColumnWidth(35, 80);
+    ui->tableViewSzczegoly->setColumnWidth(36, 80);
     hv->setSectionHidden(41, false);
     connect(
         ui->tableViewSzczegoly->selectionModel(),
@@ -84,29 +82,38 @@ void RozkrojeDialog::showEvent(QShowEvent *e) {
     hv->setStretchLastSection(true);
     hv->setSectionHidden(0, true);
     hv->setDefaultAlignment(Qt::AlignLeft);
-    ui->tableView->sortByColumn(0, Qt::AscendingOrder);
+    ui->tableView->sortByColumn(0, Qt::DescendingOrder);
     connect(
         ui->tableView->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
         SLOT(SelectionOfTableChanged(
                  const QItemSelection &,
                  const QItemSelection &)));
-    if (dodanoRozkroj) {
-        int row = ui->tableView->model()->rowCount();
-        QModelIndex index = ui->tableView->model()->index(row - 1, 1);
-        ui->tableView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
-        on_tableView_clicked(index);
-        dodanoRozkroj = false;
-    } else if(wskazRozkroj) {
-        //dbManager->pobierzIdRozkrojuWskaz(nrRozkrojuWskaz);
-    }
     for (int c = 0; c < ui->tableView->horizontalHeader()->count(); ++c) {
         ui->tableView->horizontalHeader()->setSectionResizeMode(c,
                 QHeaderView::Fixed);
     }
-    ui->tableView->horizontalHeader()->setDefaultSectionSize(100);
+    ui->tableView->horizontalHeader()->setDefaultSectionSize(110);
     ustawIFiltruj();
 
+    if (dodanoRozkroj) {
+        ui->tableView->setFocus();
+        QModelIndex index = ui->tableView->model()->index(0, 1);
+        ui->tableView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+        on_tableView_clicked(index);
+        dodanoRozkroj = false;
+    } else if(wskazRozkroj) {
+        QAbstractItemModel * model = ui->tableView->model();
+        ui->tableView->setFocus();
+        for(int i=0; i < model->rowCount(); i++) {
+            if(model->data(model->index(i, 1))==nrRozkrojuWskaz) {
+                QModelIndex index = ui->tableView->model()->index(i, 1);
+                ui->tableView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+                on_tableView_clicked(index);
+            }
+        }
+        wskazRozkroj = false;
+    }
 //    QString q = QString("select * from vroz where rozkroje_id=%1").arg(1);
 //    QSqlQuery query(q);
 //    vModel = dbManager->getSqlModelForQuery(&query);
@@ -147,13 +154,13 @@ void RozkrojeDialog::drukuj() {
     ma.setRight(0);
     printer.setPageMargins(ma);
     printer.setFullPage(true);
-    if (pageSetup(&printer)) {
+    //if (pageSetup(&printer)) {
     printDocument(&printer);
     oznaczDrukowano();
 
-      } else {
-        qDebug() << "anulowane";
-      }
+//    } else {
+//        qDebug() << "anulowane";
+//    }
     zamowieniaDruk.clear();
     idDrukowanychZam.clear();
 }
@@ -183,7 +190,6 @@ void RozkrojeDialog::stworzListeZamowienSzczegoly() {
     wyczyscListy();
     QModelIndexList selection = ui->tableViewSzczegoly->selectionModel()->selectedRows();
     std::vector<zamowienieZRozmiaramiStruct> zamowienia;
-    int id = 0;
     for (int i = 0; i < selection.count(); i++) {
         int row = selection.at(i).row();
         zamowieniaDruk.append(prepareZamowienieDruk(row));
@@ -281,14 +287,14 @@ QString RozkrojeDialog::zamowienieTabelka(zamowienieZRozmiaramiStruct zamowienie
             zamowienie.klNaz.toHtmlEscaped(), zamowienie.nrZ.toHtmlEscaped(), zamowienie.rozkrojNr.toHtmlEscaped(), zamowienie.uzyt.toHtmlEscaped(),
             zamowienie.wzor.toHtmlEscaped(), zamowienie.spn.toHtmlEscaped());
     wynik += QString("<TD WIDTH = 68>"
-                "<P style=\"margin: 3;\">KOLOR</P><P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%1</b></P></TD>"
-                "<TD WIDTH=58 >"
-                "<P style=\"margin: 3;\">OCIE</P><P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%2</b></P></TD>"
-                "<TD WIDTH=69 >"
-                "<P style=\"margin: 3;\">MAT</P><P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%3</b></P></TD>"
-                "<TD WIDTH=70 >"
-                "<P style=\"margin: 3;\">WKŁ</P><P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%4</b></P></TD></TR>"
-               ).arg(zamowienie.kolor.toHtmlEscaped(), zamowienie.ociep.toHtmlEscaped(), zamowienie.mat.toHtmlEscaped(), zamowienie.wkladka.toHtmlEscaped());
+                     "<P style=\"margin: 3;\">KOLOR</P><P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%1</b></P></TD>"
+                     "<TD WIDTH=58 >"
+                     "<P style=\"margin: 3;\">OCIE</P><P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%2</b></P></TD>"
+                     "<TD WIDTH=69 >"
+                     "<P style=\"margin: 3;\">MAT</P><P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%3</b></P></TD>"
+                     "<TD WIDTH=70 >"
+                     "<P style=\"margin: 3;\">WKŁ</P><P align=\"center\" style=\"font-size:20px;margin: 3;\"><b>%4</b></P></TD></TR>"
+                    ).arg(zamowienie.kolor.toHtmlEscaped(), zamowienie.ociep.toHtmlEscaped(), zamowienie.mat.toHtmlEscaped(), zamowienie.wkladka.toHtmlEscaped());
 
     QMap<QString, int> rozm;
     for (int i = 0; i < 15; i++) {
@@ -306,17 +312,17 @@ QString RozkrojeDialog::zamowienieTabelka(zamowienieZRozmiaramiStruct zamowienie
     }
 
     wynik += "<TR VALIGN=TOP><TD ROWSPAN=3 COLSPAN=4 WIDTH=220>"
-                     "<table border=1 cellpadding=4 cellspacing=-1 style=\"border-collapse: none;font-family:'Times New Roman', serif;font-size: 15px;\"><tr>";
+             "<table border=1 cellpadding=4 cellspacing=-1 style=\"border-collapse: none;font-family:'Times New Roman', serif;font-size: 15px;\"><tr>";
     int counter =1;
     for (QMap<QString, int>::iterator it = rozm.begin(); it != rozm.end(); it++) {
         wynik += QString("<td align=\"center\"><p><u>%1</u></p><p>%2</p></td>").arg(it.key()).arg(it.value());
-       if(counter==8) {
-           wynik +="<tr>";
-       }
-       counter++;
+        if(counter==8) {
+            wynik +="<tr>";
+        }
+        counter++;
     }
     if(counter<8) {
-       wynik += "<tr><td align=\"center\"><p>&nbsp;&nbsp;&nbsp;</p><p>&nbsp;&nbsp;&nbsp;</p></td>";
+        wynik += "<tr><td align=\"center\"><p>&nbsp;&nbsp;&nbsp;</p><p>&nbsp;&nbsp;&nbsp;</p></td>";
     }
     wynik += QString("</tr></table></TD>"
                      "<TD ROWSPAN=3 WIDTH=57>"
@@ -338,8 +344,7 @@ QString RozkrojeDialog::zamowienieTabelka(zamowienieZRozmiaramiStruct zamowienie
     return wynik;
 }
 
-void RozkrojeDialog::setNrRozkrojuWskaz(const QString &value)
-{
+void RozkrojeDialog::setNrRozkrojuWskaz(const QString &value) {
     nrRozkrojuWskaz = value;
 }
 
@@ -355,12 +360,85 @@ void RozkrojeDialog::on_pushButtonPrint_2_clicked() {
 }
 
 void RozkrojeDialog::czysc() {
-      ui->lineEditNr->clear();
-      ui->lineEditWpr->clear();
-      ui->lineEditUz->clear();
+    ui->lineEditNr->clear();
+    ui->lineEditWpr->clear();
+    ui->lineEditUz->clear();
 }
 
-void RozkrojeDialog::on_pushSzukaj_clicked()
-{
+void RozkrojeDialog::on_pushSzukaj_clicked() {
     ustawIFiltruj();
+}
+
+void RozkrojeDialog::on_pushButton_clicked() {
+    csvexport();
+}
+
+void RozkrojeDialog::csvexport() {
+    QAbstractItemModel *model = ui->tableViewSzczegoly->model();
+
+    QString linki =  QFileDialog::getSaveFileName(this, tr("Export do Excela"), "", tr("Zapisz plik CSV (*.csv)"));
+    int x = 0;
+    QString exportdata;
+
+    int counthidden=0, jint = 0;
+
+    while (jint < model->columnCount()) {
+        counthidden+=ui->tableViewSzczegoly->isColumnHidden(jint);
+        jint++;
+    }
+
+    int w = 1;
+    while (x < model->columnCount()) {
+
+        if (!ui->tableViewSzczegoly->isColumnHidden(x)) {
+
+            exportdata.append(model->headerData(x,Qt::Horizontal,Qt::DisplayRole).toString());
+
+            if (model->columnCount() - w > counthidden)
+                exportdata.append(";");
+            else {
+                exportdata.append("\n");
+
+            }
+            w++;
+        }
+        x++;
+
+    }
+
+    int z = 0;
+
+    w = 1;
+    while (z < model->rowCount()) {
+
+        x = 0;
+
+        w = 1;
+        while (x < model->columnCount()) {
+            if (!ui->tableViewSzczegoly->isColumnHidden(x)) {
+
+
+                exportdata.append(model->data(model->index(z,x),Qt::DisplayRole).toString());
+
+                if (model->columnCount() - w > counthidden)
+                    exportdata.append(";");
+                else
+                    exportdata.append("\n");
+
+                w++;
+            }
+            x++;
+
+        }
+
+        z++;
+    }
+
+    QFile plik(linki);
+    plik.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
+
+    QTextStream stream(&plik);
+    stream << exportdata;
+
+    plik.close();
 }

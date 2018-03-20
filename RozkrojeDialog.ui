@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1926</width>
-    <height>927</height>
+    <height>963</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,6 +50,35 @@
        </property>
        <property name="autoDefault">
         <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>41</width>
+         <height>41</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="zasoby.qrc">
+         <normaloff>:/zasoby/Excel.png</normaloff>:/zasoby/Excel.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>41</width>
+         <height>41</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -212,7 +241,7 @@
       <widget class="QLabel" name="label">
        <property name="font">
         <font>
-         <pointsize>17</pointsize>
+         <pointsize>10</pointsize>
         </font>
        </property>
        <property name="text">
@@ -247,8 +276,8 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>46</width>
-         <height>46</height>
+         <width>41</width>
+         <height>41</height>
         </size>
        </property>
        <property name="font">

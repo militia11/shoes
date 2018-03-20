@@ -10,31 +10,33 @@ namespace Ui {
 class wzoryDialog;
 }
 
-class wzoryDialog : public QDialog
-{
-		Q_OBJECT
+class wzoryDialog : public QDialog {
+    Q_OBJECT
 
-	public:
-		explicit wzoryDialog(nowywzorDialog * nw,BazaDanychManager *db, QWidget *parent = 0);
-		~wzoryDialog();
-		int selectExec();
+public:
+    explicit wzoryDialog(nowywzorDialog * nw,BazaDanychManager *db, QWidget *parent = 0);
+    ~wzoryDialog();
+    int selectExec();
+    void ustawIFiltruj();
+    int getAktualnyWzorNr() const;
 
-		int getAktualnyWzorNr() const;
+public slots:
+    virtual int exec();
+private slots:
+    void on_pushButton_2_clicked();
+    void wybranoWzor(const QModelIndex index);
 
-	public slots:
-		virtual int exec();
-	private slots:
-		void on_pushButton_2_clicked();
-		void wybranoWzor(const QModelIndex index);
+    void on_pushSzukaj_clicked();
 
-	private:
-		void showEvent(QShowEvent *e);
-		void hideEvent(QHideEvent *e);
-		int aktualnyWzorNr;
-		Ui::wzoryDialog *ui;
-		BazaDanychManager *dbManager;nowywzorDialog * nw;
-		QSortFilterProxyModel *proxy;
-                void aktualizujTabele();
+private:
+    void showEvent(QShowEvent *e);
+    void hideEvent(QHideEvent *e);
+    int aktualnyWzorNr;
+    Ui::wzoryDialog *ui;
+    BazaDanychManager *dbManager;
+    nowywzorDialog * nw;
+    QSortFilterProxyModel *proxy;
+    void aktualizujTabele();
 };
 
 #endif // WZORYDIALOG_H

@@ -6,43 +6,42 @@ namespace Ui {
 class NowyHandlowiecDialog;
 }
 
-class NowyHandlowiecDialog : public QDialog
-{
-		Q_OBJECT
+class NowyHandlowiecDialog : public QDialog {
+    Q_OBJECT
 
-	public:
-		explicit NowyHandlowiecDialog(QWidget *parent = 0);
-		~NowyHandlowiecDialog();
+public:
+    explicit NowyHandlowiecDialog(QWidget *parent = 0);
+    ~NowyHandlowiecDialog();
 
-		QString getImie() const;
+    QString getImie() const;
 
-		QString getNazwisko() const;
+    QString getNazwisko() const;
 
-		QString getSkrot() const;
+    QString getSkrot() const;
 
-		QString getUwagi() const;
+    QString getUwagi() const;
 
-	private slots:
-		void on_buttonBox_accepted();
-		void on_buttonBox_rejected();
+private slots:
+    void on_buttonBox_accepted();
+    void on_buttonBox_rejected();
 
-	private:
-		void keyPressEvent(QKeyEvent *event) {
-			if (event->key() == Qt::Key_Escape) {
-				wyczyscPola();
-				resetujPrzyciskiWymagane();
-			}
-			QDialog::keyPressEvent(event);
-		}
-         void showEvent(QShowEvent *e);
-		void wyczyscPola();
-		void resetujPrzyciskiWymagane();
+private:
+    void keyPressEvent(QKeyEvent *event) {
+        if (event->key() == Qt::Key_Escape) {
+            wyczyscPola();
 
-		QString imie;
-		QString nazwisko;
-		QString skrot;
-		QString uwagi;
-		Ui::NowyHandlowiecDialog *ui;
+        }
+        QDialog::keyPressEvent(event);
+    }
+    void showEvent(QShowEvent *e);
+    void wyczyscPola();
+
+
+    QString imie;
+    QString nazwisko;
+    QString skrot;
+    QString uwagi;
+    Ui::NowyHandlowiecDialog *ui;
 };
 
 #endif // NOWYHANDLOWIECDIALOG_H
