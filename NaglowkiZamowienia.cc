@@ -4,14 +4,14 @@ void NaglowkiZamowienia::ustawNaglowki(QTableView *tableView, QAbstractItemModel
     QHeaderView *hv = tableView->horizontalHeader();
     hv->setSectionHidden(0, true);
     hv->setStretchLastSection(true);
-    for (int i = 37; i < 48; i++) {
+    for (int i = 36; i < 48; i++) {
         hv->setSectionHidden(i, true);
     }
     hv->setDefaultAlignment(Qt::AlignLeft);
     for (int c = 9; c < 25;         ++c) {
         tableView->setColumnWidth(c, 30);
     }
-
+    hv->setSectionHidden(33,true);
 
     tableView->setColumnWidth(25, 51); // suma
     tableView->setColumnWidth(1, 65);
@@ -40,7 +40,7 @@ void NaglowkiZamowienia::ustawNaglowki(QTableView *tableView, QAbstractItemModel
                      "MAT" << "WKŁ" << "36" << "37" << "38" << "39" << "40" << "41" << "42" << "43"
                      << "44" << "45" << "46" << "47"    << "48" << "49" << "50"
                      << "SUMA"  << "SK1" << "SK2" <<    "SK3" << "SP NAZWA" <<
-                     "SP PROD" << "UŻY" << "HAN" << "DATA WPR" << "DATA REA" << "UWAGI 1" << "UWAGI 2" << ""
+                     "SP PROD" << "UŻY" << "HAN" << "DATA WPR" << "DATA WPR" << "DATA REA" << "REKORD" << "CAŁE ZAM" << ""
                      << "" << "" << ""  << "DRUK" << ""                    << ""  << "" << ""    << ""  << "" << ""
                      << ""  << "" << ""    << ""  << ""<< ""  << "" << ""    << ""  << ""                     << "" << ""  << "" << "";
     for (int i = 0; i < model->columnCount(); ++i) {

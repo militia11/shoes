@@ -37,7 +37,6 @@ void koloryDialog::aktualHeader() {
     hv->setStretchLastSection(true);
     hv->setDefaultAlignment(Qt::AlignLeft);
     ui->tableView->sortByColumn(1, Qt::AscendingOrder);
-
 }
 
 void koloryDialog::showEvent(QShowEvent *e) {

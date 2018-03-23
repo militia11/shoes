@@ -232,43 +232,6 @@
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_9">
-    <property name="geometry">
-     <rect>
-      <x>350</x>
-      <y>10</y>
-      <width>41</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset resource="zasoby.qrc">
-      <normaloff>:/zasoby/select.png</normaloff>:/zasoby/select.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>35</width>
-      <height>35</height>
-     </size>
-    </property>
-    <property name="autoDefault">
-     <bool>false</bool>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
@@ -770,7 +733,6 @@
  </widget>
  <tabstops>
   <tabstop>pushButton_5</tabstop>
-  <tabstop>pushButton_9</tabstop>
   <tabstop>pushButtonModel</tabstop>
   <tabstop>calendarWidget</tabstop>
   <tabstop>calendarWidgetRealizacja</tabstop>

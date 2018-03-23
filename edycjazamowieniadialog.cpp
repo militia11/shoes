@@ -1,8 +1,8 @@
 #include "edycjazamowieniadialog.h"
 #include "ui_edycjazamowieniadialog.h"
-#include "Delegate.h"
 #include <QTimer>
 #include "NaglowkiZamowienia.h"
+#include "Delegate.h"
 EdycjaZamowieniaDialog::EdycjaZamowieniaDialog(klienciDialog * dialogKlienci, handlowceDialog * dialogHandl, modeleDialog * dialogmodele, BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::EdycjaZamowieniaDialog), dbManager(db), dialogKlienci(dialogKlienci), dialogHandl(dialogHandl), dialogmodele(dialogmodele) {
@@ -88,9 +88,9 @@ void EdycjaZamowieniaDialog::showEvent(QShowEvent *e) {
     setSumaZamowien();
     ui->tableViewZam->hideColumn(2);
     ui->tableViewZam->hideColumn(3);
-    ui->tableViewZam->hideColumn(32);
+    ui->tableViewZam->hideColumn(48);
+    ui->tableViewZam->hideColumn(49);
     ui->labelKlient->setText(dbManager->getKlientSkrot(nrZam));
-    ui->labelHandlowiec->setText(dbManager->getHanlSkrot(nrZam));
     ui->tableViewZam->sortByColumn(0);
 }
 
@@ -104,13 +104,8 @@ void EdycjaZamowieniaDialog::on_pushButton_6_clicked() {
     if (dialogKlienci->selectExec() == QDialog::Accepted) {
         dbManager->zmienKlientaZam(nrZam);
         ui->labelKlient->setText(dialogKlienci->getAktualnyKlientNazwa());
-    }
-}
-
-void EdycjaZamowieniaDialog::on_pushButton_11_clicked() {
-    if (dialogHandl->selectExec() == QDialog::Accepted) {
-        dbManager->zmienHandlZam(nrZam);
-        ui->labelHandlowiec->setText(dialogHandl->getAktualnyHandlNazwa());
+        int idHa  =dbManager->zwrocIdHandlKlienta();
+        dbManager->zmienHandlZam(nrZam, idHa);
     }
 }
 
@@ -121,7 +116,6 @@ void EdycjaZamowieniaDialog::SelectionOfTableChanged(const QItemSelection &aSele
 }
 
 void EdycjaZamowieniaDialog::czysc() {
-    ui->labelHandlowiec->clear();
     ui->labelKlient->clear();
 }
 

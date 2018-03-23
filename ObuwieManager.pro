@@ -21,7 +21,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 HEADERS += BazaDanychManager.h \
            clickableLabel.h \
            CSettings.h \
-           Delegate.h \
+    Delegate.h \
            DelegateArrows.h \
            DoRozkrojuDialog.h \
            edycjazamowieniadialog.h \
@@ -55,7 +55,9 @@ HEADERS += BazaDanychManager.h \
            RozkrojeDialog.h \
     nowawkladkadialog.h \
     noweociepdialog.h \
-    logowaniedialog.h
+    logowaniedialog.h \
+    wait.h \
+    delegateKli.h
 
 FORMS += DoRozkrojuDialog.ui \
          edycjazamowieniadialog.ui \
@@ -85,7 +87,9 @@ FORMS += DoRozkrojuDialog.ui \
          RozkrojeDialog.ui \
     nowawkladkadialog.ui \
     noweociepdialog.ui \
-    logowaniedialog.ui
+    logowaniedialog.ui \
+    busydialog.ui \
+    wait.ui
 
 SOURCES += BazaDanychManager.cc \
            clickableLabel.cc \
@@ -123,7 +127,9 @@ SOURCES += BazaDanychManager.cc \
            RozkrojeDialog.cc \
     nowawkladkadialog.cpp \
     noweociepdialog.cpp \
-    logowaniedialog.cpp
+    logowaniedialog.cpp \
+    wait.cc \
+    delegatekli.cpp
 
 RESOURCES += zasoby.qrc
 

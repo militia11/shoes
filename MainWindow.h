@@ -34,7 +34,8 @@
 #include "nowawkladkadialog.h"
 #include "noweociepdialog.h"
 #include "logowaniedialog.h"
-
+#include "wait.h"
+#include "Delegate.h"
 namespace Ui {
 class MainWindow;
 }
@@ -50,9 +51,9 @@ public:
 
 public slots:
     void ustawIFiltruj();
-
 private slots:
     void refreshTable();
+    void showTable();
     void updateZamSum(const QModelIndex &topLeft, const QModelIndex &bot,
                       const QVector<int> &);
     void stionResized(int logicalIndex, int oldSize, int newSize);
@@ -99,13 +100,19 @@ private slots:
 
     void on_actionEdycja_triggered();
 
+    void updateZdj(int id);
 private:
+    bool eventFilter(QObject *object, QEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void filtruj();
     bool logowanie();
     void rozciagnijWiersze();
     void podlaczSygnaly();
 
+    void     upButtonUpdateZdj();
+    void     downButtonUpdateZdj();
+    int getIdUp();
+    int getIdDown();
     Ui::MainWindow *ui;
     BazaDanychManager *dbManager;
     UstawieniaForm *dialog;
@@ -113,6 +120,7 @@ private:
     noweZamowienieDialog *dialogNoweZamowienie;
     nowyKlientDialog *dialognowyKlient;
     NowyHandlowiecDialog *dialognowyHandl;
+    Delegate *del;
     klienciDialog *dialogKlienci;
     handlowceDialog *dialogHandl;
     NowaWkladkaDialog *dialogNowaWkl;
@@ -138,7 +146,6 @@ private:
     logowanieDialog *log;
     QSortFilterProxyModel *proxy;
 
-
     int nrkar;
     int kl;
     int klnr;
@@ -153,7 +160,6 @@ private:
     int ha ;
     int daty;
     int spnazproc;
-
     void ustawCombo(QString tabela, QComboBox *com);
     void createCombos();
     void setSumaZamowien();

@@ -106,6 +106,7 @@ void spodyDialog::aktualizujTabele() {
     hv->setSectionHidden(9, true);
     hv->setDefaultAlignment(Qt::AlignLeft);
     hv->setStretchLastSection(true);
+    ui->tableView->sortByColumn(1, Qt::AscendingOrder);
 }
 
 void spodyDialog::showEvent(QShowEvent *e) {

@@ -25,9 +25,9 @@ class modeleDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit modeleDialog( ZdjecieDialog *zdj, owyModelDialog *nowyModDialog,
-                           BazaDanychManager *db,
-                           QWidget *parent = 0);
+    modeleDialog( ZdjecieDialog *zdj, owyModelDialog *nowyModDialog,
+                  BazaDanychManager *db,
+                  QWidget *parent = 0);
     ~modeleDialog();
     int selectExec();
     void ustawIFiltruj();
@@ -82,8 +82,8 @@ private:
     void createCombos();
     void resetRodzaje();
     void updateModel(int id);
-    void     upButtonUpdateZdj();
-    void     downButtonUpdateZdj();
+    void upButtonUpdateZdj();
+    void downButtonUpdateZdj();
 };
 
 #endif // MODELEDIALOG_H

@@ -20,7 +20,6 @@ class noweZamowienieDialog : public QDialog {
 
 public:
     explicit noweZamowienieDialog(
-
         handlowceDialog *wybHandlDialog,
         BazaDanychManager *db, modeleDialog *modeleDialog, klienciDialog *dialog,
         QWidget *parent = 0);
@@ -34,9 +33,7 @@ private slots:
 
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
-    void on_pushButton_9_clicked();
     void on_pushButtonModel_clicked();
-
     void on_checkBox_stateChanged(int arg1);
     void on_tableViewZam_clicked(const QModelIndex &index);
 
@@ -46,8 +43,10 @@ private slots:
         const QItemSelection &aSelected,
         const QItemSelection &aDeselected);
     void ShowContextMenu(const QPoint &pos);
+
 public slots:
     void  abra(QWidget*);
+
 private:
     bool eventFilter(QObject *object, QEvent *event);
     void keyPressEvent(QKeyEvent *event);

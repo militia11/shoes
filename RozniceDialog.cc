@@ -6,9 +6,9 @@ RozniceDialog::RozniceDialog(BazaDanychManager *db, QWidget *parent) :
     ui(new Ui::RozniceDialog), dbManager(db) {
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
-    ui->lineEditNr->setFixedWidth(110);
-    ui->lineEditUz->setFixedWidth(110);
-    ui->lineEditWpr->setFixedWidth(110);
+    ui->lineEditNr->setFixedWidth(120);
+    ui->lineEditUz->setFixedWidth(120);
+    ui->lineEditWpr->setFixedWidth(120);
     wskazRoznice = false;
     this->setWindowFlags(Qt::Window);
 }
@@ -67,8 +67,8 @@ void RozniceDialog::on_tableView_clicked(const QModelIndex &index) {
     ui->tableViewSzczegoly->hideColumn(0);
     ui->tableViewSzczegoly->horizontalHeader()->setMinimumSectionSize(5);
     NaglowkiZamowienia::ustawNaglowki(ui->tableViewSzczegoly, vModel);
-    ui->tableViewSzczegoly->setColumnWidth(35, 110);
-    ui->tableViewSzczegoly->setColumnWidth(36, 110);
+    ui->tableViewSzczegoly->setColumnWidth(35, 120);
+    ui->tableViewSzczegoly->setColumnWidth(36, 120);
     ui->tableViewSzczegoly->update();
 }
 
@@ -93,7 +93,7 @@ void RozniceDialog::showEvent(QShowEvent *e) {
     for (int c = 0; c < ui->tableView->horizontalHeader()->count(); ++c) {
         ui->tableView->horizontalHeader()->setSectionResizeMode(c,
                 QHeaderView::Fixed);
-        ui->tableView->horizontalHeader()->setDefaultSectionSize(110);
+        ui->tableView->horizontalHeader()->setDefaultSectionSize(120);
     }
     ustawIFiltruj();
     if(wskazRoznice) {
@@ -108,7 +108,7 @@ void RozniceDialog::showEvent(QShowEvent *e) {
         }
         wskazRoznice = false;
     }
-    ui->tableView->sortByColumn(1, Qt::DescendingOrder);
+    ui->tableView->sortByColumn(2, Qt::DescendingOrder);
 }
 
 void RozniceDialog::hideEvent(QHideEvent *e) {

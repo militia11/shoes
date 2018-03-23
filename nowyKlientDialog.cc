@@ -21,12 +21,14 @@ QString nowyKlientDialog::getWoj() const {
     return woj;
 }
 
-nowyKlientDialog::nowyKlientDialog(QWidget *parent) :
+nowyKlientDialog::nowyKlientDialog(handlowceDialog *wybHandlDialog,QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::nowyKlientDialog) {
+    ui(new Ui::nowyKlientDialog),
+    dialogHandl(wybHandlDialog) {
     ui->setupUi(this);
     this->setWindowFlags(Qt::Window);
     resetujPrzyciskiWymagane();
+
 }
 
 nowyKlientDialog::~nowyKlientDialog() {
@@ -47,6 +49,7 @@ void nowyKlientDialog::wyczyscPola() {
     ui->lineEditUwagi->clear();
     ui->lineEditW->clear();
     ui->lineEditKraj->clear();
+    ui->labelHandlowiec->clear();
 }
 
 void nowyKlientDialog::on_buttonBox_accepted() {
@@ -92,6 +95,10 @@ void nowyKlientDialog::on_buttonBox_accepted() {
     if (ui->lineEditNazwa->text().isEmpty() ) {
         ui->lineEditNazwa->setFocus();
         ui->lineEditNazwa->setStyleSheet("color: blue; background-color:  #ff9999;border-style: outset; border-width: 1px; border-color: red;");
+        wyswietlKomunikat = true;
+    }
+    if (ui->labelHandlowiec->text().isEmpty() ) {
+        ui->labelHandlowiec->setStyleSheet("color: blue; background-color:  #ff9999;border-style: outset; border-width: 1px; border-color: red;");
         wyswietlKomunikat = true;
     }
 
@@ -175,4 +182,10 @@ QString nowyKlientDialog::getMail() const {
 
 QString nowyKlientDialog::getUwagi() const {
     return uwagi;
+}
+
+void nowyKlientDialog::on_pushButton_2_clicked() {
+    if (dialogHandl->selectExec() == QDialog::Accepted) {
+        ui->labelHandlowiec->setText(dialogHandl->getAktualnyHandlNazwa());
+    }
 }

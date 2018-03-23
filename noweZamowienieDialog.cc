@@ -44,7 +44,6 @@ noweZamowienieDialog::noweZamowienieDialog(handlowceDialog *wybHandlDialog,
     ui->tableViewZam->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->setWindowFlags(Qt::Window);
     connect(delArrow, SIGNAL(commitData(QWidget*)), this, SLOT(abra(QWidget*)));
-
 }
 
 bool noweZamowienieDialog::eventFilter(QObject *object, QEvent *event) {
@@ -94,6 +93,7 @@ void noweZamowienieDialog::keyPressEvent(QKeyEvent *event) {
 void noweZamowienieDialog::on_pushButton_5_clicked() {
     if (dialog->selectExec() == QDialog::Accepted) {
         ui->labelKlient->setText(dialog->getAktualnyKlientNazwa());
+        ui->labelHandlowiec->setText(dbManager->zwrocNazweHandlKlienta());
     }
 }
 
@@ -157,12 +157,6 @@ void noweZamowienieDialog::on_buttonBox_rejected() {
     reject();
 }
 
-void noweZamowienieDialog::on_pushButton_9_clicked() {
-    if (dialogHandl->selectExec() == QDialog::Accepted) {
-        ui->labelHandlowiec->setText(dialogHandl->getAktualnyHandlNazwa());
-    }
-}
-
 void noweZamowienieDialog::ustawTabeleHeaders() {
     QHeaderView *hv = ui->tableViewZam->horizontalHeader();
     hv->setMinimumSectionSize(2);
@@ -181,13 +175,8 @@ void noweZamowienieDialog::on_pushButtonModel_clicked() {
         zamowienie->insertRow(ktoraPozycja, rzad);
         ustawTabeleHeaders();
         QStringList listaZamowienia;
-        listaZamowienia << "WZÓR" << "SPÓD" << "KOLOR" <<
-                        "MATRYCA " << "OCIEP" << "WKŁADKA" << "36" << "37"
-                        << "38"    <<
-                        "39" << "40"
-                        << "41" << "42" << "43"  << "44"
-                        << "45" << "46" << "47"  << "48" << "49" << "50"
-                        << "SUMA" << "" ;
+        listaZamowienia << "WZÓR" << "SPÓD" << "KOLOR" << "MATRYCA " << "OCIEP" << "WKŁADKA" << "36" << "37" << "38" << "39" << "40" << "41" << "42" << "43"  << "44"
+                        << "45" << "46" << "47"  << "48" << "49" << "50" << "SUMA" << "" ;
         for (int i = 0; i < zamowienie->columnCount(); ++i) {
             zamowienie->setHeaderData(i, Qt::Horizontal, listaZamowienia[i]);
         }
@@ -291,7 +280,7 @@ void noweZamowienieDialog::ShowContextMenu(const QPoint &pos) {
             }
         } else if(selectedItem->text() == QString("KOPIUJ")) {
             bool ok;
-            int ile = QInputDialog::getInt(this,"KOPIOWANIE", "Proszę podać ilość kopii.",1,1,1000,1,&ok);
+            int ile = QInputDialog::getInt(this,"KOPIOWANIE", "Proszę o podanie ilości kopi.",1,1,1000,1,&ok);
             if(ok) {
                 for(int i=0; i<ile; i++) {
                     QList<QStandardItem *> list;
@@ -300,6 +289,8 @@ void noweZamowienieDialog::ShowContextMenu(const QPoint &pos) {
                         list.append(itm->clone());
                     }
                     zamowienie->insertRow(ktoraPozycja,list);
+                    QString x =ui->plainTextEditU1->toPlainText();
+                    uwagi.append(x);
                     ktoraPozycja++;
                 }
             }

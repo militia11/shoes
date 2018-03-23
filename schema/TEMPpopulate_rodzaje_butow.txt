@@ -1,0 +1,38 @@
+insert into typ (nazwa) values ('MÊSKI');
+insert into typ (nazwa) values ('M£ODZIE¯OWY');
+insert into typ (nazwa) values ('DAMSKI');
+insert into typ (nazwa) values ('DZIECIÊCY');
+
+insert into rodzaj_montazu (nazwa) values ('ÆWIEK');
+insert into rodzaj_montazu (nazwa) values ('BEZPASOW');
+insert into rodzaj_montazu (nazwa) values ('FUZBET');
+insert into rodzaj_montazu (nazwa) values ('MOKASYN');
+insert into rodzaj_montazu (nazwa) values ('CALIF');
+insert into rodzaj_montazu (nazwa) values ('FLEKS PAS');
+
+insert into rodzaj_buta (nazwa) values ('PÓ£BUT');
+insert into rodzaj_buta (nazwa) values ('ZIMA');
+insert into rodzaj_buta (nazwa) values ('SANDA£');
+insert into rodzaj_buta (nazwa) values ('KLAPEK');
+insert into rodzaj_buta (nazwa) values ('CZU£ENKO');
+
+insert into rodzaj_buta_2 (nazwa) values ('CASUAL WIZYTOWY');
+insert into rodzaj_buta_2 (nazwa) values ('SPORT');
+insert into rodzaj_buta_2 (nazwa) values ('TRAPER');
+insert into rodzaj_buta_2 (nazwa) values ('WIZYTOWY');
+insert into rodzaj_buta_2 (nazwa) values ('COMFORT');
+insert into rodzaj_buta_2 (nazwa) values ('TREKING');
+
+insert into rodzaj_buta_3 (nazwa) values ('SZNURÓWKA');
+insert into rodzaj_buta_3 (nazwa) values ('WSÓWKA');
+insert into rodzaj_buta_3 (nazwa) values ('SZNURÓWKA-SUWAK');
+insert into rodzaj_buta_3 (nazwa) values ('RZEP');
+insert into rodzaj_buta_3 (nazwa) values ('KLAMRA');
+
+insert into rodzaj_buta_4 (nazwa) values ('KOLOR');
+insert into rodzaj_buta_4 (nazwa) values ('CZARNY');
+
+insert into rodzaj_buta_5 (nazwa) values ('WYKROJNIKI');
+insert into rodzaj_buta_5 (nazwa) values ('PLOTER');
+
+insert into rodzaj_buta_6 (nazwa) values ('BRAK');

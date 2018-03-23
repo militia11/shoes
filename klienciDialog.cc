@@ -8,6 +8,8 @@ klienciDialog::klienciDialog(nowyKlientDialog *nowyKliDialog,
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
+    myDelegate = new Delegate(dbManager, this);
+    ui->tableViewKlienci->setItemDelegate(myDelegate);
 }
 
 klienciDialog::~klienciDialog() {
@@ -16,6 +18,7 @@ klienciDialog::~klienciDialog() {
 }
 
 int klienciDialog::selectExec() {
+    dbManager->setHandlowce();
     ui->tableViewKlienci->setEditTriggers(QAbstractItemView::NoEditTriggers);
     connect(ui->tableViewKlienci, SIGNAL(doubleClicked(const QModelIndex)), this,
             SLOT(wybranoKli(const QModelIndex)));
@@ -39,12 +42,16 @@ void klienciDialog::aktualizujHeader() {
     QHeaderView *hv = ui->tableViewKlienci->horizontalHeader();
     hv->setStretchLastSection(true);
     hv->setDefaultAlignment(Qt::AlignLeft);
-    ui->lineEditMi->setFixedWidth(132);
-    ui->lineEditNr->setFixedWidth(132);
-    ui->lineEditNazwaSkrot->setFixedWidth(132);
-    ui->lineEditSkrot->setFixedWidth(125);
+    ui->lineEditMi->setFixedWidth(111);
+    ui->lineEditNr->setFixedWidth(111);
+    ui->lineEditNazwaSkrot->setFixedWidth(111);
+    ui->lineEditSkrot->setFixedWidth(111);
+    ui->lineEditWoj->setFixedWidth(111);
+    ui->comboBox->setFixedWidth(111);
+    ui->lineEditKr->setFixedWidth(111);
     ui->tableViewKlienci->sortByColumn(0, Qt::AscendingOrder);
-    ui->tableViewKlienci->horizontalHeader()->setDefaultSectionSize(132);
+    ui->tableViewKlienci->horizontalHeader()->setMinimumSectionSize(13);
+    ui->tableViewKlienci->setColumnHidden(16, true);
 }
 
 void klienciDialog::aktualizujTabele() {
@@ -54,14 +61,16 @@ void klienciDialog::aktualizujTabele() {
     ui->tableViewKlienci->setSortingEnabled(true);
     for (int c = 0; c < ui->tableViewKlienci->horizontalHeader()->count(); ++c) {
         ui->tableViewKlienci->horizontalHeader()->setSectionResizeMode(c,
-                QHeaderView::Fixed);
+                QHeaderView::Stretch);
     }
     aktualizujHeader();
+    //combo();
 }
 
 void klienciDialog::showEvent(QShowEvent *e) {
     Q_UNUSED(e);
     dbManager->setKlienci();
+    dbManager->setKliR();
     aktualizujTabele();
     ui->lineEditNazwaSkrot->clear();
     ui->lineEditSkrot->clear();
@@ -116,5 +125,32 @@ void klienciDialog::on_pushButton_clicked() {
     ui->lineEditMi->setText("");
     ui->lineEditWoj->setText("");
     ui->lineEditKr->setText("");
+
+
+    ui->comboBox->setCurrentText("");
+    ui->comboBox->setCurrentIndex(0);
+//tod
+
+
     ui->tableViewKlienci->setModel(dbManager->getModelKlienci());
+    ui->tableViewKlienci->sortByColumn(0, Qt::AscendingOrder);
+    ustawIFiltruj();
+}
+
+void klienciDialog::combo() {
+    ui->comboBox->clear();
+    QString q = QString("select skrot, id from handlowce");
+    QSqlQuery query(q);
+    QAbstractItemModel *vModel = dbManager->getModelForQuery(&query);
+    ui->comboBox->addItem(QString(""), QVariant(0));
+    if (vModel) {
+        for (int i = 0; i < vModel->rowCount(); ++i) {
+            QString vEventName = vModel->data(vModel->index(i, 0)).toString();
+            QVariant vEventMnemonic = vModel->data(vModel->index(i, 1));
+            ui->comboBox->addItem(
+                vEventName,
+                vEventMnemonic);
+        }
+        delete vModel;
+    }
 }

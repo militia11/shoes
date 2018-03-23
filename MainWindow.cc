@@ -7,9 +7,9 @@
 #include "Klient.h"
 #include <QMessageBox>
 #include "Delegate.h"
+#include "delegateKli.h"
 #include <unistd.h>
 #include <QTimer>
-
 bool MainWindow::logowanie() {
     if (log->exec() == QDialog::Accepted) {
         QString text = log->getUs();
@@ -47,10 +47,11 @@ MainWindow::MainWindow(QWidget *parent) :
     dialog = new UstawieniaForm(dbManager, this);
     dialogzdj = new ZdjecieDialog(this);
     dialogzdj->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-    dialognowyKlient = new nowyKlientDialog(this);
     dialognowyHandl = new NowyHandlowiecDialog(this);
-    dialogKlienci = new klienciDialog(dialognowyKlient, dbManager, this);
     dialogHandl = new handlowceDialog(dialognowyHandl, dbManager, this);
+    dialognowyKlient = new nowyKlientDialog(dialogHandl,this);
+    del = new  Delegate(dbManager, this);
+    dialogKlienci = new klienciDialog(dialognowyKlient, dbManager, this);
     dialogNowaWkl = new NowaWkladkaDialog(this);
     dialogwkladka = new wkladkaDialog(dialogNowaWkl, dbManager, this);
     dialognskora = new nowaSkoraDialog(this);
@@ -115,7 +116,8 @@ MainWindow::MainWindow(QWidget *parent) :
     hv->setSectionHidden(48, true);
     hv->setSectionHidden(49, true);
 
-    //dilogNowyKolor->exec();
+    ui->tableViewZam->installEventFilter(this);
+    // dialogKlienci->exec();
 //    dialogNoweZamowienie->exec();
 //    exit(1);
     //rozkroje->exec();
@@ -131,6 +133,10 @@ void MainWindow::aktualizujTabele() {
 void MainWindow::refreshTable() {
     dbManager->getModelZamowienia()->select();
     setSumaZamowien();
+}
+
+void MainWindow::showTable() {
+    ui->tableViewZam->show();
 }
 
 void MainWindow::setSumaZamowien() {
@@ -185,7 +191,6 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
         }
         QIcon icontr(":/zasoby/trash2.png");
         myMenu.addAction(icontr,"USUŃ");
-
 
     } else if (dbManager->filterZamowien.status == QString("DO WYSYŁKI")) {
         if (selection.length() == 1) {
@@ -368,7 +373,7 @@ void MainWindow::rozciagnijWiersze() {
     QHeaderView *hv = ui->tableViewZam->horizontalHeader();
     hv->setSectionHidden(0, true);
     hv->setStretchLastSection(true);
-    for (int i = 37; i < 48; i++) {
+    for (int i = 38; i < 48; i++) {
         hv->setSectionHidden(i, true);
     }
 
@@ -384,7 +389,6 @@ void MainWindow::rozciagnijWiersze() {
     ui->lineEditsprod->setFixedWidth(spnazproc);
     ui->tableViewZam->setColumnWidth(33, daty);
     ui->tableViewZam->setColumnWidth(34, daty);
-
     ui->tableViewZam->setColumnWidth(37, 25);
     connect(hv, SIGNAL(sectionResized(int, int, int)), this,
             SLOT(stionResized(int,
@@ -394,6 +398,7 @@ void MainWindow::rozciagnijWiersze() {
                 QHeaderView::Fixed);
         ui->tableViewZam->setColumnWidth(c, 30);
     }
+    hv->setSectionHidden(33,true);
 }
 
 MainWindow::~MainWindow() {
@@ -501,9 +506,17 @@ void MainWindow::filtruj() {
 
 void MainWindow::on_radioButton_clicked() {
     if (archiwumMode) {
+        ui->tableViewZam->setVisible(false);
+        ui->centralWidget->layout()->setAlignment(ui->horizontalLayout_2,Qt::AlignTop);
         dbManager->setTableWidokZamowienia("vzam");
         archiwumMode = false;
+        wait ww;
+        ww.setWindowTitle("                    Zamykam archiwum ...");
+        ww.show();
         rozciagnijWiersze();
+        ww.hide();
+        showTable();
+
         if(ui->actionEdycja->isChecked())
             ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
     } else if(wysylkaMode) {
@@ -520,9 +533,17 @@ void MainWindow::on_radioButton_clicked() {
 
 void MainWindow::on_radioButton_3_clicked() {
     if (archiwumMode) {
+        ui->tableViewZam->setVisible(false);
+        ui->centralWidget->layout()->setAlignment(ui->horizontalLayout_2,Qt::AlignTop);
+
         dbManager->setTableWidokZamowienia("vzam");
         archiwumMode = false;
+        wait ww;
+        ww.setWindowTitle("                    Zamykam archiwum ...");
+        ww.show();
         rozciagnijWiersze();
+        ww.hide();
+        showTable();
         if(ui->actionEdycja->isChecked())
             ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
     }
@@ -547,8 +568,16 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 
 void MainWindow::on_radioButton_4_clicked() {
     if (archiwumMode) {
+        ui->tableViewZam->setVisible(false);
+        ui->centralWidget->layout()->setAlignment(ui->horizontalLayout_2,Qt::AlignTop);
+
         dbManager->setTableWidokZamowienia("vzam");
+        wait ww;
+        ww.setWindowTitle("                    Zamykam archiwum ...");
+        ww.show();
         rozciagnijWiersze();
+        ww.hide();
+        showTable();
         archiwumMode = false;
         if(ui->actionEdycja->isChecked())
             ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
@@ -679,9 +708,17 @@ void MainWindow::on_actionOcieplenia_triggered() {
 
 void MainWindow::on_radioButton_5_clicked() {
     if (archiwumMode) {
+        ui->tableViewZam->setVisible(false);
+        ui->centralWidget->layout()->setAlignment(ui->horizontalLayout_2,Qt::AlignTop);
+
         dbManager->setTableWidokZamowienia("vzam");
         archiwumMode = false;
+        wait ww;
+        ww.setWindowTitle("                    Zamykam archiwum ...");
+        ww.show();
         rozciagnijWiersze();
+        ww.hide();
+        showTable();
         if(ui->actionEdycja->isChecked())
             ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
     } else if(wysylkaMode) {
@@ -805,8 +842,19 @@ void MainWindow::on_radioButton_2_clicked() {
         hv->setSectionHidden(48, true);
         hv->setSectionHidden(49, true);
     }
+
+    wait ww;
+    ww.setWindowTitle("                    Wczytuję archiwum ...");
+    ww.show();
+
     dbManager->setTableWidokZamowienia("vZamArch");
+    ui->tableViewZam->setVisible(false);
+    ui->centralWidget->layout()->setAlignment(ui->horizontalLayout_2,Qt::AlignTop);
     rozciagnijWiersze();
+
+    ww.hide();
+
+    ui->tableViewZam->setVisible(true);
     archiwumMode = true;
     dbManager->filterZamowien.status = QString("");
     filtruj();
@@ -820,4 +868,75 @@ void MainWindow::on_actionWyloguj_triggered() {
 
 void MainWindow::on_actionEdycja_triggered() {
     edytuj();
+}
+
+void MainWindow::upButtonUpdateZdj() {
+    int id = getIdUp();
+    updateZdj(id);
+}
+
+void MainWindow::downButtonUpdateZdj() {
+    int id = getIdDown();
+    updateZdj(id);
+}
+
+int MainWindow::getIdUp() {
+    QModelIndex  idx = proxy->mapToSource(
+                           ui->tableViewZam->selectionModel()->currentIndex());
+    if(idx.row()==0) {
+        return  dbManager->getModelZamowienia()->data(
+                    dbManager->getModelZamowienia()->index(idx.row(),
+                            0)).toInt();
+
+    } else {
+        return dbManager->getModelZamowienia()->data(
+                   dbManager->getModelZamowienia()->index(idx.row() -1,
+                           0)).toInt();
+    }
+}
+
+int MainWindow::getIdDown() {
+    QModelIndex idx = proxy->mapToSource(
+                          ui->tableViewZam->selectionModel()->currentIndex());
+
+    if(idx.row()==ui->tableViewZam->model()->rowCount()-1) {
+        return  dbManager->getModelZamowienia()->data(
+                    dbManager->getModelZamowienia()->index(idx.row(),
+                            0)).toInt();
+    } else {
+        return dbManager->getModelZamowienia()->data(
+                   dbManager->getModelZamowienia()->index(idx.row() +1,
+                           0)).toInt();
+    }
+}
+
+void MainWindow::updateZdj(int id) {
+    ui->labelPodglad->clear();
+    ui->labelPodglad->setScaledContents(true);
+    ui->labelPodglad->setPixmap(QPixmap::fromImage(
+                                    dbManager->getImageZamowienia(id)));
+    ui->labelPodglad->setFixedHeight(196);
+    ui->labelPodglad->setFixedWidth(274);
+    ui->labelPodglad->setScaledContents(true);
+}
+
+bool MainWindow::eventFilter(QObject *object, QEvent *event) {
+    if (object == ui->tableViewZam) {
+        if (event->type() == QEvent::KeyPress) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if (keyEvent->key() == Qt::Key_Up) {
+                upButtonUpdateZdj();
+                return QMainWindow::eventFilter(object, event);
+            } else if (keyEvent->key() == Qt::Key_Down) {
+                downButtonUpdateZdj();
+                return QMainWindow::eventFilter(object, event);
+            } else {
+                return QMainWindow::eventFilter(object, event);
+            }
+        } else {
+            return QMainWindow::eventFilter(object, event);
+        }
+    } else {
+        return QMainWindow::eventFilter(object, event);
+    }
 }

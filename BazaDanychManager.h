@@ -80,7 +80,9 @@ public:
     void setOciep();
     void setKolory();
     void setSkory();
-
+    void zmienHandlZam(QString nrZam, int idh);
+    QString zwrocNazweHandlKlienta();
+    int zwrocIdHandlKlienta();
     void setHeaders(QStringList lista, QAbstractItemModel *model);
 
     zamowienieStruct filterZamowien;
@@ -166,7 +168,7 @@ public:
 
     QSqlTableModel *getRoznice() const;
     void setRoznice();
-
+    void updateHandl(int idHan, int idKL);
     void setTableWidokZamowienia(QString tabela);
     bool copyZamowienieArch(QStandardItemModel *pozycje);
     void setIdKoloru(int value);
@@ -184,6 +186,10 @@ public:
     void setIdMatrycy(int value);
 
     void setIdModelu(int value);
+
+    QSqlTableModel *getKliR() const;
+
+    void setKliR();
 
 private:
     QVariant GetFirstValueForQuery(QSqlQuery *aQuery);
@@ -209,6 +215,7 @@ private:
     QSqlTableModel *mOciep;
     QSqlTableModel *mRozkroje;
     QSqlTableModel *mRoznice;
+    QSqlTableModel *mKliR;
 
     int idKlienta;
     int idHandlowca;

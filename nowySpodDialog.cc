@@ -60,7 +60,7 @@ void nowySpodDialog::on_buttonBox_accepted() {
     if (wyswietlKomunikat) {
         QMessageBox::warning( this, "BRAK WYMAGANYCH PÓL",
                               " <FONT COLOR='#000080'>Nie można zaakceptować bez podania wymaganych pól. "
-                              "<br>Proszę uzupełnić podświetlone na czerwono pola.</FONT>",
+                              "<br>Proszę uzupełnić wymagane pola.</FONT>",
                               QMessageBox::Ok);
     } else {
         nr = ui->lineEditNr->text();

@@ -3,6 +3,7 @@
 
 #include <QtWidgets/QDialog>
 #include <QKeyEvent>
+#include "handlowceDialog.h"
 
 namespace Ui {
 class nowyKlientDialog;
@@ -12,7 +13,7 @@ class nowyKlientDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit nowyKlientDialog(QWidget *parent = 0);
+    explicit nowyKlientDialog(handlowceDialog *wybHandlDialog,QWidget *parent = 0);
     ~nowyKlientDialog();
 
     QString getNazwa() const;
@@ -47,6 +48,8 @@ private slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
 
+    void on_pushButton_2_clicked();
+
 private:
     void keyPressEvent(QKeyEvent *event) {
         if (event->key() == Qt::Key_Escape) {
@@ -60,6 +63,7 @@ private:
     void resetujPrzyciskiWymagane();
 
     Ui::nowyKlientDialog *ui;
+    handlowceDialog *dialogHandl;
     QString nazwa;
     QString skrot;
     QString numerTelefonu;

@@ -9,9 +9,9 @@ RozkrojeDialog::RozkrojeDialog(BazaDanychManager *db, QWidget *parent) :
     proxy = new QSortFilterProxyModel(this);
     dodanoRozkroj = false;
     wskazRozkroj = false;
-    ui->lineEditNr->setFixedWidth(110);
-    ui->lineEditUz->setFixedWidth(110);
-    ui->lineEditWpr->setFixedWidth(110);
+    ui->lineEditNr->setFixedWidth(120);
+    ui->lineEditUz->setFixedWidth(120);
+    ui->lineEditWpr->setFixedWidth(120);
     this->setWindowFlags(Qt::Window);
 }
 
@@ -56,7 +56,7 @@ void RozkrojeDialog::on_tableView_clicked(const QModelIndex &index) {
     ui->tableViewSzczegoly->hideColumn(0);
     ui->tableViewSzczegoly->horizontalHeader()->setMinimumSectionSize(5);
     QHeaderView *hv = ui->tableViewSzczegoly->horizontalHeader();
-    // NaglowkiZamowienia::ustawNaglowki(ui->tableViewSzczegoly, vModel);
+    NaglowkiZamowienia::ustawNaglowki(ui->tableViewSzczegoly, vModel);
     ui->tableViewSzczegoly->setColumnWidth(35, 80);
     ui->tableViewSzczegoly->setColumnWidth(36, 80);
     hv->setSectionHidden(41, false);
@@ -82,7 +82,7 @@ void RozkrojeDialog::showEvent(QShowEvent *e) {
     hv->setStretchLastSection(true);
     hv->setSectionHidden(0, true);
     hv->setDefaultAlignment(Qt::AlignLeft);
-    ui->tableView->sortByColumn(0, Qt::DescendingOrder);
+    ui->tableView->sortByColumn(2, Qt::DescendingOrder);
     connect(
         ui->tableView->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
@@ -93,7 +93,7 @@ void RozkrojeDialog::showEvent(QShowEvent *e) {
         ui->tableView->horizontalHeader()->setSectionResizeMode(c,
                 QHeaderView::Fixed);
     }
-    ui->tableView->horizontalHeader()->setDefaultSectionSize(110);
+    ui->tableView->horizontalHeader()->setDefaultSectionSize(120);
     ustawIFiltruj();
 
     if (dodanoRozkroj) {
