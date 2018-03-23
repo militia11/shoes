@@ -267,6 +267,9 @@ void noweZamowienieDialog::ShowContextMenu(const QPoint &pos) {
     if (selectedItem) {
         int row = ui->tableViewZam->selectionModel()->currentIndex().row();
         if(selectedItem->text() == QString("USUŃ")) {
+            //todo usunac tez z
+//            int row = ui->tableViewZam->currentIndex().row();
+//           int modelId = dbManager->idModeluL[row];
             if (QMessageBox::question(this, "USUŃ", "<FONT COLOR='#000080'>Czy napewno usunąć?") == QMessageBox::Yes) {
                 if (zamowienie->rowCount() != 0) {
                     if (ui->tableViewZam->selectionModel()->hasSelection()) {
@@ -282,6 +285,9 @@ void noweZamowienieDialog::ShowContextMenu(const QPoint &pos) {
             bool ok;
             int ile = QInputDialog::getInt(this,"KOPIOWANIE", "Proszę o podanie ilości kopi.",1,1,1000,1,&ok);
             if(ok) {
+                int row = ui->tableViewZam->currentIndex().row();
+                int modelId = dbManager->idModeluL[row];
+
                 for(int i=0; i<ile; i++) {
                     QList<QStandardItem *> list;
                     for (int column = 0; column < zamowienie->columnCount(); ++column) {
@@ -291,6 +297,7 @@ void noweZamowienieDialog::ShowContextMenu(const QPoint &pos) {
                     zamowienie->insertRow(ktoraPozycja,list);
                     QString x =ui->plainTextEditU1->toPlainText();
                     uwagi.append(x);
+                    dbManager->idModeluL.append(modelId);
                     ktoraPozycja++;
                 }
             }

@@ -11,6 +11,7 @@
 #include "NowyHandlowiecDialog.h"
 #include "handlowceDialog.h"
 #include <QStandardItemModel>
+
 namespace Ui {
 class noweZamowienieDialog;
 }

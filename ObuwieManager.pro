@@ -3,7 +3,8 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = "ABIS Manager"
+TARGET = "ab"
+# "ABIS Manager"
 INCLUDEPATH += .
 QT += sql core widgets sql gui printsupport
 # The following define makes your compiler warn you if you use any

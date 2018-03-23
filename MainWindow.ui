@@ -23,6 +23,9 @@
    <layout class="QVBoxLayout" name="verticalLayout_7">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QLabel" name="labelPodglad">
         <property name="sizePolicy">
@@ -978,6 +981,9 @@
     </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_6">
+      <property name="topMargin">
+       <number>5</number>
+      </property>
       <item>
        <widget class="QTableView" name="tableViewZam">
         <property name="dragDropOverwriteMode">

@@ -191,6 +191,7 @@ public:
 
     void setKliR();
 
+    QVector<int> idModeluL;
 private:
     QVariant GetFirstValueForQuery(QSqlQuery *aQuery);
     QSqlRecord getSqlRecordZModelu(const QAbstractItemModel *aItemModel);
@@ -231,7 +232,6 @@ private:
     int idZam;
     int idRoznicy;
 
-    QVector<int> idModeluL;
     QString nazwaKlienta;
     QString nazwaHandlowca;
     QString currentIdZamRozkroje;

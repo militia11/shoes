@@ -215,8 +215,8 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>1060</x>
-     <y>50</y>
+     <x>900</x>
+     <y>56</y>
      <width>41</width>
      <height>37</height>
     </rect>
@@ -238,8 +238,8 @@
   <widget class="QPushButton" name="pushSzukaj">
    <property name="geometry">
     <rect>
-     <x>1014</x>
-     <y>50</y>
+     <x>854</x>
+     <y>56</y>
      <width>41</width>
      <height>37</height>
     </rect>

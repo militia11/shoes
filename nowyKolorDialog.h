@@ -7,53 +7,58 @@ namespace Ui {
 class nowyKolorDialog;
 }
 
-class nowyKolorDialog : public QDialog
-{
-		Q_OBJECT
+class nowyKolorDialog : public QDialog {
+    Q_OBJECT
 
-	public:
-		explicit nowyKolorDialog(QWidget *parent = 0);
-		~nowyKolorDialog();
-		void keyPressEvent(QKeyEvent *event) {
-			if (event->key() == Qt::Key_Escape) {
-				wyczyscPola();
-			}
-			QDialog::keyPressEvent(event);
-		}
-		void wyczyscPola();
-		QString getSk1() const;
-		void setSk1(const QString &value);
+public:
+    explicit nowyKolorDialog(QWidget *parent = 0);
+    ~nowyKolorDialog();
+    void keyPressEvent(QKeyEvent *event) {
+        if (event->key() == Qt::Key_Escape) {
+            wyczyscPola();
+        }
+        QDialog::keyPressEvent(event);
+    }
+    void wyczyscPola();
+    QString getSk1() const;
+    void setSk1(const QString &value);
 
-		int getAktualnyKolor() const;
+    int getAktualnyKolor() const;
 
-		QString getSk1d() const;
+    QString getSk1d() const;
 
-		QString getSk2() const;
+    QString getSk2() const;
 
-		QString getSk2d() const;
+    QString getSk2d() const;
 
-		QString getSk3() const;
+    QString getSk3() const;
 
-		QString getSk3d() const;
+    QString getSk3d() const;
 
-		QString getSkdomi() const;
+    QString getSkdomi() const;
 
-	private slots:
-		void on_buttonBox_accepted();
+private slots:
+    void on_buttonBox_accepted();
 
-		void on_buttonBox_rejected();
+    void on_buttonBox_rejected();
 
-	private:
-         void showEvent(QShowEvent *e);
-		Ui::nowyKolorDialog *ui;
-		int aktKolor;
-		QString sk1;
-		QString sk1d;
-		QString sk2;
-		QString sk2d;
-		QString sk3;
-		QString sk3d;
-		QString skdomin;
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_4_clicked();
+
+private:
+    void showEvent(QShowEvent *e);
+    Ui::nowyKolorDialog *ui;
+    int aktKolor;
+    QString sk1;
+    QString sk1d;
+    QString sk2;
+    QString sk2d;
+    QString sk3;
+    QString sk3d;
+    QString skdomin;
 
 };
 

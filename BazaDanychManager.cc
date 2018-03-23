@@ -606,7 +606,6 @@ void BazaDanychManager::setRoznice() {
 }
 
 void BazaDanychManager::updateHandl( int idHan, int idKL) {
-    //  setKlienci();
     QSqlQuery qry2;
     QString qryStr = QString("update `obuwie_db`.`klienci` set handlowce_id=%1 where klienci.id=%2").arg(idHan).arg(idKL);
     qry2.prepare(qryStr);
@@ -1315,12 +1314,12 @@ bool BazaDanychManager::rozkroj(QStandardItemModel *pozycje, QStandardItemModel 
         qry.bindValue(":R50", rzad.at(24)->data(Qt::DisplayRole).toInt());
         qry.bindValue(":suma", rzad.at(25)->data(Qt::DisplayRole).toInt());
         qry.bindValue(":uzytkownik", user);
-        qry.bindValue(":wprowadzono", rzad.at(33)->data(Qt::DisplayRole).toString());
-        qry.bindValue(":realizacja", rzad.at(34)->data(Qt::DisplayRole).toString());
-        qry.bindValue(":uwagi", rzad.at(35)->data(Qt::DisplayRole).toString());
-        qry.bindValue(":uwagi2", rzad.at(36)->data(Qt::DisplayRole).toString());
-        qry.bindValue(":handlowce_id",  rzad.at(46)->data(Qt::DisplayRole).toInt());
-        qry.bindValue(":modele_id", rzad.at(47)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":modele_id", rzad.at(33)->data(Qt::DisplayRole).toInt());
+        qry.bindValue(":wprowadzono", rzad.at(34)->data(Qt::DisplayRole).toString());
+        qry.bindValue(":realizacja", rzad.at(35)->data(Qt::DisplayRole).toString());
+        qry.bindValue(":uwagi", rzad.at(36)->data(Qt::DisplayRole).toString());
+        qry.bindValue(":uwagi2", rzad.at(37)->data(Qt::DisplayRole).toString());
+        qry.bindValue(":handlowce_id",  rzad.at(47)->data(Qt::DisplayRole).toInt());
         qry.bindValue(":rozkroje_id", idRozkroju);
         QString nrPoz = QString("%1").arg((i+1));
         qry.bindValue(":pozycja", QString("%1/%2").arg(nrRozkroju, nrPoz));
