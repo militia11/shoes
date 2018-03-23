@@ -54,10 +54,6 @@ void Delegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QM
         QComboBox *comboBox = static_cast<QComboBox *>(editor);
         int data = comboBox->currentData().toInt();
         dbManager->updateHandl(data,idk);
-//        QString str = comboBox->currentText();
-//        qDebug() << str;
-//        QString str2 = comboBox->currentText();
-//        qDebug() << str2;
 
         return;
     }

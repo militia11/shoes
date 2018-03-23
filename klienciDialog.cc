@@ -10,6 +10,7 @@ klienciDialog::klienciDialog(nowyKlientDialog *nowyKliDialog,
     this->setWindowFlags(Qt::Window);
     myDelegate = new Delegate(dbManager, this);
     ui->tableViewKlienci->setItemDelegate(myDelegate);
+    connect(myDelegate, SIGNAL(commitData(QWidget*)), this, SLOT(abra(QWidget*)));
 }
 
 klienciDialog::~klienciDialog() {
@@ -28,6 +29,11 @@ int klienciDialog::selectExec() {
 int klienciDialog::exec() {
     ui->tableViewKlienci->setEditTriggers(QAbstractItemView::DoubleClicked);
     return QDialog::exec();
+}
+
+void klienciDialog::abra(QWidget *) {
+    dbManager->getModelKlienci()->select();
+    ui->tableViewKlienci->update();
 }
 
 void klienciDialog::wybranoKli(const QModelIndex index) {
