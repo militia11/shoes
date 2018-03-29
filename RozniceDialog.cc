@@ -69,6 +69,13 @@ void RozniceDialog::on_tableView_clicked(const QModelIndex &index) {
     NaglowkiZamowienia::ustawNaglowki(ui->tableViewSzczegoly, vModel);
     ui->tableViewSzczegoly->setColumnWidth(35, 120);
     ui->tableViewSzczegoly->setColumnWidth(36, 120);
+    ui->tableViewSzczegoly->setColumnWidth(1, 125);
+
+//    hv->setSectionHidden(37, true);
+//    hv->setSectionHidden(38, true);
+//    hv->setSectionHidden(39, true);
+//    hv->setSectionHidden(40, true);
+//    hv->setSectionHidden(41, true);
     ui->tableViewSzczegoly->update();
 }
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>900</width>
-    <height>966</height>
+    <height>980</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -332,7 +332,7 @@
    <property name="geometry">
     <rect>
      <x>710</x>
-     <y>930</y>
+     <y>945</y>
      <width>181</width>
      <height>31</height>
     </rect>
@@ -850,7 +850,7 @@
      <x>10</x>
      <y>430</y>
      <width>881</width>
-     <height>251</height>
+     <height>271</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -1039,7 +1039,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>220</y>
+      <y>247</y>
       <width>16</width>
       <height>16</height>
      </rect>
@@ -1063,8 +1063,8 @@
    <widget class="QCheckBox" name="checkBox2">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>220</y>
+      <x>326</x>
+      <y>247</y>
       <width>16</width>
       <height>16</height>
      </rect>
@@ -1088,8 +1088,8 @@
    <widget class="QCheckBox" name="checkBox3">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>220</y>
+      <x>539</x>
+      <y>247</y>
       <width>16</width>
       <height>16</height>
      </rect>
@@ -1113,8 +1113,8 @@
    <widget class="QCheckBox" name="checkBox4">
     <property name="geometry">
      <rect>
-      <x>760</x>
-      <y>220</y>
+      <x>766</x>
+      <y>247</y>
       <width>16</width>
       <height>16</height>
      </rect>
@@ -1255,12 +1255,76 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>526</x>
+      <y>220</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>SPÓD</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>220</y>
+      <width>181</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>STRONA ZEWNĘTRZNA</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>220</y>
+      <width>201</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>STRONA WEWNETRZNA</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>220</y>
+      <width>61</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Z GÓRY</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
   <widget class="QFrame" name="frame_13">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>690</y>
+     <y>710</y>
      <width>881</width>
      <height>231</height>
     </rect>

@@ -3,6 +3,8 @@
 
 #include <QtWidgets/QDialog>
 #include <QKeyEvent>
+#include "skoryDialog.h"
+#include "BazaDanychManager.h"
 namespace Ui {
 class nowyKolorDialog;
 }
@@ -11,7 +13,7 @@ class nowyKolorDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit nowyKolorDialog(QWidget *parent = 0);
+    explicit nowyKolorDialog(BazaDanychManager *dbManager,skoryDialog *s,QWidget *parent = 0);
     ~nowyKolorDialog();
     void keyPressEvent(QKeyEvent *event) {
         if (event->key() == Qt::Key_Escape) {
@@ -20,18 +22,13 @@ public:
         QDialog::keyPressEvent(event);
     }
     void wyczyscPola();
-    QString getSk1() const;
-    void setSk1(const QString &value);
-
     int getAktualnyKolor() const;
 
     QString getSk1d() const;
 
-    QString getSk2() const;
 
     QString getSk2d() const;
 
-    QString getSk3() const;
 
     QString getSk3d() const;
 
@@ -52,14 +49,12 @@ private:
     void showEvent(QShowEvent *e);
     Ui::nowyKolorDialog *ui;
     int aktKolor;
-    QString sk1;
     QString sk1d;
-    QString sk2;
     QString sk2d;
-    QString sk3;
     QString sk3d;
     QString skdomin;
-
+    skoryDialog * s;
+    BazaDanychManager *dbManager;
 };
 
 #endif // NOWYKOLORDIALOG_H

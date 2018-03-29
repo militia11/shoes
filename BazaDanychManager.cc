@@ -29,6 +29,7 @@ void BazaDanychManager::clearFilterZam() {
     filterKlientow.nr = QString("");
     filterKlientow.woj = QString("");
     filterKlientow.kraj = QString("");
+    filterKlientow.han = QString("");
 }
 
 BazaDanychManager::BazaDanychManager() :
@@ -56,13 +57,15 @@ BazaDanychManager::BazaDanychManager() :
     idModelu = -1;
     idKoloru = -1;
     idSpodu = -1;
-    idSkory = -1;
     idWzoru = -1;
     idOciep = -1;
     idWkladki = -1;
     idRozkroju = -1;
     idZam = -1;
     idRoznicy = -1;
+    sk1= 1;
+    sk2= 1;
+    sk3= 1;
     clearFilterZam();
     user = QString("value");
 //todo
@@ -513,6 +516,7 @@ QStandardItemModel *BazaDanychManager::getDoRozkroju(const std::vector<int> &val
     }
     idki.remove(idki.count() - 1, 1);
     queString += idki;
+    qDebug() << idki;
     currentIdZamRozkroje = idki;
     queString += " )";
     QSqlQuery query(queString);
@@ -564,10 +568,6 @@ void BazaDanychManager::setIdMatrycy(int value) {
 
 void BazaDanychManager::setIdModelu(int value) {
     idModelu = value;
-}
-
-void BazaDanychManager::setIdSkory(int value) {
-    idSkory = value;
 }
 
 void BazaDanychManager::setIdOciep(int value) {
@@ -738,10 +738,10 @@ QSqlTableModel *BazaDanychManager::getKolory() const {
 void BazaDanychManager::setKolory() {
     if (mKolory == nullptr) {
         mKolory = new QSqlTableModel();
-        mKolory->setTable("kolor");
+        mKolory->setTable("vkolory");
         QStringList listaKlienci;
-        listaKlienci << "ID " << "KOLOR" <<  "SK1" << "DOSTAWCA SK1" << "SK2" <<
-                     "DOSTAWCA SK2" << "SK3" << "DOSTAWCA SK3" << "KOLOR SK DOMINUJĄCY" << "" << "";
+        listaKlienci << "ID " << "KOLOR" <<  "SKÓRA 1" << "DOSTAWCA SK1" << "SKÓRA 2" <<
+                     "DOSTAWCA SK2" << "SKÓRA 3" << "DOSTAWCA SK3" << "KOLOR SK DOMIN" << "" << "" << "" << "";
         setHeaders(listaKlienci, mKolory);
     }
     mKolory->select();
@@ -851,27 +851,28 @@ QString BazaDanychManager::poberzOpis2(int id) {
 }
 
 QString BazaDanychManager::pobierzAktualnaSkore(const QModelIndex index) {
-    idSkory = mSkory->data(mSkory->index(index.row(),
-                                         0)).toInt();
     return  mSkory->data(mSkory->index(index.row(),
                                        1)).toString();
 }
 
-void BazaDanychManager::zachowajKolor(int kolor, QString s1, QString s1d,
-                                      QString s2,
-                                      QString s2d, QString s3, QString s3d, QString sdomi) {
+int BazaDanychManager::pobierzAktualnaSkoreId(const QModelIndex index) {
+    return mSkory->data(mSkory->index(index.row(),
+                                      0)).toInt();
+}
+
+void BazaDanychManager::zachowajKolor(int kolor, QString s1d,
+                                      QString s2d, QString s3d, QString sdomi) {
     QSqlQuery qry;
-    qry.prepare("INSERT INTO kolor (`kolor`, `sk1`, `dost_sk1`, `sk2`, `dost_sk2`, `sk3`, `dost_sk3`, `kolor_sk_dominujacy`) VALUES (:kolor, :sk1, :dost_sk1, :sk2, :dost_sk2, :sk3, :dost_sk3, :kolor_sk_dominujacy)");
+    qry.prepare("INSERT INTO kolor (`kolor`, `skora_id1`, `skora_id2`, `skora_id3`,`kolor_sk_dominujacy`)"
+                " VALUES (:kolor, :skora_id1, :skora_id2, :skora_id3, :kolor_sk_dominujacy)");
     qry.bindValue(":kolor", kolor);
-    qry.bindValue(":sk1", s1);
-    qry.bindValue(":dost_sk1", s1d);
-    qry.bindValue(":sk2", s2);
-    qry.bindValue(":dost_sk2", s2d);
-    qry.bindValue(":sk3", s3);
-    qry.bindValue(":dost_sk3", s3d);
+    qry.bindValue(":skora_id1", sk1);
+    qry.bindValue(":skora_id2", sk2);
+    qry.bindValue(":skora_id3", sk3);
     qry.bindValue(":kolor_sk_dominujacy", sdomi);
     if (!qry.exec()) {
         qDebug() << "Bląd przy zapisie koloru" ;
+        qDebug() << qry.lastError().text();
     } else {
         mKolory->select();
     }
@@ -1335,8 +1336,8 @@ bool BazaDanychManager::rozkroj(QStandardItemModel *pozycje, QStandardItemModel 
             QSqlQuery qry2;
             qry2.prepare("INSERT INTO `obuwie_db`.`rozniceZam`(`nr_zamowieniaRoz`, `R36`, `R37`, `R38`, `R39`, `R40`, `R41`,"
                          " `R42`, `R43`, `R44`, `R45`, `R46`, `R47`, `R48`, `R49`, `R50`, `suma`,`wprowadzono`,`realizacja`, `uwagi`, `uwagi2`,"
-                         " `uzytkownik`, `modele_id`, `klienci_id`, `handlowce_id`, `roznice_id`) VALUES (:nr_zamowieniaRoz, :R36, :R37 ,:R38,:R39, :R40 ,  :R41 ,  :R42 , :R43  ,:R44, :R45 ,  :R46 , :R47  , :R48, :R49,:R50 ,:suma,:wprowadzono, :realizacja,:uwagi, :uwagi2,"
-                         " :uzytkownik, :modele_id, :klienci_id, :handlowce_id, :roznice_id);");
+                         " `uzytkownik`, `modele_id`, `klienci_id`, `handlowce_id`, `roznice_id`, `pozycja`) VALUES (:nr_zamowieniaRoz, :R36, :R37 ,:R38,:R39, :R40 ,  :R41 ,  :R42 , :R43  ,:R44, :R45 ,  :R46 , :R47  , :R48, :R49,:R50 ,:suma,:wprowadzono, :realizacja,:uwagi, :uwagi2,"
+                         " :uzytkownik, :modele_id, :klienci_id, :handlowce_id, :roznice_id, :pozycja);");
             qry2.bindValue(":nr_zamowieniaRoz", rzad.at(1)->data(Qt::DisplayRole).toString());
             qry2.bindValue(":klienci_id", rzad.at(3)->data(Qt::DisplayRole).toInt());
             qry2.bindValue(":R36", bazarzad.at(10)->data(Qt::DisplayRole).toInt() -
@@ -1372,15 +1373,20 @@ bool BazaDanychManager::rozkroj(QStandardItemModel *pozycje, QStandardItemModel 
             qry2.bindValue(":suma", bazarzad.at(25)->data(Qt::DisplayRole).toInt() -
                            rzad.at(25)->data(Qt::DisplayRole).toInt());
             qry2.bindValue(":uzytkownik", user);
-            qry2.bindValue(":wprowadzono", rzad.at(33)->data(Qt::DisplayRole).toString());
-            qry2.bindValue(":realizacja", rzad.at(34)->data(Qt::DisplayRole).toString());
-            qry2.bindValue(":uwagi", rzad.at(35)->data(Qt::DisplayRole).toString());
-            qry2.bindValue(":uwagi2", rzad.at(36)->data(Qt::DisplayRole).toString());
-            qry2.bindValue(":handlowce_id",  rzad.at(46)->data(Qt::DisplayRole).toInt());
-            qry2.bindValue(":modele_id", rzad.at(47)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":modele_id", rzad.at(33)->data(Qt::DisplayRole).toInt());
+            qry2.bindValue(":wprowadzono", rzad.at(34)->data(Qt::DisplayRole).toString());
+            qry2.bindValue(":realizacja", rzad.at(35)->data(Qt::DisplayRole).toString());
+            qry2.bindValue(":uwagi", rzad.at(36)->data(Qt::DisplayRole).toString());
+            qry2.bindValue(":uwagi2", rzad.at(37)->data(Qt::DisplayRole).toString());
+            qry2.bindValue(":handlowce_id",  rzad.at(47)->data(Qt::DisplayRole).toInt());
             qry2.bindValue(":roznice_id", idRoznicy);
+            QString nrPoz = QString("%1").arg((i+1));
+            QString nrRoznicy = QString("ROZ-%1").arg(idRozkroju);
+
+            qry2.bindValue(":pozycja", QString("%1/%2").arg(nrRoznicy).arg(nrPoz));
             if (!qry2.exec()) {
                 qDebug() << "Bląd przy zapisie rozk poz222222" ;
+                qDebug() << qry2.lastError().text();
                 vSuccess = false;
                 bazowepozycje->appendRow(bazarzad);
             }
@@ -1641,11 +1647,13 @@ void BazaDanychManager::setZamowieniaFilter() {
              filterZamowien.snaz, filterZamowien.sprod);
     mZamowienia->setFilter(f);
 }
-
+//`kol`.`sk1` AS `sk1`,
+//       `kol`.`sk2` AS `sk2`,
+//       `kol`.`sk3` AS `sk3`,
 void BazaDanychManager::setKlienciFilter() {
     QString f =
-        QString("nazwa_skrot LIKE '%1%' AND nazwa LIKE '%2%' AND miasto LIKE '%3%' AND id LIKE '%4%' ").arg(
-            filterKlientow.skrot, filterKlientow.nazwa, filterKlientow.miasto, filterKlientow.nr);
+        QString("nazwa_skrot LIKE '%1%' AND nazwa LIKE '%2%' AND miasto LIKE '%3%' AND id LIKE '%4%' AND skrot LIKE '%5%' ").arg(
+            filterKlientow.skrot, filterKlientow.nazwa, filterKlientow.miasto, filterKlientow.nr, filterKlientow.han);
     mKlienci->setFilter(f);
 }
 

@@ -115,7 +115,7 @@
      <item row="10" column="1">
       <widget class="QLineEdit" name="lineEditNumerTelefonu">
        <property name="styleSheet">
-        <string notr="true">color: blue; background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
+        <string notr="true">background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
        </property>
        <property name="frame">
         <bool>true</bool>
@@ -132,7 +132,7 @@
      <item row="11" column="1">
       <widget class="QLineEdit" name="lineEditTel1">
        <property name="styleSheet">
-        <string notr="true">color: blue; background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
+        <string notr="true">background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
        </property>
       </widget>
      </item>
@@ -146,7 +146,7 @@
      <item row="12" column="1">
       <widget class="QLineEdit" name="lineEditTel2">
        <property name="styleSheet">
-        <string notr="true">color: blue; background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
+        <string notr="true">background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
        </property>
       </widget>
      </item>
@@ -160,7 +160,7 @@
      <item row="13" column="1">
       <widget class="QLineEdit" name="lineEditFax">
        <property name="styleSheet">
-        <string notr="true">color: blue; background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
+        <string notr="true">background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
        </property>
       </widget>
      </item>
@@ -174,7 +174,7 @@
      <item row="14" column="1">
       <widget class="QLineEdit" name="lineEditMail">
        <property name="styleSheet">
-        <string notr="true">color: blue; background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
+        <string notr="true">background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
        </property>
       </widget>
      </item>
@@ -188,7 +188,7 @@
      <item row="15" column="1">
       <widget class="QPlainTextEdit" name="lineEditUwagi">
        <property name="styleSheet">
-        <string notr="true">color: blue; background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
+        <string notr="true">background-color: #74AFAD;border-style: outset; border-width: 1px; border-color: blue;</string>
        </property>
        <property name="tabChangesFocus">
         <bool>true</bool>
@@ -258,6 +258,7 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>pushButton_2</tabstop>
   <tabstop>lineEditNazwa</tabstop>
   <tabstop>lineEditSkrot</tabstop>
   <tabstop>lineEditMiasto</tabstop>
@@ -272,6 +273,7 @@
   <tabstop>lineEditFax</tabstop>
   <tabstop>lineEditMail</tabstop>
   <tabstop>lineEditUwagi</tabstop>
+  <tabstop>labelHandlowiec</tabstop>
  </tabstops>
  <resources>
   <include location="zasoby.qrc"/>

@@ -20,6 +20,7 @@ public:
     void ustawIFiltruj();
     int getAktualnyKolor() const;
     int selectExec();
+
 private slots:
     void on_pushButton_2_clicked();
     void wybranoKolor(const QModelIndex index);
@@ -29,6 +30,7 @@ private slots:
 
 public slots:
     virtual int exec();
+
 protected:
     void aktualHeader();
 

@@ -6,6 +6,7 @@ skoryDialog::skoryDialog(nowaSkoraDialog *ns, BazaDanychManager *db,
     QDialog(parent),
     ui(new Ui::skoryDialog), dbManager(db), ns(ns), m(nullptr) {
     ui->setupUi(this);
+    idsk = -1;
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
 }
@@ -28,13 +29,12 @@ int skoryDialog::selectExec() {
 int skoryDialog::exec() {
     ui->tableViewKlienci->setEditTriggers(QAbstractItemView::DoubleClicked);
     return QDialog::exec();
-
 }
 
 void skoryDialog::wybranoSkore(const QModelIndex index) {
-    QModelIndex  idx = proxy->mapToSource(
-                           ui->tableViewKlienci->selectionModel()->currentIndex());
-    aktualnaSkoraNazwa =	dbManager->pobierzAktualnaSkore(idx);
+    QModelIndex  idx = proxy->mapToSource(ui->tableViewKlienci->selectionModel()->currentIndex());
+    aktualnaSkoraNazwa = dbManager->pobierzAktualnaSkore(idx);
+    idsk = dbManager->pobierzAktualnaSkoreId(idx);
     accept();
 }
 
@@ -73,6 +73,10 @@ void skoryDialog::hideEvent(QHideEvent *e) {
     disconnect(dbManager->getSkory(), SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &, const QVector<int> &)),
                this, SLOT(updateZamSum(const QModelIndex &, const QModelIndex &, const QVector<int> &)));
 
+}
+
+int skoryDialog::getIdsk() const {
+    return idsk;
 }
 
 QString skoryDialog::getAktualnaSkoraNazwa() const {

@@ -101,6 +101,7 @@ private slots:
     void on_actionEdycja_triggered();
 
     void updateZdj(int id);
+
 private:
     bool eventFilter(QObject *object, QEvent *event);
     void keyPressEvent(QKeyEvent *event);

@@ -51,7 +51,6 @@ int owyModelDialog::editExec(int id) {
     dbManager->setIdKoloru(listId[3]);
     dbManager->setIdWkladki(listId[4]);
     dbManager->setIdSpodu(listId[5]);
-    dbManager->setIdSkory(listId[6]);
     createCombos();
     QVector<QString> vec = dbManager->poberzRodzaje(id);
     ui->comboBoxtyp->setCurrentIndex(ui->comboBoxtyp->findData(vec[0]));

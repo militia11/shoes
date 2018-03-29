@@ -26,6 +26,7 @@ struct KlientFilter {
     QString nr;
     QString kraj;
     QString woj;
+    QString han;
 };
 
 class BazaDanychManager {
@@ -104,14 +105,15 @@ public:
     QString pobierzNazweAktualejWkladki(const QModelIndex index);
     QString pobierzAktualnyOciep(const QModelIndex index);
     QString pobierzAktualnaSkore(const QModelIndex index);
+    int pobierzAktualnaSkoreId(const QModelIndex index);
     int getNrWzoru(const QModelIndex index);
     int getWysZdj(int id);
     QVector<QString> poberzRodzaje(int id);
     QString poberzOpis1(int id);
     QString poberzOpis2(int id);
 
-    void zachowajKolor(int kolor, QString s1, QString s1d, QString s2, QString s2d,
-                       QString s3, QString s3d, QString sdomi);
+    void zachowajKolor(int kolor, QString s1d,
+                       QString s2d, QString s3d, QString sdomi);
     void zachowajSkore(QString naz, QString dost, double cena);
     void zachowajMatryce(QString naz, QString infonaz);
     void zachowajWkla(QString naz, QString o);
@@ -181,8 +183,6 @@ public:
 
     void setIdOciep(int value);
 
-    void setIdSkory(int value);
-
     void setIdMatrycy(int value);
 
     void setIdModelu(int value);
@@ -192,6 +192,9 @@ public:
     void setKliR();
 
     QVector<int> idModeluL;
+    int sk1;
+    int sk2;
+    int sk3;
 private:
     QVariant GetFirstValueForQuery(QSqlQuery *aQuery);
     QSqlRecord getSqlRecordZModelu(const QAbstractItemModel *aItemModel);
@@ -226,11 +229,11 @@ private:
     int idWzoru;
     int idWkladki;
     int idOciep;
-    int idSkory;
     int idMatrycy;
     int idRozkroju;
     int idZam;
     int idRoznicy;
+
 
     QString nazwaKlienta;
     QString nazwaHandlowca;

@@ -70,7 +70,7 @@ void klienciDialog::aktualizujTabele() {
                 QHeaderView::Stretch);
     }
     aktualizujHeader();
-    //combo();
+    combo();
 }
 
 void klienciDialog::showEvent(QShowEvent *e) {
@@ -99,6 +99,7 @@ void klienciDialog::ustawIFiltruj() {
     dbManager->filterKlientow.nazwa = ui->lineEditSkrot->text();
     dbManager->filterKlientow.skrot = ui->lineEditNazwaSkrot->text();
     dbManager->filterKlientow.nr = ui->lineEditNr->text();
+    dbManager->filterKlientow.han = ui->comboBox->currentText();
     dbManager->setKlienciFilter();
 }
 
@@ -117,6 +118,7 @@ void klienciDialog::on_pushButton_2_clicked() {
                       nowyKliDialog->getKraj());
         dbManager->zachowajKlienta(klient);
         aktualizujHeader();
+        combo();
     }
 }
 
@@ -135,9 +137,7 @@ void klienciDialog::on_pushButton_clicked() {
 
     ui->comboBox->setCurrentText("");
     ui->comboBox->setCurrentIndex(0);
-//tod
-
-
+//todo
     ui->tableViewKlienci->setModel(dbManager->getModelKlienci());
     ui->tableViewKlienci->sortByColumn(0, Qt::AscendingOrder);
     ustawIFiltruj();
@@ -159,4 +159,9 @@ void klienciDialog::combo() {
         }
         delete vModel;
     }
+}
+
+void klienciDialog::on_comboBox_activated(const QString &arg1) {
+    dbManager->filterKlientow.han = ui->comboBox->currentText();
+    ustawIFiltruj();
 }

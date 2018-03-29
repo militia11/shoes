@@ -26,11 +26,14 @@ public:
 public slots:
     virtual int exec();
     void abra(QWidget*);
+
 private slots:
     void wybranoKli(const QModelIndex index);
     void on_pushButton_2_clicked();
     void on_pushSzukaj_clicked();
     void on_pushButton_clicked();
+
+    void on_comboBox_activated(const QString &arg1);
 
 private:
     void combo();

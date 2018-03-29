@@ -3,14 +3,15 @@
 #include <QMessageBox>
 
 void nowyKlientDialog::resetujPrzyciskiWymagane() {
-    ui->lineEditNazwa->setStyleSheet("color:darkblue ;background-color: white;");
-    ui->lineEditSkrot->setStyleSheet("color:darkblue ;background-color: white;");
-    ui->lineEditNrDomu->setStyleSheet("color:darkblue ;background-color: white;");
-    ui->lineEditMiasto->setStyleSheet("color:darkblue ;background-color: white;");
-    ui->lineEditKodPocztowy->setStyleSheet("color:darkblue ;background-color: white;");
-    ui->lineEditUlica->setStyleSheet("color:darkblue ;background-color: white;");
-    ui->lineEditW->setStyleSheet("color:darkblue ;background-color: white;");
-    ui->lineEditKraj->setStyleSheet("color:darkblue ;background-color: white;");
+    ui->lineEditNazwa->setStyleSheet("color:black ;background-color: white;");
+    ui->lineEditSkrot->setStyleSheet("color:black ;background-color: white;");
+    ui->lineEditNrDomu->setStyleSheet("color:black ;background-color: white;");
+    ui->lineEditMiasto->setStyleSheet("color:black ;background-color: white;");
+    ui->lineEditKodPocztowy->setStyleSheet("color:black ;background-color: white;");
+    ui->lineEditUlica->setStyleSheet("color:black ;background-color: white;");
+    ui->lineEditW->setStyleSheet("color:black ;background-color: white;");
+    ui->lineEditKraj->setStyleSheet("color:black ;background-color: white;");
+    ui->labelHandlowiec->setStyleSheet("color:black ;background-color: white;");
 }
 
 QString nowyKlientDialog::getKraj() const {
@@ -28,7 +29,6 @@ nowyKlientDialog::nowyKlientDialog(handlowceDialog *wybHandlDialog,QWidget *pare
     ui->setupUi(this);
     this->setWindowFlags(Qt::Window);
     resetujPrzyciskiWymagane();
-
 }
 
 nowyKlientDialog::~nowyKlientDialog() {
@@ -186,6 +186,6 @@ QString nowyKlientDialog::getUwagi() const {
 
 void nowyKlientDialog::on_pushButton_2_clicked() {
     if (dialogHandl->selectExec() == QDialog::Accepted) {
-        ui->labelHandlowiec->setText(dialogHandl->getAktualnyHandlNazwa());
+        ( ui->labelHandlowiec->setText(dialogHandl->getAktualnyHandlNazwa()));
     }
 }

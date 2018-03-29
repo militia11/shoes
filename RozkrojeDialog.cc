@@ -59,7 +59,13 @@ void RozkrojeDialog::on_tableView_clicked(const QModelIndex &index) {
     NaglowkiZamowienia::ustawNaglowki(ui->tableViewSzczegoly, vModel);
     ui->tableViewSzczegoly->setColumnWidth(35, 80);
     ui->tableViewSzczegoly->setColumnWidth(36, 80);
-    hv->setSectionHidden(41, false);
+
+
+    hv->setSectionHidden(37, true);
+    hv->setSectionHidden(38, true);
+    hv->setSectionHidden(39, true);
+    hv->setSectionHidden(40, true);
+    hv->setSectionHidden(41, true);
     connect(
         ui->tableViewSzczegoly->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
@@ -73,6 +79,7 @@ void RozkrojeDialog::showEvent(QShowEvent *e) {
     deleteOldModel();
     ui->pushButtonPrint->setEnabled(false);
     ui->pushButtonPrint_2->setEnabled(false);
+    ui->pushButton->setEnabled(false);
     dbManager->setRozkroje();
     proxy->setDynamicSortFilter(true);
     proxy->setSourceModel(dbManager->getRozkroje());
@@ -82,7 +89,7 @@ void RozkrojeDialog::showEvent(QShowEvent *e) {
     hv->setStretchLastSection(true);
     hv->setSectionHidden(0, true);
     hv->setDefaultAlignment(Qt::AlignLeft);
-    ui->tableView->sortByColumn(2, Qt::DescendingOrder);
+    ui->tableView->sortByColumn(0, Qt::DescendingOrder);
     connect(
         ui->tableView->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
@@ -134,6 +141,7 @@ void RozkrojeDialog::on_pushButtonPrint_clicked() {
 void RozkrojeDialog::SelectionOfTableChanged(const QItemSelection &aSelected, const QItemSelection &aDeselected) {
     bool vIsAnyItemSelected = aSelected.count() > 0;
     ui->pushButtonPrint->setEnabled(vIsAnyItemSelected);
+    ui->pushButton->setEnabled(vIsAnyItemSelected);
     if (!vIsAnyItemSelected) {
         deleteOldModel();
         ui->pushButtonPrint_2->setEnabled(false);
@@ -157,7 +165,6 @@ void RozkrojeDialog::drukuj() {
     //if (pageSetup(&printer)) {
     printDocument(&printer);
     oznaczDrukowano();
-
 //    } else {
 //        qDebug() << "anulowane";
 //    }

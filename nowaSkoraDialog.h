@@ -8,36 +8,37 @@ namespace Ui {
 class nowaSkoraDialog;
 }
 
-class nowaSkoraDialog : public QDialog
-{
-		Q_OBJECT
+class nowaSkoraDialog : public QDialog {
+    Q_OBJECT
 
-	public:
-		explicit nowaSkoraDialog(QWidget *parent = 0);
-		~nowaSkoraDialog();
-		void keyPressEvent(QKeyEvent *event) {
-			if (event->key() == Qt::Key_Escape) {
-				wyczyscPola();
-			}
-			QDialog::keyPressEvent(event);
-		}
-		void wyczyscPola();
-		QString getNaz() const;
+public:
+    explicit nowaSkoraDialog(QWidget *parent = 0);
+    ~nowaSkoraDialog();
+    void keyPressEvent(QKeyEvent *event) {
+        if (event->key() == Qt::Key_Escape) {
+            wyczyscPola();
+        }
+        QDialog::keyPressEvent(event);
+    }
+    void wyczyscPola();
+    QString getNaz() const;
 
-		QString getDos() const;
+    QString getDos() const;
 
-		double getCena() const;
+    double getCena() const;
 
-	private slots:
-		void on_buttonBox_accepted();
+    void showEvent(QShowEvent *e);
 
-		void on_buttonBox_rejected();
+private slots:
+    void on_buttonBox_accepted();
 
-	private:
-		Ui::nowaSkoraDialog *ui;
-		QString naz;
-		QString dos;
-		double cena;
+    void on_buttonBox_rejected();
+
+private:
+    Ui::nowaSkoraDialog *ui;
+    QString naz;
+    QString dos;
+    double cena;
 };
 
 #endif // NOWASKORADIALOG_H

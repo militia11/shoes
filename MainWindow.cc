@@ -10,6 +10,7 @@
 #include "delegateKli.h"
 #include <unistd.h>
 #include <QTimer>
+
 bool MainWindow::logowanie() {
     if (log->exec() == QDialog::Accepted) {
         QString text = log->getUs();
@@ -56,8 +57,8 @@ MainWindow::MainWindow(QWidget *parent) :
     dialogwkladka = new wkladkaDialog(dialogNowaWkl, dbManager, this);
     dialognskora = new nowaSkoraDialog(this);
     dialogskory = new skoryDialog(dialognskora, dbManager, this);
-    dilogNowyKolor = new nowyKolorDialog(this);
-    dialogkolory = new koloryDialog(dilogNowyKolor, dbManager, this);
+    dilogNowyKolor = new nowyKolorDialog(dbManager,dialogskory, this);
+    dialogkolory = new koloryDialog( dilogNowyKolor, dbManager, this);
     dialognspod = new nowySpodDialog(this);
     dialogspody = new spodyDialog(dialogzdj, dialognspod, dbManager, this);
     dno = new noweociepdialog(this);
@@ -84,7 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
     if (!dbManager->polacz()) {
         ustawieniaBazy();
     }
-    //while(!logowanie());
+    while(!logowanie());
     ui->labelPodglad->setFixedHeight(196);
     ui->labelPodglad->setFixedWidth(274);
     ui->labelPodglad->setScaledContents(true);
@@ -117,7 +118,7 @@ MainWindow::MainWindow(QWidget *parent) :
     hv->setSectionHidden(49, true);
 
     ui->tableViewZam->installEventFilter(this);
-    // dialogKlienci->exec();
+//    dialogKlienci->exec();
 //    dialogNoweZamowienie->exec();
 //    exit(1);
     //rozkroje->exec();
@@ -178,122 +179,129 @@ QString MainWindow::prepareZam() {
 }
 
 void MainWindow::ShowContextMenu(const QPoint &pos) {
-    //  if (ui->actionEdycja->isChecked()) {
-    QPoint globalPos = ui->tableViewZam->mapToGlobal(pos);
-    QMenu myMenu;
-    QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
-    if (dbManager->filterZamowien.status == QString("WPROWADZONE")) {
-        QIcon icon(":/zasoby/cut.png");
-        myMenu.addAction( icon,"KRÓJ");
-        if (selection.length() == 1) {
-            QIcon iconch(":/zasoby/change.png");
-            myMenu.addAction(iconch,"EDYTUJ");
-        }
-        QIcon icontr(":/zasoby/trash2.png");
-        myMenu.addAction(icontr,"USUŃ");
-
-    } else if (dbManager->filterZamowien.status == QString("DO WYSYŁKI")) {
-        if (selection.length() == 1) {
-            myMenu.addAction("POKAŻ ROZKRÓJ");
-            QModelIndex index = proxy->mapToSource(selection.at(0));
-            if(dbManager->getCzyRoznicaZamowieniaZTabeli(index)) {
-                myMenu.addAction("POKAŻ RÓŻNICĘ");
+    if (ui->actionEdycja->isChecked()) {
+        QPoint globalPos = ui->tableViewZam->mapToGlobal(pos);
+        QMenu myMenu;
+        QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
+        if (dbManager->filterZamowien.status == QString("WPROWADZONE")) {
+            QIcon icon(":/zasoby/cut.png");
+            myMenu.addAction( icon,"KRÓJ");
+            if (selection.length() == 1) {
+                QIcon iconch(":/zasoby/change.png");
+                myMenu.addAction(iconch,"EDYTUJ");
             }
-            myMenu.addSeparator();
-        }
-        QIcon iconup(":/zasoby/update.png");
-        myMenu.addAction(iconup, "ZREALIZUJ");
+            QIcon icontr(":/zasoby/trash2.png");
+            myMenu.addAction(icontr,"USUŃ");
 
-        QIcon icontr(":/zasoby/trash2.png");
-        myMenu.addAction(icontr,"USUŃ");
-
-    }  else if (dbManager->filterZamowien.status == QString("ZREALIZOWANO")) {
-        // nothing
-    }
-    QAction *selectedItem = myMenu.exec(globalPos);
-    if (selectedItem) {
-        QModelIndex idx = proxy->mapToSource(
-                              ui->tableViewZam->selectionModel()->currentIndex());
-
-        if (selectedItem->text() == QString("KRÓJ")) {
-            QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
-            std::vector<int> zamowienia;
-            int id = 0;
-            for (int i = 0; i < selection.count(); i++) {
-                QModelIndex index = proxy->mapToSource(selection.at(i));
-                id =  dbManager->getIdZamowieniaZTabeli(index);
-                zamowienia.push_back(id);
+        } else if (dbManager->filterZamowien.status == QString("DO WYSYŁKI")) {
+            if (selection.length() == 1) {
+                myMenu.addAction("POKAŻ ROZKRÓJ");
+                QModelIndex index = proxy->mapToSource(selection.at(0));
+                if(dbManager->getCzyRoznicaZamowieniaZTabeli(index)) {
+                    myMenu.addAction("POKAŻ RÓŻNICĘ");
+                }
+                myMenu.addSeparator();
             }
-            if (QMessageBox::question(this, "MODYFIKACJA", "<FONT COLOR='#000080'>Czy pomniejszyć o stany magazynowe?") == QMessageBox::Yes) {
-                dorozkroju->setModel(dbManager->getDoRozkroju(zamowienia));
-                QString nr = prepareRozkroj();
-                dorozkroju->setNr(nr);
-                if (dorozkroju->exec() == QDialog::Accepted) {
-                    dbManager->copyZamowienieArch(dorozkroju->getModel());
-                    if (dbManager->rozkroj(dorozkroju->getModel(), dorozkroju->getBazowyModel())) {
+            QIcon iconup(":/zasoby/update.png");
+            myMenu.addAction(iconup, "ZREALIZUJ");
+
+            QIcon icontr(":/zasoby/trash2.png");
+            myMenu.addAction(icontr,"USUŃ");
+
+        }  else if (dbManager->filterZamowien.status == QString("ZREALIZOWANO")) {
+            // nothing
+        }
+        QAction *selectedItem = myMenu.exec(globalPos);
+        if (selectedItem) {
+            QModelIndex idx = proxy->mapToSource(
+                                  ui->tableViewZam->selectionModel()->currentIndex());
+
+            if (selectedItem->text() == QString("KRÓJ")) {
+                QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
+                std::vector<int> zamowienia;
+                int id = 0;
+                for (int i = 0; i < selection.count(); i++) {
+                    QModelIndex index = proxy->mapToSource(selection.at(i));
+                    id =  dbManager->getIdZamowieniaZTabeli(index);
+                    zamowienia.push_back(id);
+                }
+                if (QMessageBox::question(this, "MODYFIKACJA", "<FONT COLOR='#000080'>Czy pomniejszyć o stany magazynowe?") == QMessageBox::Yes) {
+                    dorozkroju->setModel(dbManager->getDoRozkroju(zamowienia));
+                    QString nr = prepareRozkroj();
+                    dorozkroju->setNr(nr);
+                    if (dorozkroju->exec() == QDialog::Accepted) {
+                        dbManager->copyZamowienieArch(dorozkroju->getModel());
+                        if (dbManager->rozkroj(dorozkroju->getModel(), dorozkroju->getBazowyModel())) {
+                            dbManager->getModelZamowienia()->select();
+                            rozkroje->setDodanoRozkroj(true);
+                            rozkroje->exec();
+                        }
+
+                    } else {
+                        dbManager->usunSzkieletRozkroju();
+                        return;
+                    }
+                } else {
+                    prepareRozkroj();
+                    dbManager->copyZamowienieArch(dbManager->getDoRozkroju(zamowienia));
+                    if (dbManager->rozkroj(dbManager->getDoRozkroju(zamowienia))) {
                         dbManager->getModelZamowienia()->select();
                         rozkroje->setDodanoRozkroj(true);
                         rozkroje->exec();
+                    } else {
+                        dbManager->usunSzkieletRozkroju();
+                        return;
+                    }
+                }
+            } else if (selectedItem->text() == QString("ZREALIZUJ")) {
+                int id = 0;
+                bool sukces = true;
+                for (int i = 0; i < selection.count(); i++) {
+                    QModelIndex index = selection.at(i);
+
+                    id = dbManager->getIdZamowieniaZTabeli(index);
+                    if (dbManager->aktualizujStatus(id, "ZREALIZOWANO") == false) {
+                        sukces = false;
+                    }
+                }
+                if (sukces) {
+                    QMessageBox::information(this, "REALIZACJA",
+                                             QString(" <FONT COLOR='#0f00f0'>Zrealizowano %1 pozycje.").arg(
+                                                 QString::number(selection.count())), QMessageBox::Ok);
+                    dbManager->getModelZamowienia()->select();
+                }
+
+            } else if (selectedItem->text() == QString("EDYTUJ")) {
+                QString nr_zam = getNrZam(idx);
+                dialogEdycjaZam->setNrZam(nr_zam);
+                dialogEdycjaZam->exec();
+            } else if(selectedItem->text() == QString("POKAŻ ROZKRÓJ")) {
+                rozkroje->setWskazRozkroj(true);
+                rozkroje->setNrRozkrojuWskaz(dbManager->getNrRozkrojuDoWskazania(idx));
+                rozkroje->exec();
+            } else if(selectedItem->text() == QString("POKAŻ RÓŻNICĘ")) {
+                roznicerozkroje->setNrRoznicy(QString("ROZ-%1").arg(dbManager->getNrRozkrojuDoWskazania(idx)));
+                roznicerozkroje->setWskazRoznice(true);
+                roznicerozkroje->exec();
+                roznicerozkroje->exec();
+            } else if(selectedItem->text() == QString("USUŃ")) {
+                if (QMessageBox::question(this, "USUŃ", "<FONT COLOR='#000080'>Czy napewno usunąć?") == QMessageBox::Yes) {
+                    int id = 0;
+                    for (int i = 0; i < selection.count(); i++) {
+                        QModelIndex index = selection.at(i);
+
+                        id = dbManager->getIdZamowieniaZTabeli(index);
+                        dbManager->removeZamowienie(id);
                     }
 
-                } else {
-                    dbManager->usunSzkieletRozkroju();
-                    return;
-                }
-            } else {
-                prepareRozkroj();
-                dbManager->copyZamowienieArch(dbManager->getDoRozkroju(zamowienia));
-                if (dbManager->rozkroj(dbManager->getDoRozkroju(zamowienia))) {
                     dbManager->getModelZamowienia()->select();
-                    rozkroje->setDodanoRozkroj(true);
-                    rozkroje->exec();
-                } else {
-                    dbManager->usunSzkieletRozkroju();
-                    return;
+                    QMessageBox::information(this, "ZAKTUALIZOWANO", QString(" <FONT COLOR='#0f00f0'>Usunięto %1 pozycje.").arg(
+                                                 QString::number(selection.count())), QMessageBox::Ok);
                 }
-            }
-        } else if (selectedItem->text() == QString("ZREALIZUJ")) {
-            int id = 0;
-            bool sukces = true;
-            for (int i = 0; i < selection.count(); i++) {
-                QModelIndex index = selection.at(i);
-
-                id = dbManager->getIdZamowieniaZTabeli(index);
-                if (dbManager->aktualizujStatus(id, "ZREALIZOWANO") == false) {
-                    sukces = false;
-                }
-            }
-            if (sukces) {
-                QMessageBox::information(this, "REALIZACJA",
-                                         QString(" <FONT COLOR='#0f00f0'>Zrealizowano %1 pozycje.").arg(
-                                             QString::number(selection.count())), QMessageBox::Ok);
-                dbManager->getModelZamowienia()->select();
-            }
-
-        } else if (selectedItem->text() == QString("EDYTUJ")) {
-            QString nr_zam = getNrZam(idx);
-            dialogEdycjaZam->setNrZam(nr_zam);
-            dialogEdycjaZam->exec();
-        } else if(selectedItem->text() == QString("POKAŻ ROZKRÓJ")) {
-            rozkroje->setWskazRozkroj(true);
-            rozkroje->setNrRozkrojuWskaz(dbManager->getNrRozkrojuDoWskazania(idx));
-            rozkroje->exec();
-        } else if(selectedItem->text() == QString("POKAŻ RÓŻNICĘ")) {
-            roznicerozkroje->setNrRoznicy(QString("ROZ-%1").arg(dbManager->getNrRozkrojuDoWskazania(idx)));
-            roznicerozkroje->setWskazRoznice(true);
-            roznicerozkroje->exec();
-            roznicerozkroje->exec();
-        } else if(selectedItem->text() == QString("USUŃ")) {
-            if (QMessageBox::question(this, "USUŃ", "<FONT COLOR='#000080'>Czy napewno usunąć?") == QMessageBox::Yes) {
-                int id = getiDZam(idx);
-                dbManager->removeZamowienie(id);
-                dbManager->getModelZamowienia()->select();
-                QMessageBox::information(this, "ZAKTUALIZOWANO", " <FONT COLOR='#0f00f0'>Usunięto pozycję.", QMessageBox::Ok);
             }
         }
     }
 }
-//todo}
 
 void MainWindow::ustawieniaBazy() {
     if (dialog->exec() == QDialog::Accepted) {
@@ -393,7 +401,7 @@ void MainWindow::rozciagnijWiersze() {
     connect(hv, SIGNAL(sectionResized(int, int, int)), this,
             SLOT(stionResized(int,
                               int, int)));
-    for (int c = 10; c < 25;     ++c) {
+    for (int c = 10; c < 25;     c++) {
         ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
                 QHeaderView::Fixed);
         ui->tableViewZam->setColumnWidth(c, 30);
@@ -549,7 +557,7 @@ void MainWindow::on_radioButton_3_clicked() {
     }
     ui->tableViewZam->setColumnWidth(35, 84);
     ui->tableViewZam->setColumnWidth(36, 84);
-    ui->tableViewZam->setColumnWidth(48, 86);
+    ui->tableViewZam->setColumnWidth(47, 86);
     QHeaderView *hv = ui->tableViewZam->horizontalHeader();
     hv->setSectionHidden(48, false);
     hv->setSectionHidden(49, false);

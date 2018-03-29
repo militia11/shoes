@@ -41,6 +41,11 @@ double nowaSkoraDialog::getCena() const {
     return cena;
 }
 
+void nowaSkoraDialog::showEvent(QShowEvent *e) {
+    wyczyscPola();
+    ui->lineEditNaz->setFocus();
+}
+
 QString nowaSkoraDialog::getDos() const {
     return dos;
 }

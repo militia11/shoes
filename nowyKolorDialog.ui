@@ -203,10 +203,13 @@
  </widget>
  <tabstops>
   <tabstop>spinBox</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>pushButton_3</tabstop>
+  <tabstop>pushButton_4</tabstop>
+  <tabstop>lineEditSkDominujacy</tabstop>
   <tabstop>lineEditSk1</tabstop>
   <tabstop>lineEditSk2</tabstop>
   <tabstop>lineEditSk3</tabstop>
-  <tabstop>lineEditSkDominujacy</tabstop>
  </tabstops>
  <resources>
   <include location="zasoby.qrc"/>

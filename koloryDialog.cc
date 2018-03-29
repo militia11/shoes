@@ -17,8 +17,8 @@ koloryDialog::~koloryDialog() {
 }
 
 void koloryDialog::ustawIFiltruj() {
-    dbManager->getKolory()->setFilter(QString("kolor LIKE '%1%' and dost_sk1 like '%2%' and dost_sk2 like '%3%' and dost_sk3 "
-                                      "like '%4%' and sk1 like '%5%' and sk2 like '%6%' and sk3 like '%7%' ").arg(ui->lineEdit->text(),
+    dbManager->getKolory()->setFilter(QString("KOLOR LIKE '%1%' and d1 like '%2%' and d2 like '%3%' and d3 "
+                                      "like '%4%' and SKORA1 like '%5%' and SKORA2 like '%6%' and SKORA3 like '%7%' ").arg(ui->lineEdit->text(),
                                               ui->lineEditd1->text(), ui->lineEditd2->text(),ui->lineEditd3->text(),
                                               ui->lineEdits1->text(),ui->lineEdits2->text(),ui->lineEdits3->text()));
 }
@@ -29,8 +29,6 @@ int koloryDialog::selectExec() {
             SLOT(wybranoKolor(const QModelIndex)));
     return QDialog::exec();
 }
-
-
 
 void koloryDialog::aktualHeader() {
     QHeaderView *hv = ui->tableView->horizontalHeader();
@@ -74,9 +72,9 @@ void koloryDialog::hideEvent(QHideEvent *e) {
 
 void koloryDialog::on_pushButton_2_clicked() {
     if (nowyKolor->exec() == QDialog::Accepted) {
-        dbManager->zachowajKolor(nowyKolor->getAktualnyKolor(), nowyKolor->getSk1(),
+        dbManager->zachowajKolor(nowyKolor->getAktualnyKolor(),
                                  nowyKolor->getSk1d(),
-                                 nowyKolor->getSk2(), nowyKolor->getSk2d(), nowyKolor->getSk3(),
+                                 nowyKolor->getSk2d(),
                                  nowyKolor->getSk3d(), nowyKolor->getSkdomi());
         aktualHeader();
     }

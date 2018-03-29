@@ -35,12 +35,12 @@ void NaglowkiZamowienia::ustawNaglowki(QTableView *tableView, QAbstractItemModel
     tableView->setColumnWidth(34, 88);
     tableView->setColumnWidth(37, 25);
     QStringList listaZamowienia;
-    listaZamowienia  << "" << "NR ZAM" << "KL SKR" << "KL NR"  << "WZÓR"  << "SPÓD" << "KOL" <<
+    listaZamowienia  << "" << "POZ" << "NR ZAM" << "KL SK" << "KL NR"  << "WZÓR"  << "SPÓD" << "KOL" <<
                      "OCIE" <<
                      "MAT" << "WKŁ" << "36" << "37" << "38" << "39" << "40" << "41" << "42" << "43"
                      << "44" << "45" << "46" << "47"    << "48" << "49" << "50"
                      << "SUMA"  << "SK1" << "SK2" <<    "SK3" << "SP NAZWA" <<
-                     "SP PROD" << "UŻY" << "HAN" << "DATA WPR" << "DATA WPR" << "DATA REA" << "REKORD" << "CAŁE ZAM" << ""
+                     "SP PROD" << "UŻY" << "HAN" << "DATA WPR" << "DATA REA" << "" << "REKORD" << "CAŁE ZAM" << ""
                      << "" << "" << ""  << "DRUK" << ""                    << ""  << "" << ""    << ""  << "" << ""
                      << ""  << "" << ""    << ""  << ""<< ""  << "" << ""    << ""  << ""                     << "" << ""  << "" << "";
     for (int i = 0; i < model->columnCount(); ++i) {
