@@ -245,6 +245,7 @@ void owyModelDialog::on_buttonBox_accepted() {
                                      ui->comboBoxb4->currentText(), ui->comboBoxb5->currentText(), ui->comboBoxb6->currentText(),
                                      ui->plainTextEdit1->toPlainText(), ui->plainTextEdit2->toPlainText(), wysZdj);
 
+
             wyczyscPola();
             accept();
         }

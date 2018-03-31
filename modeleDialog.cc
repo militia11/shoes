@@ -17,8 +17,7 @@ modeleDialog::modeleDialog(ZdjecieDialog *zdj,
                            BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::modeleDialog), dbManager(db), nowyModDialog(nowyModDialog),
-    dialogZdj(zdj),
-    proxy(nullptr) {
+    dialogZdj(zdj) {
     ui->setupUi(this);
     label1 = new clickableLabel(this);
     ui->horizontalLay1->addWidget(label1);
@@ -180,7 +179,6 @@ bool modeleDialog::eventFilter(QObject *object, QEvent *event) {
     } else {
         return QDialog::eventFilter(object, event);
     }
-
 }
 
 int modeleDialog::getId() {

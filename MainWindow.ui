@@ -116,13 +116,27 @@
            </font>
           </property>
           <property name="text">
-           <string>DO WYSŁANIA</string>
+           <string>ZLEC W PRODUKCJI</string>
           </property>
           <property name="iconSize">
            <size>
             <width>18</width>
             <height>16</height>
            </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioButton_6">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>MAGAZYN TOWARÓW</string>
           </property>
          </widget>
         </item>
@@ -1077,7 +1091,8 @@
      <string>Produkcja</string>
     </property>
     <addaction name="actionRozkroje"/>
-    <addaction name="actionR_nice_rozkroje"/>
+    <addaction name="actionMagazyn_wolne"/>
+    <addaction name="actionRozch_d_wewn_trzny"/>
    </widget>
    <addaction name="menuPlik"/>
    <addaction name="menuProdukcja"/>
@@ -1203,6 +1218,16 @@
    </property>
    <property name="text">
     <string>Wyloguj</string>
+   </property>
+  </action>
+  <action name="actionMagazyn_wolne">
+   <property name="text">
+    <string>Magazyn wolne</string>
+   </property>
+  </action>
+  <action name="actionRozch_d_wewn_trzny">
+   <property name="text">
+    <string>Rozchód wewnętrzny</string>
    </property>
   </action>
  </widget>

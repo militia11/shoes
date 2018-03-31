@@ -4,8 +4,7 @@
 handlowceDialog::handlowceDialog(NowyHandlowiecDialog *nowyKliDialog,
                                  BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::handlowceDialog), dbManager(db), nowyKliDialog(nowyKliDialog),
-    proxy(nullptr) {
+    ui(new Ui::handlowceDialog), dbManager(db), nowyKliDialog(nowyKliDialog) {
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);

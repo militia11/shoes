@@ -53,12 +53,12 @@ public:
                     QStringList uwagi1,
                     QString uwagi2, QString nr_zam, QStandardItemModel *pozycje);
     void insertPozycjazamowienie(QString nr_zam, int idKlienta, int idHandlowca);
-    bool rozkroj(QStandardItemModel *pozycje, QStandardItemModel *bazowepozycje = 0);
+    bool rozkroj(QStandardItemModel *pozycje);
     void ustawAktualnyModelId(const QModelIndex index);
+    int zwrocAktualnyModelIdMw(const QModelIndex index);
     QList<QStandardItem *> zwrocWierszModel();
     QString getOstatniSelectZam() const;
     int getIdZamowieniaZTabeli(QModelIndex index);
-    bool getCzyRoznicaZamowieniaZTabeli(QModelIndex index);
     QString getNrRozkrojuDoWskazania(QModelIndex index);
     QImage getImage(int id, int ktore, QString tab);
     bool updateImage(int id, int ktore, QImage im, QString tab);
@@ -119,7 +119,8 @@ public:
     void zachowajWkla(QString naz, QString o);
     void zachowajKlienta(const Klient &klient);
     void zachowajHandlowca(QString im, QString nz, QString skr, QString uwagi);
-    void zachowajModel(QVector<QImage> images, QString rodzaj_montazu,  QString typ,
+    bool zachowajRW();
+    bool zachowajModel(QVector<QImage> images, QString rodzaj_montazu,  QString typ,
                        QString  rodzaj_buta,  QString   rodzaj_buta_2,
                        QString  rodzaj_buta_3,  QString rodzaj_buta_4,
                        QString  rodzaj_buta_5, QString  rodzaj_buta_6, QString opis, QString opis2,
@@ -156,6 +157,7 @@ public:
     void clearFilterZam();
     int getNumerOstatniegoZamKomputerowego();
     int getNumerOstatniegoRozkroju();
+    int getNumerOstatniegoModeluMw();
     void stworzSzkieletRozkroju(QString nr);
     void stworzSzkieletZam(QString nr);
     void usunSzkieletRozkroju();
@@ -168,8 +170,8 @@ public:
     QSqlTableModel *getRozkroje() const;
     void setRozkroje();
 
-    QSqlTableModel *getRoznice() const;
-    void setRoznice();
+    QSqlTableModel *getmw() const;
+    void setmw();
     void updateHandl(int idHan, int idKL);
     void setTableWidokZamowienia(QString tabela);
     bool copyZamowienieArch(QStandardItemModel *pozycje);
@@ -195,6 +197,10 @@ public:
     int sk1;
     int sk2;
     int sk3;
+
+    QSqlTableModel *getRw() const;
+    void setRw();
+
 private:
     QVariant GetFirstValueForQuery(QSqlQuery *aQuery);
     QSqlRecord getSqlRecordZModelu(const QAbstractItemModel *aItemModel);
@@ -218,8 +224,9 @@ private:
     QSqlTableModel *mSkory;
     QSqlTableModel *mOciep;
     QSqlTableModel *mRozkroje;
-    QSqlTableModel *mRoznice;
     QSqlTableModel *mKliR;
+    QSqlTableModel *mw;
+    QSqlTableModel *rw;
 
     int idKlienta;
     int idHandlowca;
@@ -232,7 +239,7 @@ private:
     int idMatrycy;
     int idRozkroju;
     int idZam;
-    int idRoznicy;
+    int idMw;
 
 
     QString nazwaKlienta;

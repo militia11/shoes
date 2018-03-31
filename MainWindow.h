@@ -28,7 +28,6 @@
 #include "nowyKolorDialog.h"
 #include "nowywzorDialog.h"
 #include "DoRozkrojuDialog.h"
-#include "RozniceDialog.h"
 #include "edycjazamowieniadialog.h"
 #include "RozkrojeDialog.h"
 #include "nowawkladkadialog.h"
@@ -36,6 +35,10 @@
 #include "logowaniedialog.h"
 #include "wait.h"
 #include "Delegate.h"
+#include "mwdialog.h"
+#include "rozmiarydialog.h"
+#include "rwdialog.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -51,6 +54,7 @@ public:
 
 public slots:
     void ustawIFiltruj();
+
 private slots:
     void refreshTable();
     void showTable();
@@ -92,7 +96,6 @@ private slots:
     void on_radioButton_5_clicked();
 
     void on_actionRozkroje_triggered();
-    void on_actionR_nice_rozkroje_triggered();
 
     void on_radioButton_2_clicked();
 
@@ -101,6 +104,12 @@ private slots:
     void on_actionEdycja_triggered();
 
     void updateZdj(int id);
+
+    void on_actionMagazyn_wolne_triggered();
+
+    void on_radioButton_6_clicked();
+
+    void on_actionRozch_d_wewn_trzny_triggered();
 
 private:
     bool eventFilter(QObject *object, QEvent *event);
@@ -116,6 +125,8 @@ private:
     int getIdDown();
     Ui::MainWindow *ui;
     BazaDanychManager *dbManager;
+    mwDialog *mw;
+    rwDialog *rwDial;
     UstawieniaForm *dialog;
     ZdjecieDialog *dialogzdj;
     noweZamowienieDialog *dialogNoweZamowienie;
@@ -142,9 +153,9 @@ private:
     modeleDialog *dialogmodele;
     RozkrojeDialog *rozkroje;
     DoRozkrojuDialog *dorozkroju;
-    RozniceDialog *roznicerozkroje;
     EdycjaZamowieniaDialog *dialogEdycjaZam;
     logowanieDialog *log;
+    rozmiaryDialog *rozmDialo;
     QSortFilterProxyModel *proxy;
 
     int nrkar;

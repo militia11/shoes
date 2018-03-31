@@ -31,6 +31,7 @@ public:
     ~modeleDialog();
     int selectExec();
     void ustawIFiltruj();
+
 public slots:
     virtual int exec();
     void wybranoModel(const QModelIndex index);

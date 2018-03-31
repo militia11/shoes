@@ -28,8 +28,8 @@ public slots:
 private slots:
     void updateZamSum(const QModelIndex &, const QModelIndex &, const QVector<int> &);
     void on_pushButton_2_clicked();
-
     void on_tableViewKlienci_clicked(const QModelIndex &index);
+
 private:
     void showEvent(QShowEvent *e);
     void hideEvent(QHideEvent *e);

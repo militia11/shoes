@@ -45,7 +45,6 @@ HEADERS += BazaDanychManager.h \
            nowywzorDialog.h \
            ocieplenieDialog.h \
            owyModelDialog.h \
-           RozniceDialog.h \
            skoryDialog.h \
            spodyDialog.h \
            ustawieniaform.h \
@@ -58,7 +57,10 @@ HEADERS += BazaDanychManager.h \
     noweociepdialog.h \
     logowaniedialog.h \
     wait.h \
-    delegateKli.h
+    delegateKli.h \
+    mwdialog.h \
+    rozmiarydialog.h \
+    rwdialog.h
 
 FORMS += DoRozkrojuDialog.ui \
          edycjazamowieniadialog.ui \
@@ -78,7 +80,6 @@ FORMS += DoRozkrojuDialog.ui \
          nowywzorDialog.ui \
          ocieplenieDialog.ui \
          owyModelDialog.ui \
-         RozniceDialog.ui \
          skoryDialog.ui \
          spodyDialog.ui \
          ustawieniaform.ui \
@@ -90,7 +91,10 @@ FORMS += DoRozkrojuDialog.ui \
     noweociepdialog.ui \
     logowaniedialog.ui \
     busydialog.ui \
-    wait.ui
+    wait.ui \
+    mwdialog.ui \
+    rozmiarydialog.ui \
+    rwdialog.ui
 
 SOURCES += BazaDanychManager.cc \
            clickableLabel.cc \
@@ -118,7 +122,6 @@ SOURCES += BazaDanychManager.cc \
            nowywzorDialog.cc \
            ocieplenieDialog.cc \
            owyModelDialog.cpp \
-           RozniceDialog.cc \
            skoryDialog.cc \
            spodyDialog.cc \
            ustawieniaform.cc \
@@ -130,7 +133,10 @@ SOURCES += BazaDanychManager.cc \
     noweociepdialog.cpp \
     logowaniedialog.cpp \
     wait.cc \
-    delegatekli.cpp
+    delegatekli.cpp \
+    mwdialog.cpp \
+    rozmiarydialog.cpp \
+    rwdialog.cpp
 
 RESOURCES += zasoby.qrc
 

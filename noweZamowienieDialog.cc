@@ -8,11 +8,12 @@
 #include <QInputDialog>
 #include "DelegateArrows.h"
 
-noweZamowienieDialog::noweZamowienieDialog(handlowceDialog *wybHandlDialog,
+noweZamowienieDialog::noweZamowienieDialog(mwDialog *roz, handlowceDialog *wybHandlDialog,
         BazaDanychManager *db, modeleDialog *modeleDialog,
         klienciDialog *dialog,
         QWidget *parent) :
     QDialog(parent),
+    roz(roz),
     dbManager(db),
     idZamowienia(0),
     modelDialog(modeleDialog),
@@ -85,9 +86,12 @@ void noweZamowienieDialog::obliczSume(QStandardItem *it) {
 
 void noweZamowienieDialog::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Escape) {
-        wyczysc();
+        if (QMessageBox::question(this, "WYJŚCIE", "<FONT COLOR='#000080'>Jesteś w trakcie dodawania zamówienia. Czy na pewno wyjść?") == QMessageBox::Yes) {
+            wyczysc();
+            QDialog::keyPressEvent(event);
+        } else {
+        }
     }
-    QDialog::keyPressEvent(event);
 }
 
 void noweZamowienieDialog::on_pushButton_5_clicked() {
@@ -120,6 +124,7 @@ void noweZamowienieDialog::setNr(const QString &value) {
 
 void noweZamowienieDialog::on_buttonBox_accepted() {
     QString firstLetterZamm = ui->lineEditPapier->text().left(1);
+    QString zam = ui->lineEditPapier->text();
     int x = QString::compare(firstLetterZamm, "A", Qt::CaseSensitive);
     int y = QString::compare(firstLetterZamm, "B", Qt::CaseSensitive);
     if (ui->labelKlient->text().isEmpty()) {
@@ -134,7 +139,11 @@ void noweZamowienieDialog::on_buttonBox_accepted() {
         QMessageBox::warning(this, "NIEPOPRAWNE ZAMÓWIENIE",
                              " <FONT COLOR='#000080'>Zamówienie papierowe zaczynamy A, natomiast komputerowe B",
                              QMessageBox::Ok);
-    } else if (dbManager->sprawdzNr(ui->lineEditPapier->text())) {
+    }  else if (zam.count() < 2) {
+        QMessageBox::warning(this, "NIEPOPRAWNE ZAMÓWIENIE",
+                             " <FONT COLOR='#000080'>Uzupełnij numer zamówienia.",
+                             QMessageBox::Ok);
+    }     else if (dbManager->sprawdzNr(ui->lineEditPapier->text())) {
         QMessageBox::warning(this, "NIEPOPRAWNE ZAMÓWIENIE",
                              " <FONT COLOR='#000080'>Zamówienie o podanym numerze istnieje w bazie.",
                              QMessageBox::Ok);
@@ -153,8 +162,11 @@ void noweZamowienieDialog::on_buttonBox_accepted() {
 }
 
 void noweZamowienieDialog::on_buttonBox_rejected() {
-    wyczysc();
-    reject();
+    if (QMessageBox::question(this, "WYJŚCIE", "<FONT COLOR='#000080'>Jesteś w trakcie dodawania zamówienia. Czy na pewno wyjść?") == QMessageBox::Yes) {
+        wyczysc();
+        reject();
+    } else {
+    }
 }
 
 void noweZamowienieDialog::ustawTabeleHeaders() {
@@ -312,4 +324,9 @@ void noweZamowienieDialog::ShowContextMenu(const QPoint &pos) {
 
 void noweZamowienieDialog::abra(QWidget *) {
     ui->plainTextEditU1->setPlainText(uwagi[ui->tableViewZam->currentIndex().row()]);
+}
+
+void noweZamowienieDialog::on_pushButtonModel_2_clicked() {
+    roz->setFixedSize(roz->size());
+    roz->selectExec();
 }

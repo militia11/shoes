@@ -17,5 +17,6 @@
         <file>zasoby/button_logoff.png</file>
         <file>zasoby/cut.png</file>
         <file>zasoby/Excel.png</file>
+        <file>zasoby/de.png</file>
     </qresource>
 </RCC>

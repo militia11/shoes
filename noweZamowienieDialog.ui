@@ -47,7 +47,7 @@
    <widget class="QPushButton" name="pushButtonModel">
     <property name="geometry">
      <rect>
-      <x>350</x>
+      <x>130</x>
       <y>10</y>
       <width>41</width>
       <height>41</height>
@@ -166,6 +166,43 @@
      <string>suma zamówienia</string>
     </property>
     <property name="clearButtonEnabled">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonModel_2">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>10</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="zasoby.qrc">
+      <normaloff>:/zasoby/add.png</normaloff>:/zasoby/add.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>31</width>
+      <height>31</height>
+     </size>
+    </property>
+    <property name="autoDefault">
      <bool>false</bool>
     </property>
    </widget>

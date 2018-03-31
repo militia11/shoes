@@ -10,6 +10,7 @@
 #include "modeleDialog.h"
 #include "NowyHandlowiecDialog.h"
 #include "handlowceDialog.h"
+#include "mwdialog.h"
 #include <QStandardItemModel>
 
 namespace Ui {
@@ -20,10 +21,10 @@ class noweZamowienieDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit noweZamowienieDialog(
-        handlowceDialog *wybHandlDialog,
-        BazaDanychManager *db, modeleDialog *modeleDialog, klienciDialog *dialog,
-        QWidget *parent = 0);
+    noweZamowienieDialog(mwDialog *roz,
+                         handlowceDialog *wybHandlDialog,
+                         BazaDanychManager *db, modeleDialog *modeleDialog, klienciDialog *dialog,
+                         QWidget *parent = 0);
     ~noweZamowienieDialog();
 
     void setNr(const QString &value);
@@ -45,6 +46,8 @@ private slots:
         const QItemSelection &aDeselected);
     void ShowContextMenu(const QPoint &pos);
 
+    void on_pushButtonModel_2_clicked();
+
 public slots:
     void  abra(QWidget*);
 
@@ -56,6 +59,7 @@ private:
     void wyczysc();
 
     QStringList uwagi;
+    mwDialog *roz;
     BazaDanychManager *dbManager;
     int idZamowienia;
     modeleDialog *modelDialog;

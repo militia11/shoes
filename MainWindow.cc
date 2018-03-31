@@ -11,18 +11,6 @@
 #include <unistd.h>
 #include <QTimer>
 
-bool MainWindow::logowanie() {
-    if (log->exec() == QDialog::Accepted) {
-        QString text = log->getUs();
-        dbManager->setUser(text);
-        QString l = QString("ABIS Manager - %1").arg(text);
-        this->setWindowTitle(l);
-        return true;
-    } else {
-        return false;
-    }
-}
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow) {
@@ -45,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableViewZam->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->toolBar->setIconSize(QSize(36, 36));
     dbManager = new BazaDanychManager();
+    rwDial = new rwDialog(dbManager, this);
     dialog = new UstawieniaForm(dbManager, this);
     dialogzdj = new ZdjecieDialog(this);
     dialogzdj->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
@@ -75,17 +64,18 @@ MainWindow::MainWindow(QWidget *parent) :
                                          this);
     dialogmodele = new modeleDialog(dialogzdj, dialognowyModel, dbManager, this);
 
-    dialogNoweZamowienie = new noweZamowienieDialog(dialogHandl, dbManager, dialogmodele, dialogKlienci, this);
     rozkroje = new RozkrojeDialog(dbManager, this);
     dorozkroju = new DoRozkrojuDialog(this);
-    roznicerozkroje = new RozniceDialog(dbManager, this) ;
     log = new logowanieDialog(dbManager, this);
+    rozmDialo= new    rozmiaryDialog( dbManager, this);
+    mw = new mwDialog(rozmDialo,dbManager,  this);
+    dialogNoweZamowienie = new noweZamowienieDialog(mw, dialogHandl, dbManager, dialogmodele, dialogKlienci, this);
     proxy = new QSortFilterProxyModel(this);
     archiwumMode = false;
     if (!dbManager->polacz()) {
         ustawieniaBazy();
     }
-    while(!logowanie());
+    //while(!logowanie());
     ui->labelPodglad->setFixedHeight(196);
     ui->labelPodglad->setFixedWidth(274);
     ui->labelPodglad->setScaledContents(true);
@@ -116,12 +106,30 @@ MainWindow::MainWindow(QWidget *parent) :
     QHeaderView *hv = ui->tableViewZam->horizontalHeader();
     hv->setSectionHidden(48, true);
     hv->setSectionHidden(49, true);
+    ui->tableViewZam->sortByColumn(0, Qt::DescendingOrder);
 
     ui->tableViewZam->installEventFilter(this);
 //    dialogKlienci->exec();
-//    dialogNoweZamowienie->exec();
+
+    rozmDialo->setCurId(4);
+    rozmDialo->exec();
+
+    //dialogNoweZamowienie->exec();
 //    exit(1);
     //rozkroje->exec();
+}
+
+
+bool MainWindow::logowanie() {
+    if (log->exec() == QDialog::Accepted) {
+        QString text = log->getUs();
+        dbManager->setUser(text);
+        QString l = QString("ABIS Manager - %1").arg(text);
+        this->setWindowTitle(l);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void MainWindow::aktualizujTabele() {
@@ -192,14 +200,9 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
             }
             QIcon icontr(":/zasoby/trash2.png");
             myMenu.addAction(icontr,"USUŃ");
-
-        } else if (dbManager->filterZamowien.status == QString("DO WYSYŁKI")) {
+        } else if (dbManager->filterZamowien.status == QString("ZLEC W PRODUKCJI")) {
             if (selection.length() == 1) {
                 myMenu.addAction("POKAŻ ROZKRÓJ");
-                QModelIndex index = proxy->mapToSource(selection.at(0));
-                if(dbManager->getCzyRoznicaZamowieniaZTabeli(index)) {
-                    myMenu.addAction("POKAŻ RÓŻNICĘ");
-                }
                 myMenu.addSeparator();
             }
             QIcon iconup(":/zasoby/update.png");
@@ -207,7 +210,6 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
 
             QIcon icontr(":/zasoby/trash2.png");
             myMenu.addAction(icontr,"USUŃ");
-
         }  else if (dbManager->filterZamowien.status == QString("ZREALIZOWANO")) {
             // nothing
         }
@@ -215,7 +217,6 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
         if (selectedItem) {
             QModelIndex idx = proxy->mapToSource(
                                   ui->tableViewZam->selectionModel()->currentIndex());
-
             if (selectedItem->text() == QString("KRÓJ")) {
                 QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
                 std::vector<int> zamowienia;
@@ -231,11 +232,11 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
                     dorozkroju->setNr(nr);
                     if (dorozkroju->exec() == QDialog::Accepted) {
                         dbManager->copyZamowienieArch(dorozkroju->getModel());
-                        if (dbManager->rozkroj(dorozkroju->getModel(), dorozkroju->getBazowyModel())) {
-                            dbManager->getModelZamowienia()->select();
-                            rozkroje->setDodanoRozkroj(true);
-                            rozkroje->exec();
-                        }
+//                        if (dbManager->rozkroj(dorozkroju->getModel(), dorozkroju->getBazowyModel())) {
+//                            dbManager->getModelZamowienia()->select();
+//                            rozkroje->setDodanoRozkroj(true);
+//                            rozkroje->exec();
+//                        }
 
                     } else {
                         dbManager->usunSzkieletRozkroju();
@@ -279,11 +280,6 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
                 rozkroje->setWskazRozkroj(true);
                 rozkroje->setNrRozkrojuWskaz(dbManager->getNrRozkrojuDoWskazania(idx));
                 rozkroje->exec();
-            } else if(selectedItem->text() == QString("POKAŻ RÓŻNICĘ")) {
-                roznicerozkroje->setNrRoznicy(QString("ROZ-%1").arg(dbManager->getNrRozkrojuDoWskazania(idx)));
-                roznicerozkroje->setWskazRoznice(true);
-                roznicerozkroje->exec();
-                roznicerozkroje->exec();
             } else if(selectedItem->text() == QString("USUŃ")) {
                 if (QMessageBox::question(this, "USUŃ", "<FONT COLOR='#000080'>Czy napewno usunąć?") == QMessageBox::Yes) {
                     int id = 0;
@@ -336,78 +332,13 @@ void MainWindow::dodajZam() {
     dialogNoweZamowienie->setNr(nr);
     dialogNoweZamowienie->setFixedSize(dialogNoweZamowienie->size());
     if (dialogNoweZamowienie->exec() == QDialog::Accepted) {
-        ui->tableViewZam->sortByColumn(0, Qt::AscendingOrder);
+        ui->tableViewZam->sortByColumn(0, Qt::DescendingOrder);
         QMessageBox::information(this, "ZATWIERDZONO", "<FONT COLOR='#000080'>Dodano zamówienie. ", QMessageBox::Ok);
     } else {
         dbManager->usunSzkieletZam();
     }
 }
 
-void MainWindow::rozciagnijWiersze() {
-    ui->tableViewZam->horizontalHeader()->setMinimumSectionSize(15);
-    ui->tableViewZam->setColumnWidth(1, nrkar);
-    ui->lineEditNrKarta->setFixedWidth(nrkar);
-
-    ui->tableViewZam->setColumnWidth(2, kl);
-    ui->lineEditKlient->setFixedWidth(kl);
-
-    ui->tableViewZam->setColumnWidth(3, klnr);
-    ui->lineEditKlientN->setFixedWidth(klnr);
-
-    ui->lineEditWzor->setFixedWidth(wz);
-    ui->tableViewZam->setColumnWidth(4, wz);
-    ui->tableViewZam->setColumnWidth(5, sp);
-    ui->tableViewZam->setColumnWidth(6, kol);
-    ui->tableViewZam->setColumnWidth(7, oc);
-    ui->tableViewZam->setColumnWidth(8, ma);
-    ui->tableViewZam->setColumnWidth(9, wkl);
-
-    ui->tableViewZam->setColumnWidth(25, 51); // suma
-    ui->lineEditO->setFixedWidth(oc);
-    ui->lineEditMa->setFixedWidth(ma);
-    ui->lineEditKol->setFixedWidth(kol);
-    ui->lineEditNrKarta->setFixedWidth(nrkar);
-    ui->lineEditKlient->setFixedWidth(klnr);
-    ui->lineEditKlientN->setFixedWidth(kl);
-    ui->lineEditWkl->setFixedWidth(wkl);
-    ui->lineEditS->setFixedWidth(sp);
-    ui->lineEdits1->setFixedWidth(s123);
-    ui->lineEdits2->setFixedWidth(s123);
-    ui->lineEdits3->setFixedWidth(s123);
-    ui->lineEditUzy->setFixedWidth(uz);
-    ui->lineEditHan->setFixedWidth(ha);
-    ui->lineEditwpr->setFixedWidth(daty);
-    ui->lineEditzre->setFixedWidth(daty);
-    QHeaderView *hv = ui->tableViewZam->horizontalHeader();
-    hv->setSectionHidden(0, true);
-    hv->setStretchLastSection(true);
-    for (int i = 38; i < 48; i++) {
-        hv->setSectionHidden(i, true);
-    }
-
-    hv->setDefaultAlignment(Qt::AlignLeft);
-    ui->tableViewZam->setColumnWidth(26, s123);// sk1
-    ui->tableViewZam->setColumnWidth(27, s123);
-    ui->tableViewZam->setColumnWidth(28, s123);
-    ui->tableViewZam->setColumnWidth(29, spnazproc);
-    ui->tableViewZam->setColumnWidth(30, spnazproc);
-    ui->tableViewZam->setColumnWidth(31, uz);
-    ui->tableViewZam->setColumnWidth(32, ha);
-    ui->lineEditsnaz->setFixedWidth(spnazproc);
-    ui->lineEditsprod->setFixedWidth(spnazproc);
-    ui->tableViewZam->setColumnWidth(33, daty);
-    ui->tableViewZam->setColumnWidth(34, daty);
-    ui->tableViewZam->setColumnWidth(37, 25);
-    connect(hv, SIGNAL(sectionResized(int, int, int)), this,
-            SLOT(stionResized(int,
-                              int, int)));
-    for (int c = 10; c < 25;     c++) {
-        ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
-                QHeaderView::Fixed);
-        ui->tableViewZam->setColumnWidth(c, 30);
-    }
-    hv->setSectionHidden(33,true);
-}
 
 MainWindow::~MainWindow() {
     delete ui;
@@ -708,6 +639,7 @@ void MainWindow::on_pushButton_clicked() {
     ui->comboBoxb5->setCurrentIndex(0);
     ui->comboBoxb6->setCurrentIndex(0);
     ustawIFiltruj();
+    ui->tableViewZam->sortByColumn(0, Qt::DescendingOrder);
 }
 
 void MainWindow::on_actionOcieplenia_triggered() {
@@ -742,10 +674,6 @@ void MainWindow::on_radioButton_5_clicked() {
 
 void MainWindow::on_actionRozkroje_triggered() {
     rozkroje->exec();
-}
-
-void MainWindow::on_actionR_nice_rozkroje_triggered() {
-    roznicerozkroje->exec();
 }
 
 void MainWindow::stionResized(int logicalIndex, int oldSize, int newSize) {
@@ -947,4 +875,84 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event) {
     } else {
         return QMainWindow::eventFilter(object, event);
     }
+}
+
+void MainWindow::on_actionMagazyn_wolne_triggered() {
+    mw->setFixedSize(mw->size());
+    mw->exec();
+}
+
+void MainWindow::on_radioButton_6_clicked() {
+    // MAG T
+}
+
+void MainWindow::rozciagnijWiersze() {
+    ui->tableViewZam->horizontalHeader()->setMinimumSectionSize(15);
+    ui->tableViewZam->setColumnWidth(1, nrkar);
+    ui->lineEditNrKarta->setFixedWidth(nrkar);
+
+    ui->tableViewZam->setColumnWidth(2, kl);
+    ui->lineEditKlient->setFixedWidth(kl);
+
+    ui->tableViewZam->setColumnWidth(3, klnr);
+    ui->lineEditKlientN->setFixedWidth(klnr);
+
+    ui->lineEditWzor->setFixedWidth(wz);
+    ui->tableViewZam->setColumnWidth(4, wz);
+    ui->tableViewZam->setColumnWidth(5, sp);
+    ui->tableViewZam->setColumnWidth(6, kol);
+    ui->tableViewZam->setColumnWidth(7, oc);
+    ui->tableViewZam->setColumnWidth(8, ma);
+    ui->tableViewZam->setColumnWidth(9, wkl);
+
+    ui->tableViewZam->setColumnWidth(25, 51); // suma
+    ui->lineEditO->setFixedWidth(oc);
+    ui->lineEditMa->setFixedWidth(ma);
+    ui->lineEditKol->setFixedWidth(kol);
+    ui->lineEditNrKarta->setFixedWidth(nrkar);
+    ui->lineEditKlient->setFixedWidth(klnr);
+    ui->lineEditKlientN->setFixedWidth(kl);
+    ui->lineEditWkl->setFixedWidth(wkl);
+    ui->lineEditS->setFixedWidth(sp);
+    ui->lineEdits1->setFixedWidth(s123);
+    ui->lineEdits2->setFixedWidth(s123);
+    ui->lineEdits3->setFixedWidth(s123);
+    ui->lineEditUzy->setFixedWidth(uz);
+    ui->lineEditHan->setFixedWidth(ha);
+    ui->lineEditwpr->setFixedWidth(daty);
+    ui->lineEditzre->setFixedWidth(daty);
+    QHeaderView *hv = ui->tableViewZam->horizontalHeader();
+    hv->setSectionHidden(0, true);
+    hv->setStretchLastSection(true);
+    for (int i = 39; i < 48; i++) {
+        hv->setSectionHidden(i, true);
+    }
+
+    hv->setDefaultAlignment(Qt::AlignLeft);
+    ui->tableViewZam->setColumnWidth(26, s123);// sk1
+    ui->tableViewZam->setColumnWidth(27, s123);
+    ui->tableViewZam->setColumnWidth(28, s123);
+    ui->tableViewZam->setColumnWidth(29, spnazproc);
+    ui->tableViewZam->setColumnWidth(30, spnazproc);
+    ui->tableViewZam->setColumnWidth(31, uz);
+    ui->tableViewZam->setColumnWidth(32, ha);
+    ui->lineEditsnaz->setFixedWidth(spnazproc);
+    ui->lineEditsprod->setFixedWidth(spnazproc);
+    ui->tableViewZam->setColumnWidth(33, daty);
+    ui->tableViewZam->setColumnWidth(34, daty);
+    ui->tableViewZam->setColumnWidth(37, 25);
+    connect(hv, SIGNAL(sectionResized(int, int, int)), this,
+            SLOT(stionResized(int,
+                              int, int)));
+    for (int c = 10; c < 25;     c++) {
+        ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
+                QHeaderView::Fixed);
+        ui->tableViewZam->setColumnWidth(c, 30);
+    }
+    hv->setSectionHidden(33,true);
+}
+
+void MainWindow::on_actionRozch_d_wewn_trzny_triggered() {
+    rwDial->setFixedSize(rwDial->size());
+    rwDial->exec();
 }
