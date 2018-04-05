@@ -10,7 +10,7 @@ klienciDialog::klienciDialog(nowyKlientDialog *nowyKliDialog,
     this->setWindowFlags(Qt::Window);
     myDelegate = new Delegate(dbManager, this);
     ui->tableViewKlienci->setItemDelegate(myDelegate);
-    connect(myDelegate, SIGNAL(commitData(QWidget*)), this, SLOT(abra(QWidget*)));
+    connect(myDelegate, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)), this, SLOT(abra(QWidget*,QAbstractItemDelegate::EndEditHint)));
 }
 
 klienciDialog::~klienciDialog() {
@@ -31,7 +31,7 @@ int klienciDialog::exec() {
     return QDialog::exec();
 }
 
-void klienciDialog::abra(QWidget *) {
+void klienciDialog::abra(QWidget *,QAbstractItemDelegate::EndEditHint) {
     dbManager->getModelKlienci()->select();
     ui->tableViewKlienci->update();
 }
@@ -82,6 +82,7 @@ void klienciDialog::showEvent(QShowEvent *e) {
     ui->lineEditSkrot->clear();
     ui->lineEditMi->clear();
     ui->lineEditNr->clear();
+    ui->pushSzukaj->setFocus();
     ustawIFiltruj();
 }
 

@@ -110,6 +110,7 @@ void skoryDialog::getceny() {
     }
     ui->tableViewCeny->hideColumn(0);
     ui->tableViewCeny->hideColumn(3);
+    ui->tableViewCeny->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
     ui->tableViewCeny->update();
 }
 

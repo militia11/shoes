@@ -1,6 +1,7 @@
 #include "rozmiarydialog.h"
 #include "ui_rozmiarydialog.h"
 #include <QKeyEvent>
+#include <QMessageBox>
 
 rozmiaryDialog::rozmiaryDialog(BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),dbManager(db), stModel(nullptr),
@@ -23,6 +24,7 @@ rozmiaryDialog::rozmiaryDialog(BazaDanychManager *db, QWidget *parent) :
     ui->lineEdit48->installEventFilter(this);
     ui->lineEdit49->installEventFilter(this);
     ui->lineEdit50->installEventFilter(this);
+    insertExec = false;
     connect(ui->buttonBox, SIGNAL(accepted()),this, SLOT(acceptRoz()));
 }
 
@@ -77,10 +79,34 @@ void rozmiaryDialog::updateCurrentRow() {
 void rozmiaryDialog::showEvent(QShowEvent *e) {
     wyczyscPola();
     updateCurrentRow();
+    if(insertExec) {
+        ui->labeldOD->setVisible(true);
+        ui->labelpOB->setVisible(false);
+    } else {
+        ui->labeldOD->setVisible(false);
+        ui->labelpOB->setVisible(true);
+    }
 }
 
 void rozmiaryDialog::hideEvent(QHideEvent *e) {
     curId = -1;
+    insertExec = false;
+}
+
+QList<QStandardItem *> rozmiaryDialog::zwrocWierszModel() {
+    QList<QStandardItem *> rzad;
+    rzad.append(new QStandardItem(stModel->index(0,2).data(Qt::DisplayRole).toString()));
+    rzad.append(new QStandardItem(stModel->index(0,3).data(Qt::DisplayRole).toString()));
+    rzad.append(new QStandardItem(stModel->index(0,4).data(Qt::DisplayRole).toString()));
+    rzad.append(new QStandardItem(stModel->index(0,5).data(Qt::DisplayRole).toString()));
+    rzad.append(new QStandardItem(stModel->index(0,6).data(Qt::DisplayRole).toString()));
+    rzad.append(new QStandardItem(stModel->index(0,7).data(Qt::DisplayRole).toString()));
+
+    for (int i = 0; i < 16; i++) {
+        rzad.append(new QStandardItem(rozmiaryx.at(i)));
+    }
+    rzad.append(new QStandardItem("MAGAZYN TOWARÓW"));
+    return rzad;
 }
 
 int rozmiaryDialog::getCurId() const {
@@ -91,12 +117,216 @@ void rozmiaryDialog::setCurId(int value) {
     curId = value;
 }
 
+int rozmiaryDialog::insertexec() {
+
+    return QDialog::exec();
+}
+
 void rozmiaryDialog::acceptRoz() {
-    dbManager->zachowajRW();
-    accept();
+    if(insertExec) {
+        if(ui->lineEditsuma->text()!="0") {
+            if(!ui->lineEdit36->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit36->text());
+            } else rozmiaryx.append("0");
+            if(!ui->lineEdit37->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit37->text());
+            } else rozmiaryx.append("0");
+            if(!ui->lineEdit38->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit38->text());
+            } else rozmiaryx.append("0");
+            if(!ui->lineEdit39->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit39->text());
+            } else rozmiaryx.append("0");
+            if(!ui->lineEdit40->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit40->text());
+            } else rozmiaryx.append("0");
+            if(!ui->lineEdit41->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit41->text());
+            } else rozmiaryx.append("0");
+            if(!ui->lineEdit42->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit42->text());
+            } else rozmiaryx.append("0");
+            if(!ui->lineEdit43->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit43->text());
+            } else rozmiaryx.append("0");
+            if(!ui->lineEdit44->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit44->text());
+            } else rozmiaryx.append("0");
+            if(!ui->lineEdit45->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit45->text());
+            } else rozmiaryx.append("0");
+            if(!ui->lineEdit46->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit46->text());
+            } else rozmiaryx.append("0");
+            if(!ui->lineEdit47->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit47->text());
+            } else rozmiaryx.append("0");
+            if(!ui->lineEdit48->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit48->text());
+            } else rozmiaryx.append("0");
+            if(!ui->lineEdit49->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit49->text());
+            } else rozmiaryx.append("0");
+            if(!ui->lineEdit50->text().isEmpty()) {
+                rozmiaryx.append(ui->lineEdit50->text());
+            } else rozmiaryx.append("0");
+            rozmiaryx.append(ui->lineEditsuma->text());
+
+            QList<QStandardItem *> rzad = zwrocWierszModel();
+
+            dbManager->insPz(rzad);
+            accept();
+        } else {
+            QMessageBox::information(this, "NIEPOPRAWNA ILOŚĆ", " <FONT COLOR='#0f00f0'>Nie dodano żadnej ilości. Proszę sprawdzić pozycje.", QMessageBox::Ok);
+        }
+    } else {
+        bool wysKomunikat = false;
+
+        if(!ui->lineEdit36->text().isEmpty() && !wysKomunikat) {
+            if(ui->lineEdit36->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,8)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit36->text());
+            }
+        } else rozmiaryx.append("0");
+
+        if(!ui->lineEdit37->text().isEmpty() && !wysKomunikat) {
+            if(ui->lineEdit37->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,9)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit37->text());
+            }
+        } else rozmiaryx.append("0");
+        if(!ui->lineEdit38->text().isEmpty()) {
+            if(ui->lineEdit38->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,10)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit38->text());
+            }
+        } else rozmiaryx.append("0");
+        if(!ui->lineEdit39->text().isEmpty() && !wysKomunikat) {
+            if(ui->lineEdit39->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,11)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit39->text());
+            }
+        } else rozmiaryx.append("0");
+        if(!ui->lineEdit40->text().isEmpty() && !wysKomunikat) {
+            if(ui->lineEdit40->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,12)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit40->text());
+            }
+        } else rozmiaryx.append("0");
+        if(!ui->lineEdit41->text().isEmpty() && !wysKomunikat) {
+            if(ui->lineEdit41->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,13)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit41->text());
+            }
+        }
+
+        else rozmiaryx.append("0");
+        if(!ui->lineEdit42->text().isEmpty() && !wysKomunikat) {
+            if(ui->lineEdit42->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,14)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit42->text());
+            }
+        }
+
+        else rozmiaryx.append("0");
+        if(!ui->lineEdit43->text().isEmpty() && !wysKomunikat) {
+            if(ui->lineEdit43->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,15)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit43->text());
+            }
+        }
+
+        else rozmiaryx.append("0");
+
+        if(!ui->lineEdit44->text().isEmpty() && !wysKomunikat) {
+            if(ui->lineEdit44->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,16)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit44->text());
+            }
+        }
+
+        else rozmiaryx.append("0");
+        if(!ui->lineEdit45->text().isEmpty() && !wysKomunikat) {
+            if(ui->lineEdit45->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,17)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit45->text());
+            }
+
+        }   else rozmiaryx.append("0");
+        if(!ui->lineEdit46->text().isEmpty() && !wysKomunikat) {
+            if(ui->lineEdit46->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,18)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit46->text());
+            }
+
+        }   else rozmiaryx.append("0");
+        if(!ui->lineEdit47->text().isEmpty() && !wysKomunikat) {
+            if(ui->lineEdit47->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,19)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit47->text());
+            }
+
+        }   else rozmiaryx.append("0");
+        if(!ui->lineEdit48->text().isEmpty() && !wysKomunikat) {
+            if(ui->lineEdit48->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,20)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit48->text());
+            }
+
+        }  else rozmiaryx.append("0");
+
+        if(!ui->lineEdit49->text().isEmpty() && !wysKomunikat) {
+            if(ui->lineEdit49->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,21)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit49->text());
+            }
+        } else rozmiaryx.append("0");
+        if(!ui->lineEdit50->text().isEmpty() && !wysKomunikat) {
+            if(ui->lineEdit50->text().toInt() > ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(0,22)).toInt()) {
+                wysKomunikat = true;
+            } else {
+                rozmiaryx.append(ui->lineEdit50->text());
+            }
+
+        } else rozmiaryx.append("0");
+
+        if(!ui->lineEditsuma->text().isEmpty() && !wysKomunikat)
+            rozmiaryx.append(ui->lineEditsuma->text());
+        rozmiaryx.append("0");
+
+        if(wysKomunikat) {
+            rozmiaryx.clear();
+            QMessageBox::information(this, "NIEPOPRAWNA ILOŚĆ", " <FONT COLOR='#0f00f0'>Na magazynie nie jest dostępna podana ilość towaru. Proszę sprawdzić pozycje.", QMessageBox::Ok);
+        } else {
+            if(ui->lineEditsuma->text()!="0")
+                accept();
+            else {
+                QMessageBox::information(this, "NIEPOPRAWNA ILOŚĆ", " <FONT COLOR='#0f00f0'>Nie pobrano żadnej ilości z magazynu. Proszę sprawdzić pozycje.", QMessageBox::Ok);
+            }
+        }
+    }
+}
+
+void rozmiaryDialog::setInsertExec(bool value) {
+    insertExec = value;
 }
 
 void rozmiaryDialog::wyczyscPola() {
+    rozmiaryx.clear();
     ui->lineEdit36->clear();
     ui->lineEdit37->clear();
     ui->lineEdit38->clear();
@@ -132,7 +362,7 @@ void rozmiaryDialog::obliczSumeGora() {
         stModel->setData(stModel->index(0, 23), QVariant(suma));
     }
 }
-//Stream na sport.tvp.pl. Portal sport.se.pl
+
 bool rozmiaryDialog::eventFilter(QObject *object, QEvent *event) {
     if (object == ui->lineEdit36 || object == ui->lineEdit37 || object == ui->lineEdit38  || object == ui->lineEdit39  || object == ui->lineEdit40  || object == ui->lineEdit41
             || object == ui->lineEdit42 || object == ui->lineEdit43 || object == ui->lineEdit44 || object == ui->lineEdit45 || object == ui->lineEdit46 || object == ui->lineEdit47 || object == ui->lineEdit48 || object == ui->lineEdit49 || object == ui->lineEdit50) {

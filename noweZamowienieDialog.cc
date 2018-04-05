@@ -43,7 +43,7 @@ noweZamowienieDialog::noweZamowienieDialog(mwDialog *roz, handlowceDialog *wybHa
     ui->plainTextEditU1->installEventFilter(this);
     ui->plainTextEditU2->installEventFilter(this);
     ui->tableViewZam->setSelectionBehavior(QAbstractItemView::SelectRows);
-    this->setWindowFlags(Qt::Window);
+    this->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint| Qt::WindowSystemMenuHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
     connect(delArrow, SIGNAL(commitData(QWidget*)), this, SLOT(abra(QWidget*)));
 }
 
@@ -68,9 +68,16 @@ noweZamowienieDialog::~noweZamowienieDialog() {
     delete ui;
 }
 
+void noweZamowienieDialog::sumall() {
+    int wszystkie = 0;
+    for (int j = 0; j <  zamowienie->rowCount(); j++) {
+        wszystkie += zamowienie->data(zamowienie->index(j, 21), Qt::DisplayRole).toInt();
+    }
+    ui->lcdNumber->setText(QString::number(wszystkie));
+}
+
 void noweZamowienieDialog::obliczSume(QStandardItem *it) {
     int suma = 0;
-    int wszystkie = 0;
     int rzad = it->row();
     for (int i = 6; i < 21; i++) {
         suma += zamowienie->data(zamowienie->index(rzad, i),
@@ -78,10 +85,7 @@ void noweZamowienieDialog::obliczSume(QStandardItem *it) {
     }
     zamowienie->setData(zamowienie->index(rzad, 21), QVariant(suma));
 
-    for (int j = 0; j <  zamowienie->rowCount(); j++) {
-        wszystkie += zamowienie->data(zamowienie->index(j, 21), Qt::DisplayRole).toInt();
-    }
-    ui->lcdNumber->setText(QString::number(wszystkie));
+    sumall();
 }
 
 void noweZamowienieDialog::keyPressEvent(QKeyEvent *event) {
@@ -151,6 +155,9 @@ void noweZamowienieDialog::on_buttonBox_accepted() {
         if (dbManager->zamowienie(ui->calendarWidget->selectedDate(),
                                   ui->calendarWidgetRealizacja->selectedDate(),
                                   uwagi, ui->plainTextEditU2->toPlainText(), ui->lineEditPapier->text(), zamowienie)) {
+            if(firstLetterZamm == QString("A")) {
+                dbManager->usunSzkieletZam();
+            }
             wyczysc();
             accept();
         } else {
@@ -180,35 +187,35 @@ void noweZamowienieDialog::ustawTabeleHeaders() {
     hv->setStretchLastSection(true);
 }
 
-void noweZamowienieDialog::on_pushButtonModel_clicked() {
-    modelDialog->setFixedSize(modelDialog->size());
-    if (modelDialog->selectExec() == QDialog::Accepted) {
-        QList<QStandardItem *> rzad = dbManager->zwrocWierszModel();
-        zamowienie->insertRow(ktoraPozycja, rzad);
-        ustawTabeleHeaders();
-        QStringList listaZamowienia;
-        listaZamowienia << "WZÓR" << "SPÓD" << "KOLOR" << "MATRYCA " << "OCIEP" << "WKŁADKA" << "36" << "37" << "38" << "39" << "40" << "41" << "42" << "43"  << "44"
-                        << "45" << "46" << "47"  << "48" << "49" << "50" << "SUMA" << "" ;
-        for (int i = 0; i < zamowienie->columnCount(); ++i) {
-            zamowienie->setHeaderData(i, Qt::Horizontal, listaZamowienia[i]);
-        }
-        uwagi.append(QString(""));
+//void noweZamowienieDialog::on_pushButtonModel_clicked() {
+//    modelDialog->setFixedSize(modelDialog->size());
+//    if (modelDialog->selectExec() == QDialog::Accepted) {
+//        QList<QStandardItem *> rzad = dbManager->zwrocWierszModel();
+//        zamowienie->insertRow(ktoraPozycja, rzad);
+//        ustawTabeleHeaders();
+//        QStringList listaZamowienia;
+//        listaZamowienia << "WZÓR" << "SPÓD" << "KOLOR" << "MATRYCA " << "OCIEP" << "WKŁADKA" << "36" << "37" << "38" << "39" << "40" << "41" << "42" << "43"  << "44"
+//                        << "45" << "46" << "47"  << "48" << "49" << "50" << "SUMA" << "" ;
+//        for (int i = 0; i < zamowienie->columnCount(); ++i) {
+//            zamowienie->setHeaderData(i, Qt::Horizontal, listaZamowienia[i]);
+//        }
+//        uwagi.append(QString(""));
 
-        QModelIndex index = ui->tableViewZam->model()->index(ktoraPozycja, 10);
+//        QModelIndex index = ui->tableViewZam->model()->index(ktoraPozycja, 10);
 
-        ui->tableViewZam->selectionModel()->clearSelection();
-        ui->tableViewZam->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
-        if(ktoraPozycja==0) {
-            ustawTabeleHeaders();
-            ui->tableViewZam->setContextMenuPolicy(Qt::CustomContextMenu);
-            connect(ui->tableViewZam, SIGNAL(customContextMenuRequested(const QPoint &)),
-                    this,
-                    SLOT(ShowContextMenu(const QPoint &)));
-        }
-        ktoraPozycja++;
-        ui->plainTextEditU1->clear();
-    }
-}
+//        ui->tableViewZam->selectionModel()->clearSelection();
+//        ui->tableViewZam->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+//        if(ktoraPozycja==0) {
+//            ustawTabeleHeaders();
+//            ui->tableViewZam->setContextMenuPolicy(Qt::CustomContextMenu);
+//            connect(ui->tableViewZam, SIGNAL(customContextMenuRequested(const QPoint &)),
+//                    this,
+//                    SLOT(ShowContextMenu(const QPoint &)));
+//        }
+//        ktoraPozycja++;
+//        ui->plainTextEditU1->clear();
+//    }
+//}
 
 void noweZamowienieDialog::showEvent(QShowEvent *e) {
     Q_UNUSED(e);
@@ -328,5 +335,61 @@ void noweZamowienieDialog::abra(QWidget *) {
 
 void noweZamowienieDialog::on_pushButtonModel_2_clicked() {
     roz->setFixedSize(roz->size());
-    roz->selectExec();
+    if(roz->selectExec() == QDialog::Accepted) {
+        if(roz->getZmagazynu()) {
+            QList<QStandardItem *> rzad = roz->zwrocWierszModel();
+            dbManager->ustawAktualnyModelMWId(roz->getActualLastId());
+            zamowienie->insertRow(ktoraPozycja, rzad);
+            ustawTabeleHeaders();
+            QStringList listaZamowienia;
+            listaZamowienia << "WZÓR" << "SPÓD" << "KOLOR" << "MATRYCA " << "OCIEP" << "WKŁADKA" << "36" << "37" << "38" << "39" << "40" << "41" << "42" << "43"  << "44"
+                            << "45" << "46" << "47"  << "48" << "49" << "50" << "SUMA" << "STATUS" ;
+            for (int i = 0; i < zamowienie->columnCount(); ++i) {
+                zamowienie->setHeaderData(i, Qt::Horizontal, listaZamowienia[i]);
+            }
+            uwagi.append(QString(""));
+
+            QModelIndex index = ui->tableViewZam->model()->index(ktoraPozycja, 10);
+
+            ui->tableViewZam->selectionModel()->clearSelection();
+            ui->tableViewZam->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+            if(ktoraPozycja==0) {
+                ustawTabeleHeaders();
+                ui->tableViewZam->setContextMenuPolicy(Qt::CustomContextMenu);
+                connect(ui->tableViewZam, SIGNAL(customContextMenuRequested(const QPoint &)),
+                        this,
+                        SLOT(ShowContextMenu(const QPoint &)));
+            }
+            ktoraPozycja++;
+            ui->plainTextEditU1->clear();
+            sumall();
+            dbManager->zachowajRW(rzad);
+            dbManager->odejmijzMW(roz->zwrocWierszModel(), roz->getActualLastId());
+        } else {
+            QList<QStandardItem *> rzad = dbManager->zwrocWierszModel();
+            zamowienie->insertRow(ktoraPozycja, rzad);
+            ustawTabeleHeaders();
+            QStringList listaZamowienia;
+            listaZamowienia << "WZÓR" << "SPÓD" << "KOLOR" << "MATRYCA " << "OCIEP" << "WKŁADKA" << "36" << "37" << "38" << "39" << "40" << "41" << "42" << "43"  << "44"
+                            << "45" << "46" << "47"  << "48" << "49" << "50" << "SUMA" << "" ;
+            for (int i = 0; i < zamowienie->columnCount(); ++i) {
+                zamowienie->setHeaderData(i, Qt::Horizontal, listaZamowienia[i]);
+            }
+            uwagi.append(QString(""));
+
+            QModelIndex index = ui->tableViewZam->model()->index(ktoraPozycja, 10);
+
+            ui->tableViewZam->selectionModel()->clearSelection();
+            ui->tableViewZam->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+            if(ktoraPozycja==0) {
+                ustawTabeleHeaders();
+                ui->tableViewZam->setContextMenuPolicy(Qt::CustomContextMenu);
+                connect(ui->tableViewZam, SIGNAL(customContextMenuRequested(const QPoint &)),
+                        this,
+                        SLOT(ShowContextMenu(const QPoint &)));
+            }
+            ktoraPozycja++;
+            ui->plainTextEditU1->clear();
+        }
+    }
 }

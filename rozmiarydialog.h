@@ -17,14 +17,20 @@ public:
     void updateCurrentRow();
     void showEvent(QShowEvent *e);
     void hideEvent(QHideEvent *e);
-
+    QList<QStandardItem *> zwrocWierszModel();
     int getCurId() const;
 
     void setCurId(int value);
 
+    void setInsertExec(bool value);
+
 private slots:
+    int insertexec();
     void acceptRoz();
+
 private:
+    QVector<QString>rozmiaryx;
+    bool insertExec;
     void wyczyscPola();
     void obliczSume();
     void obliczSumeGora();
@@ -33,7 +39,6 @@ private:
     BazaDanychManager *dbManager;
     QStandardItemModel *stModel;
     Ui::rozmiaryDialog *ui;
-
 };
 
 #endif // ROZMIARYDIALOG_H

@@ -55,6 +55,7 @@ public:
     void insertPozycjazamowienie(QString nr_zam, int idKlienta, int idHandlowca);
     bool rozkroj(QStandardItemModel *pozycje);
     void ustawAktualnyModelId(const QModelIndex index);
+    void ustawAktualnyModelMWId(int id);
     int zwrocAktualnyModelIdMw(const QModelIndex index);
     QList<QStandardItem *> zwrocWierszModel();
     QString getOstatniSelectZam() const;
@@ -119,7 +120,8 @@ public:
     void zachowajWkla(QString naz, QString o);
     void zachowajKlienta(const Klient &klient);
     void zachowajHandlowca(QString im, QString nz, QString skr, QString uwagi);
-    bool zachowajRW();
+    bool zachowajRW(QList<QStandardItem *> rzad);
+    bool odejmijzMW(QList<QStandardItem *> rzad, int id);
     bool zachowajModel(QVector<QImage> images, QString rodzaj_montazu,  QString typ,
                        QString  rodzaj_buta,  QString   rodzaj_buta_2,
                        QString  rodzaj_buta_3,  QString rodzaj_buta_4,
@@ -201,6 +203,10 @@ public:
     QSqlTableModel *getRw() const;
     void setRw();
 
+    QSqlTableModel *getPz() const;
+    void setPz();
+    bool insPz(QList<QStandardItem *> rzad);
+
 private:
     QVariant GetFirstValueForQuery(QSqlQuery *aQuery);
     QSqlRecord getSqlRecordZModelu(const QAbstractItemModel *aItemModel);
@@ -227,6 +233,7 @@ private:
     QSqlTableModel *mKliR;
     QSqlTableModel *mw;
     QSqlTableModel *rw;
+    QSqlTableModel *pz;
 
     int idKlienta;
     int idHandlowca;

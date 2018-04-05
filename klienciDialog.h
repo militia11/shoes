@@ -25,7 +25,7 @@ public:
 
 public slots:
     virtual int exec();
-    void abra(QWidget*);
+    void abra(QWidget*, QAbstractItemDelegate::EndEditHint);
 
 private slots:
     void wybranoKli(const QModelIndex index);

@@ -29,10 +29,10 @@ void NowyHandlowiecDialog::on_buttonBox_accepted() {
         wyswietlKomunikat = true;
     }
     if (wyswietlKomunikat) {
-        QMessageBox::warning( this, "BRAK WYMAGANYCH PÓL",
-                              " <FONT COLOR='#000080'>Nie można zaakceptować bez podania wymaganych pól. "
-                              "<br>Proszę uzupełnić podświetlone na czerwono pola.</FONT>",
-                              QMessageBox::Ok);
+        QMessageBox::warning(this, "BRAK WYMAGANYCH PÓL",
+                             " <FONT COLOR='#000080'>Nie można zaakceptować bez podania wymaganych pól. "
+                             "<br>Proszę uzupełnić wymagane pola.</FONT>",
+                             QMessageBox::Ok);
     } else {
         imie = ui->lineEditImie->text();
         nazwisko = ui->lineEditNazwisko->text();

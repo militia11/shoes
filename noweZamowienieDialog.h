@@ -29,13 +29,15 @@ public:
 
     void setNr(const QString &value);
 
+    void sumall();
+
 private slots:
     void obliczSume(QStandardItem *it);
     void on_pushButton_5_clicked();
 
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
-    void on_pushButtonModel_clicked();
+    //void on_pushButtonModel_clicked();
     void on_checkBox_stateChanged(int arg1);
     void on_tableViewZam_clicked(const QModelIndex &index);
 

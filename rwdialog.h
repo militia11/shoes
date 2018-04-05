@@ -15,6 +15,8 @@ public:
     explicit rwDialog( BazaDanychManager *db,QWidget *parent = 0);
     ~rwDialog();
     void ustawIFiltruj();
+    void czysc();
+
 private slots:
     void on_pushButtonSzukaj_clicked();
 

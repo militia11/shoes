@@ -1,32 +1,46 @@
-#include "rwdialog.h"
-#include "ui_rwdialog.h"
+#include "pzdialog.h"
+#include "ui_pzdialog.h"
 
-rwDialog::rwDialog(BazaDanychManager *db, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::rwDialog),dbManager(db)  {
+pzDialog::pzDialog(rozmiaryDialog *roz, BazaDanychManager *db, QWidget *parent) :
+    QDialog(parent), dbManager(db),roz(roz),
+    ui(new Ui::pzDialog) {
     ui->setupUi(this);
+    actualLastId = -1;
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
 }
 
-rwDialog::~rwDialog() {
+pzDialog::~pzDialog() {
     delete ui;
     delete proxy;
 }
 
-void rwDialog::ustawIFiltruj() {
+void pzDialog::ustawIFiltruj() {
     QString f = QString("nr_wzoru LIKE '%1%' AND spnaz LIKE '%2%' AND kolor LIKE '%3%' AND rodzaj LIKE '%4%'"
                         "AND nazwa LIKE '%5%' AND wkrodzaj LIKE '%6%'").arg(
                     ui->lineEditwz->text(),ui->lineEditsp->text(), ui->lineEditkol->text(), ui->lineEditoc->text(),ui->lineEditma->text(),
                     ui->lineEditwkl->text());
 
-    dbManager->getRw()->setFilter(f);
+    dbManager->getPz()->setFilter(f);
 }
 
-void rwDialog::showEvent(QShowEvent *e) {
-    dbManager->setRw();
+int pzDialog::getActualLastId() const {
+    return actualLastId;
+}
+
+void pzDialog::czysc() {
+    ui->lineEditwz->clear();
+    ui->lineEditkol->clear();
+    ui->lineEditma->clear();
+    ui->lineEditoc->clear();
+    ui->lineEditsp->clear();
+    ui->lineEditwkl->clear();
+}
+
+void pzDialog::showEvent(QShowEvent *e) {
+    dbManager->setPz();
     proxy->setDynamicSortFilter(true);
-    proxy->setSourceModel(dbManager->getRw());
+    proxy->setSourceModel(dbManager->getPz());
     ui->tableView->setModel(proxy);
     ui->tableView->setSortingEnabled(true);
     ui->tableView->setColumnHidden(0,true);
@@ -53,30 +67,33 @@ void rwDialog::showEvent(QShowEvent *e) {
     hv->setStretchLastSection(true);
     hv->setDefaultAlignment(Qt::AlignLeft);
     ui->tableView->setColumnWidth(23,59);
+    ui->tableView->sortByColumn(0, Qt::AscendingOrder);
+    czysc();
+    ustawIFiltruj();
+//        connect(
+//            ui->tableView->selectionModel(),
+//            SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+//            SLOT(SelectionOfTableChanged(
+//                     const QItemSelection &,
+//                     const QItemSelection &)));
+}
 
-    ui->tableView->sortByColumn(0, Qt::DescendingOrder);
+void pzDialog::hideEvent(QHideEvent *e) {
+
+}
+
+void pzDialog::on_pushButtonSzukaj_clicked() {
+    ustawIFiltruj();
+}
+
+void pzDialog::on_pushButton_clicked() {
     czysc();
     ustawIFiltruj();
 }
 
-void rwDialog::hideEvent(QHideEvent *e) {
-
-}
-
-void rwDialog::on_pushButtonSzukaj_clicked() {
-    ustawIFiltruj();
-}
-
-void rwDialog::czysc() {
-    ui->lineEditwz->clear();
-    ui->lineEditkol->clear();
-    ui->lineEditma->clear();
-    ui->lineEditoc->clear();
-    ui->lineEditsp->clear();
-    ui->lineEditwkl->clear();
-}
-
-void rwDialog::on_pushButton_clicked() {
-    czysc();
-    ustawIFiltruj();
+void pzDialog::on_pushButton_3_clicked() {
+    roz->setInsertExec(true);
+    roz->setFixedSize(roz->size());
+    roz->setWindowTitle("Pobranie z magazynu wolne");
+    roz->exec();
 }

@@ -69,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
     log = new logowanieDialog(dbManager, this);
     rozmDialo= new    rozmiaryDialog( dbManager, this);
     mw = new mwDialog(rozmDialo,dbManager,  this);
+    pz = new pzDialog(rozmDialo,dbManager,  this);
     dialogNoweZamowienie = new noweZamowienieDialog(mw, dialogHandl, dbManager, dialogmodele, dialogKlienci, this);
     proxy = new QSortFilterProxyModel(this);
     archiwumMode = false;
@@ -109,11 +110,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableViewZam->sortByColumn(0, Qt::DescendingOrder);
 
     ui->tableViewZam->installEventFilter(this);
+    ui->labelw->setText(QString::number(ui->tableViewZam->model()->rowCount()));
+    ui->radioButton_2->setEnabled(false);
+    //  ui->radioButton_6->setEnabled(false);
 //    dialogKlienci->exec();
-
-    rozmDialo->setCurId(4);
-    rozmDialo->exec();
-
     //dialogNoweZamowienie->exec();
 //    exit(1);
     //rozkroje->exec();
@@ -193,13 +193,13 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
         QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
         if (dbManager->filterZamowien.status == QString("WPROWADZONE")) {
             QIcon icon(":/zasoby/cut.png");
-            myMenu.addAction( icon,"KRÓJ");
+            //  myMenu.addAction( icon,"KRÓJ");
             if (selection.length() == 1) {
                 QIcon iconch(":/zasoby/change.png");
-                myMenu.addAction(iconch,"EDYTUJ");
+                // myMenu.addAction(iconch,"EDYTUJ");
             }
             QIcon icontr(":/zasoby/trash2.png");
-            myMenu.addAction(icontr,"USUŃ");
+            //  myMenu.addAction(icontr,"USUŃ");
         } else if (dbManager->filterZamowien.status == QString("ZLEC W PRODUKCJI")) {
             if (selection.length() == 1) {
                 myMenu.addAction("POKAŻ ROZKRÓJ");
@@ -467,6 +467,7 @@ void MainWindow::on_radioButton_clicked() {
 
     dbManager->filterZamowien.status = QString("WPROWADZONE");
     filtruj();
+    ui->labelw->setText(QString::number(ui->tableViewZam->model()->rowCount()));
     ui->labelPodglad->clear();
 }
 
@@ -495,6 +496,7 @@ void MainWindow::on_radioButton_3_clicked() {
     dbManager->filterZamowien.status = QString("DO WYSYŁKI");
     ui->labelPodglad->clear();
     filtruj();
+    ui->labelw->setText(QString::number(ui->tableViewZam->model()->rowCount()));
     wysylkaMode = true;
 }
 
@@ -529,6 +531,7 @@ void MainWindow::on_radioButton_4_clicked() {
     dbManager->filterZamowien.status = QString("");
     ui->labelPodglad->clear();
     filtruj();
+    ui->labelw->setText(QString::number(ui->tableViewZam->model()->rowCount()));
 }
 
 void MainWindow::on_actionWzory_triggered() {
@@ -670,6 +673,7 @@ void MainWindow::on_radioButton_5_clicked() {
     dbManager->filterZamowien.status = QString("ZREALIZOWANO");
     ui->labelPodglad->clear();
     filtruj();
+    ui->labelw->setText(QString::number(ui->tableViewZam->model()->rowCount()));
 }
 
 void MainWindow::on_actionRozkroje_triggered() {
@@ -796,6 +800,7 @@ void MainWindow::on_radioButton_2_clicked() {
     filtruj();
     ui->tableViewZam->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->labelPodglad->clear();
+    ui->labelw->setText(QString::number(ui->tableViewZam->model()->rowCount()));
 }
 
 void MainWindow::on_actionWyloguj_triggered() {
@@ -883,7 +888,32 @@ void MainWindow::on_actionMagazyn_wolne_triggered() {
 }
 
 void MainWindow::on_radioButton_6_clicked() {
-    // MAG T
+    // MAG TMAGAZYN TOWARÓW
+
+    if (archiwumMode) {
+        ui->tableViewZam->setVisible(false);
+        ui->centralWidget->layout()->setAlignment(ui->horizontalLayout_2,Qt::AlignTop);
+
+        dbManager->setTableWidokZamowienia("vzam");
+        archiwumMode = false;
+        wait ww;
+        ww.setWindowTitle("                    Zamykam archiwum ...");
+        ww.show();
+        rozciagnijWiersze();
+        ww.hide();
+        showTable();
+        if(ui->actionEdycja->isChecked())
+            ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
+    } else if(wysylkaMode) {
+        ui->tableViewZam->setColumnWidth(35, 152);
+        QHeaderView *hv = ui->tableViewZam->horizontalHeader();
+        hv->setSectionHidden(48, true);
+        hv->setSectionHidden(49, true);
+    }
+    dbManager->filterZamowien.status = QString("MAGAZYN TOWARÓW");
+    ui->labelPodglad->clear();
+    filtruj();
+    ui->labelw->setText(QString::number(ui->tableViewZam->model()->rowCount()));
 }
 
 void MainWindow::rozciagnijWiersze() {
@@ -955,4 +985,9 @@ void MainWindow::rozciagnijWiersze() {
 void MainWindow::on_actionRozch_d_wewn_trzny_triggered() {
     rwDial->setFixedSize(rwDial->size());
     rwDial->exec();
+}
+
+void MainWindow::on_actionPrzyj_cie_zewn_trzne_triggered() {
+    pz->setFixedSize(pz->size());
+    pz->exec();
 }

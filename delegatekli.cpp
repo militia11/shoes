@@ -41,8 +41,8 @@ void Delegate::setEditorData(QWidget *editor,const QModelIndex &index) const {
         comboBox->setCurrentIndex(value);
         return;
     }
-
     QString value = index.model()->data(index).toString();
+
     QLineEdit* lineEditNumber = static_cast<QLineEdit*>(editor);
     lineEditNumber->setText(value);
 }
@@ -57,7 +57,6 @@ void Delegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QM
 
         return;
     }
-
     QItemDelegate::setModelData(editor,model,index);
 }
 

@@ -17,9 +17,18 @@ public:
     ~mwDialog();
     virtual int exec();
     void ustawIFiltruj();
+    QList<QStandardItem *> zwrocWierszModel();
+    int getActualLastId() const;
+
+    bool getZmagazynu() const;
+
+    void czysc();
 
 private slots:
 
+    void SelectionOfTableChanged(
+        const QItemSelection &aSelected,
+        const QItemSelection &aDeselected);
     void on_pushButtonZw_clicked();
 
     void on_pushButtonPu_clicked();
@@ -28,7 +37,11 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_pushButton_2_clicked();
+
 private:
+    bool zmagazynu;
+    int actualLastId;
     void showEvent(QShowEvent *e);
     void hideEvent(QHideEvent *e);
     BazaDanychManager *dbManager;

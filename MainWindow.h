@@ -38,6 +38,7 @@
 #include "mwdialog.h"
 #include "rozmiarydialog.h"
 #include "rwdialog.h"
+#include "pzdialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -111,6 +112,8 @@ private slots:
 
     void on_actionRozch_d_wewn_trzny_triggered();
 
+    void on_actionPrzyj_cie_zewn_trzne_triggered();
+
 private:
     bool eventFilter(QObject *object, QEvent *event);
     void keyPressEvent(QKeyEvent *event);
@@ -156,6 +159,7 @@ private:
     EdycjaZamowieniaDialog *dialogEdycjaZam;
     logowanieDialog *log;
     rozmiaryDialog *rozmDialo;
+    pzDialog *pz;
     QSortFilterProxyModel *proxy;
 
     int nrkar;
