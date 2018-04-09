@@ -114,7 +114,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->radioButton_2->setEnabled(false);
     //  ui->radioButton_6->setEnabled(false);
 //    dialogKlienci->exec();
-    //dialogNoweZamowienie->exec();
+    dialogNoweZamowienie->exec();
 //    exit(1);
     //rozkroje->exec();
 }
@@ -193,13 +193,13 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
         QModelIndexList selection = ui->tableViewZam->selectionModel()->selectedRows();
         if (dbManager->filterZamowien.status == QString("WPROWADZONE")) {
             QIcon icon(":/zasoby/cut.png");
-            //  myMenu.addAction( icon,"KRÓJ");
+            myMenu.addAction( icon,"KRÓJ");
             if (selection.length() == 1) {
                 QIcon iconch(":/zasoby/change.png");
-                // myMenu.addAction(iconch,"EDYTUJ");
+                myMenu.addAction(iconch,"EDYTUJ");
             }
             QIcon icontr(":/zasoby/trash2.png");
-            //  myMenu.addAction(icontr,"USUŃ");
+            myMenu.addAction(icontr,"USUŃ");
         } else if (dbManager->filterZamowien.status == QString("ZLEC W PRODUKCJI")) {
             if (selection.length() == 1) {
                 myMenu.addAction("POKAŻ ROZKRÓJ");
@@ -226,34 +226,17 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
                     id =  dbManager->getIdZamowieniaZTabeli(index);
                     zamowienia.push_back(id);
                 }
-                if (QMessageBox::question(this, "MODYFIKACJA", "<FONT COLOR='#000080'>Czy pomniejszyć o stany magazynowe?") == QMessageBox::Yes) {
-                    dorozkroju->setModel(dbManager->getDoRozkroju(zamowienia));
-                    QString nr = prepareRozkroj();
-                    dorozkroju->setNr(nr);
-                    if (dorozkroju->exec() == QDialog::Accepted) {
-                        dbManager->copyZamowienieArch(dorozkroju->getModel());
-//                        if (dbManager->rozkroj(dorozkroju->getModel(), dorozkroju->getBazowyModel())) {
-//                            dbManager->getModelZamowienia()->select();
-//                            rozkroje->setDodanoRozkroj(true);
-//                            rozkroje->exec();
-//                        }
-
-                    } else {
-                        dbManager->usunSzkieletRozkroju();
-                        return;
-                    }
+                prepareRozkroj();
+                dbManager->copyZamowienieArch(dbManager->getDoRozkroju(zamowienia));
+                if (dbManager->rozkroj(dbManager->getDoRozkroju(zamowienia))) {
+                    dbManager->getModelZamowienia()->select();
+                    rozkroje->setDodanoRozkroj(true);
+                    rozkroje->exec();
                 } else {
-                    prepareRozkroj();
-                    dbManager->copyZamowienieArch(dbManager->getDoRozkroju(zamowienia));
-                    if (dbManager->rozkroj(dbManager->getDoRozkroju(zamowienia))) {
-                        dbManager->getModelZamowienia()->select();
-                        rozkroje->setDodanoRozkroj(true);
-                        rozkroje->exec();
-                    } else {
-                        dbManager->usunSzkieletRozkroju();
-                        return;
-                    }
+                    dbManager->usunSzkieletRozkroju();
+                    return;
                 }
+
             } else if (selectedItem->text() == QString("ZREALIZUJ")) {
                 int id = 0;
                 bool sukces = true;

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1129</width>
+    <width>1278</width>
     <height>987</height>
    </rect>
   </property>
@@ -34,7 +34,7 @@
     <rect>
      <x>10</x>
      <y>150</y>
-     <width>1111</width>
+     <width>1261</width>
      <height>411</height>
     </rect>
    </property>
@@ -49,12 +49,15 @@
      <rect>
       <x>10</x>
       <y>60</y>
-      <width>1101</width>
+      <width>1241</width>
       <height>311</height>
      </rect>
     </property>
     <property name="editTriggers">
      <set>QAbstractItemView::AllEditTriggers</set>
+    </property>
+    <property name="showDropIndicator" stdset="0">
+     <bool>false</bool>
     </property>
     <property name="alternatingRowColors">
      <bool>true</bool>
@@ -66,7 +69,7 @@
      <enum>QAbstractItemView::SelectRows</enum>
     </property>
     <property name="sortingEnabled">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QLabel" name="label_11">
@@ -94,7 +97,7 @@
    <widget class="QLineEdit" name="lcdNumber">
     <property name="geometry">
      <rect>
-      <x>890</x>
+      <x>1030</x>
       <y>370</y>
       <width>221</width>
       <height>31</height>
@@ -374,7 +377,7 @@
     <rect>
      <x>10</x>
      <y>570</y>
-     <width>1111</width>
+     <width>1261</width>
      <height>211</height>
     </rect>
    </property>
@@ -387,7 +390,7 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>190</x>
       <y>0</y>
       <width>251</width>
       <height>31</height>
@@ -412,7 +415,7 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>730</x>
+      <x>800</x>
       <y>0</y>
       <width>251</width>
       <height>31</height>
@@ -437,7 +440,7 @@
    <widget class="QCalendarWidget" name="calendarWidget">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>190</x>
       <y>30</y>
       <width>251</width>
       <height>171</height>
@@ -459,7 +462,7 @@
    <widget class="QCalendarWidget" name="calendarWidgetRealizacja">
     <property name="geometry">
      <rect>
-      <x>730</x>
+      <x>800</x>
       <y>30</y>
       <width>251</width>
       <height>171</height>
@@ -495,7 +498,7 @@
     <rect>
      <x>10</x>
      <y>790</y>
-     <width>1111</width>
+     <width>1261</width>
      <height>171</height>
     </rect>
    </property>
@@ -508,7 +511,7 @@
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>100</x>
       <y>0</y>
       <width>441</width>
       <height>31</height>
@@ -533,7 +536,7 @@
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>640</x>
+      <x>710</x>
       <y>0</y>
       <width>441</width>
       <height>31</height>
@@ -558,7 +561,7 @@
    <widget class="QPlainTextEdit" name="plainTextEditU1">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>100</x>
       <y>30</y>
       <width>441</width>
       <height>131</height>
@@ -582,7 +585,7 @@
    <widget class="QPlainTextEdit" name="plainTextEditU2">
     <property name="geometry">
      <rect>
-      <x>640</x>
+      <x>710</x>
       <y>30</y>
       <width>441</width>
       <height>131</height>
@@ -610,7 +613,7 @@
   <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
-     <x>1000</x>
+     <x>1150</x>
      <y>10</y>
      <width>121</width>
      <height>131</height>
@@ -681,7 +684,7 @@
   <widget class="QFrame" name="frame_6">
    <property name="geometry">
     <rect>
-     <x>560</x>
+     <x>630</x>
      <y>10</y>
      <width>361</width>
      <height>131</height>

@@ -6,7 +6,7 @@
 #include <QModelIndex>
 #include <QMenu>
 #include <QInputDialog>
-#include "DelegateArrows.h"
+
 
 noweZamowienieDialog::noweZamowienieDialog(mwDialog *roz, handlowceDialog *wybHandlDialog,
         BazaDanychManager *db, modeleDialog *modeleDialog,
@@ -34,17 +34,19 @@ noweZamowienieDialog::noweZamowienieDialog(mwDialog *roz, handlowceDialog *wybHa
     for (int i = 0; i < 6; i++) {
         ui->tableViewZam->setItemDelegateForColumn(i, del);
     }
-    DelegateArrows *delArrow = new DelegateArrows(ui->tableViewZam);
+    delArrow = new DelegateArrows(ui->tableViewZam);
     for (int i = 6; i < 21; i++) {
         ui->tableViewZam->setItemDelegateForColumn(i, delArrow);
     }
     ui->tableViewZam->setItemDelegateForColumn(21, del);
+    ui->tableViewZam->setItemDelegateForColumn(22, del);
 
     ui->plainTextEditU1->installEventFilter(this);
     ui->plainTextEditU2->installEventFilter(this);
     ui->tableViewZam->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint| Qt::WindowSystemMenuHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
     connect(delArrow, SIGNAL(commitData(QWidget*)), this, SLOT(abra(QWidget*)));
+    //connect(delArrow, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)), this, SLOT(ab(QWidget*,QAbstractItemDelegate::EndEditHint)));
 }
 
 bool noweZamowienieDialog::eventFilter(QObject *object, QEvent *event) {
@@ -90,7 +92,7 @@ void noweZamowienieDialog::obliczSume(QStandardItem *it) {
 
 void noweZamowienieDialog::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Escape) {
-        if (QMessageBox::question(this, "WYJŚCIE", "<FONT COLOR='#000080'>Jesteś w trakcie dodawania zamówienia. Czy na pewno wyjść?") == QMessageBox::Yes) {
+        if (QMessageBox::question(this, "WYJŚCIE", "<FONT COLOR='#000082'>Jesteś w trakcie dodawania zamówienia. Czy na pewno wyjść?") == QMessageBox::Yes) {
             wyczysc();
             QDialog::keyPressEvent(event);
         } else {
@@ -133,23 +135,23 @@ void noweZamowienieDialog::on_buttonBox_accepted() {
     int y = QString::compare(firstLetterZamm, "B", Qt::CaseSensitive);
     if (ui->labelKlient->text().isEmpty()) {
         QMessageBox::warning(this, "BRAK WYMAGANYCH PÓL",
-                             " <FONT COLOR='#000080'>Nie można zaakceptować bez wskazania klienta. ",
+                             " <FONT COLOR='#000082'>Nie można zaakceptować bez wskazania klienta. ",
                              QMessageBox::Ok);
     } else if (ui->labelHandlowiec->text().isEmpty()) {
         QMessageBox::warning(this, "BRAK WYMAGANYCH PÓL",
-                             " <FONT COLOR='#000080'>Nie można zaakceptować bez wskazania handlowca. ",
+                             " <FONT COLOR='#000082'>Nie można zaakceptować bez wskazania handlowca. ",
                              QMessageBox::Ok);
     } else if (x != 0 && y != 0) {
         QMessageBox::warning(this, "NIEPOPRAWNE ZAMÓWIENIE",
-                             " <FONT COLOR='#000080'>Zamówienie papierowe zaczynamy A, natomiast komputerowe B",
+                             " <FONT COLOR='#000082'>Zamówienie papierowe zaczynamy A, natomiast komputerowe B",
                              QMessageBox::Ok);
     }  else if (zam.count() < 2) {
         QMessageBox::warning(this, "NIEPOPRAWNE ZAMÓWIENIE",
-                             " <FONT COLOR='#000080'>Uzupełnij numer zamówienia.",
+                             " <FONT COLOR='#000082'>Uzupełnij numer zamówienia.",
                              QMessageBox::Ok);
     }     else if (dbManager->sprawdzNr(ui->lineEditPapier->text())) {
         QMessageBox::warning(this, "NIEPOPRAWNE ZAMÓWIENIE",
-                             " <FONT COLOR='#000080'>Zamówienie o podanym numerze istnieje w bazie.",
+                             " <FONT COLOR='#000082'>Zamówienie o podanym numerze istnieje w bazie.",
                              QMessageBox::Ok);
     } else {
         if (dbManager->zamowienie(ui->calendarWidget->selectedDate(),
@@ -162,14 +164,14 @@ void noweZamowienieDialog::on_buttonBox_accepted() {
             accept();
         } else {
             QMessageBox::warning(this, "NIEPOWODZENIE",
-                                 " <FONT COLOR='#000080'>Dodanie zamówienia nie powiodło się. ",
+                                 " <FONT COLOR='#000082'>Dodanie zamówienia nie powiodło się. ",
                                  QMessageBox::Ok);
         }
     }
 }
 
 void noweZamowienieDialog::on_buttonBox_rejected() {
-    if (QMessageBox::question(this, "WYJŚCIE", "<FONT COLOR='#000080'>Jesteś w trakcie dodawania zamówienia. Czy na pewno wyjść?") == QMessageBox::Yes) {
+    if (QMessageBox::question(this, "WYJŚCIE", "<FONT COLOR='#000082'>Jesteś w trakcie dodawania zamówienia. Czy na pewno wyjść?") == QMessageBox::Yes) {
         wyczysc();
         reject();
     } else {
@@ -187,36 +189,6 @@ void noweZamowienieDialog::ustawTabeleHeaders() {
     hv->setStretchLastSection(true);
 }
 
-//void noweZamowienieDialog::on_pushButtonModel_clicked() {
-//    modelDialog->setFixedSize(modelDialog->size());
-//    if (modelDialog->selectExec() == QDialog::Accepted) {
-//        QList<QStandardItem *> rzad = dbManager->zwrocWierszModel();
-//        zamowienie->insertRow(ktoraPozycja, rzad);
-//        ustawTabeleHeaders();
-//        QStringList listaZamowienia;
-//        listaZamowienia << "WZÓR" << "SPÓD" << "KOLOR" << "MATRYCA " << "OCIEP" << "WKŁADKA" << "36" << "37" << "38" << "39" << "40" << "41" << "42" << "43"  << "44"
-//                        << "45" << "46" << "47"  << "48" << "49" << "50" << "SUMA" << "" ;
-//        for (int i = 0; i < zamowienie->columnCount(); ++i) {
-//            zamowienie->setHeaderData(i, Qt::Horizontal, listaZamowienia[i]);
-//        }
-//        uwagi.append(QString(""));
-
-//        QModelIndex index = ui->tableViewZam->model()->index(ktoraPozycja, 10);
-
-//        ui->tableViewZam->selectionModel()->clearSelection();
-//        ui->tableViewZam->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
-//        if(ktoraPozycja==0) {
-//            ustawTabeleHeaders();
-//            ui->tableViewZam->setContextMenuPolicy(Qt::CustomContextMenu);
-//            connect(ui->tableViewZam, SIGNAL(customContextMenuRequested(const QPoint &)),
-//                    this,
-//                    SLOT(ShowContextMenu(const QPoint &)));
-//        }
-//        ktoraPozycja++;
-//        ui->plainTextEditU1->clear();
-//    }
-//}
-
 void noweZamowienieDialog::showEvent(QShowEvent *e) {
     Q_UNUSED(e);
     ui->lineEditPapier->setText("A");
@@ -224,9 +196,9 @@ void noweZamowienieDialog::showEvent(QShowEvent *e) {
     ktoraPozycja = 0;
     if (zamowienie == 0) {
         zamowienie = new QStandardItemModel();
+        ui->tableViewZam->setModel(zamowienie);
         connect(zamowienie, SIGNAL(itemChanged(QStandardItem *)), this,
                 SLOT(obliczSume(QStandardItem *)));
-        ui->tableViewZam->setModel(zamowienie);
         connect(
             ui->tableViewZam->selectionModel(),
             SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
@@ -289,30 +261,32 @@ void noweZamowienieDialog::ShowContextMenu(const QPoint &pos) {
             //todo usunac tez z
 //            int row = ui->tableViewZam->currentIndex().row();
 //           int modelId = dbManager->idModeluL[row];
-            if (QMessageBox::question(this, "USUŃ", "<FONT COLOR='#000080'>Czy napewno usunąć?") == QMessageBox::Yes) {
+            if (QMessageBox::question(this, "USUŃ", "<FONT COLOR='#000082'>Czy napewno usunąć?") == QMessageBox::Yes) {
                 if (zamowienie->rowCount() != 0) {
                     if (ui->tableViewZam->selectionModel()->hasSelection()) {
                         uwagi.removeAt(row);
                         zamowienie->removeRow(row);
                         ktoraPozycja--;
                         ui->tableViewZam->update();
+                        sumall();
                     }
                 }
                 QMessageBox::information(this, "ZAKTUALIZOWANO", " <FONT COLOR='#0f00f0'>Usunięto pozycję.", QMessageBox::Ok);
             }
         } else if(selectedItem->text() == QString("KOPIUJ")) {
             bool ok;
-            int ile = QInputDialog::getInt(this,"KOPIOWANIE", "Proszę o podanie ilości kopi.",1,1,1000,1,&ok);
+            int ile = QInputDialog::getInt(this,"KOPIOWANIE", "Proszę o podanie ilości kopii.",1,1,1000,1,&ok);
             if(ok) {
                 int row = ui->tableViewZam->currentIndex().row();
                 int modelId = dbManager->idModeluL[row];
 
                 for(int i=0; i<ile; i++) {
                     QList<QStandardItem *> list;
-                    for (int column = 0; column < zamowienie->columnCount(); ++column) {
+                    for (int column = 0; column < zamowienie->columnCount() -1; ++column) {
                         QStandardItem * itm= zamowienie->item(row, column);
                         list.append(itm->clone());
                     }
+                    list.append(new QStandardItem("WPROWADZONE"));
                     zamowienie->insertRow(ktoraPozycja,list);
                     QString x =ui->plainTextEditU1->toPlainText();
                     uwagi.append(x);
@@ -333,6 +307,17 @@ void noweZamowienieDialog::abra(QWidget *) {
     ui->plainTextEditU1->setPlainText(uwagi[ui->tableViewZam->currentIndex().row()]);
 }
 
+void noweZamowienieDialog::ab(QWidget *, QAbstractItemDelegate::EndEditHint) {
+    QString x = ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(ui->tableViewZam->currentIndex().row(),22)).toString();
+    if(x == "MAGAZYN TOWARÓW") {
+        delArrow->x = true;
+        qDebug() << "tak";
+    } else {
+        qDebug() << "nie";
+        delArrow->x = false;
+    }
+}
+
 void noweZamowienieDialog::on_pushButtonModel_2_clicked() {
     roz->setFixedSize(roz->size());
     if(roz->selectExec() == QDialog::Accepted) {
@@ -342,7 +327,7 @@ void noweZamowienieDialog::on_pushButtonModel_2_clicked() {
             zamowienie->insertRow(ktoraPozycja, rzad);
             ustawTabeleHeaders();
             QStringList listaZamowienia;
-            listaZamowienia << "WZÓR" << "SPÓD" << "KOLOR" << "MATRYCA " << "OCIEP" << "WKŁADKA" << "36" << "37" << "38" << "39" << "40" << "41" << "42" << "43"  << "44"
+            listaZamowienia << "WZÓR" << "SPÓD" << "KOLOR" << "MATRYCA " << "OCIEPLEN" << "WKŁADKA" << "36" << "37" << "38" << "39" << "40" << "41" << "42" << "43"  << "44"
                             << "45" << "46" << "47"  << "48" << "49" << "50" << "SUMA" << "STATUS" ;
             for (int i = 0; i < zamowienie->columnCount(); ++i) {
                 zamowienie->setHeaderData(i, Qt::Horizontal, listaZamowienia[i]);
@@ -365,13 +350,33 @@ void noweZamowienieDialog::on_pushButtonModel_2_clicked() {
             sumall();
             dbManager->zachowajRW(rzad);
             dbManager->odejmijzMW(roz->zwrocWierszModel(), roz->getActualLastId());
+
+            for (int c = 0; c < ui->tableViewZam->horizontalHeader()->count(); ++c) {
+                ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
+                        QHeaderView::Fixed);
+            }
+
+            ui->tableViewZam->setColumnWidth(0, 82);
+            ui->tableViewZam->setColumnWidth(1, 82);
+            ui->tableViewZam->setColumnWidth(2, 82);
+            ui->tableViewZam->setColumnWidth(3, 82);
+            ui->tableViewZam->setColumnWidth(4, 82);
+            ui->tableViewZam->setColumnWidth(5, 82);
+            for (int c = 6; c < 21;  c++) {
+                ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
+                        QHeaderView::Fixed);
+                ui->tableViewZam->setColumnWidth(c, 30);
+            }
+            QHeaderView *hv = ui->tableViewZam->horizontalHeader();
+            hv->setStretchLastSection(true);
+
         } else {
             QList<QStandardItem *> rzad = dbManager->zwrocWierszModel();
             zamowienie->insertRow(ktoraPozycja, rzad);
             ustawTabeleHeaders();
             QStringList listaZamowienia;
-            listaZamowienia << "WZÓR" << "SPÓD" << "KOLOR" << "MATRYCA " << "OCIEP" << "WKŁADKA" << "36" << "37" << "38" << "39" << "40" << "41" << "42" << "43"  << "44"
-                            << "45" << "46" << "47"  << "48" << "49" << "50" << "SUMA" << "" ;
+            listaZamowienia << "WZÓR" << "SPÓD" << "KOLOR" << "MATRYCA " << "OCIEPLEN" << "WKŁADKA" << "36" << "37" << "38" << "39" << "40" << "41" << "42" << "43"  << "44"
+                            << "45" << "46" << "47"  << "48" << "49" << "50" << "SUMA" << "STATUS" ;
             for (int i = 0; i < zamowienie->columnCount(); ++i) {
                 zamowienie->setHeaderData(i, Qt::Horizontal, listaZamowienia[i]);
             }
@@ -390,6 +395,25 @@ void noweZamowienieDialog::on_pushButtonModel_2_clicked() {
             }
             ktoraPozycja++;
             ui->plainTextEditU1->clear();
+
+            for (int c = 0; c < ui->tableViewZam->horizontalHeader()->count(); ++c) {
+                ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
+                        QHeaderView::Fixed);
+            }
+
+            ui->tableViewZam->setColumnWidth(0, 82);
+            ui->tableViewZam->setColumnWidth(1, 82);
+            ui->tableViewZam->setColumnWidth(2, 82);
+            ui->tableViewZam->setColumnWidth(3, 82);
+            ui->tableViewZam->setColumnWidth(4, 82);
+            ui->tableViewZam->setColumnWidth(5, 82);
+            for (int c = 6; c < 21;  c++) {
+                ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
+                        QHeaderView::Fixed);
+                ui->tableViewZam->setColumnWidth(c, 30);
+            }
+            QHeaderView *hv = ui->tableViewZam->horizontalHeader();
+            hv->setStretchLastSection(true);
         }
     }
 }

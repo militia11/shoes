@@ -1,5 +1,6 @@
 #include "mwdialog.h"
 #include "ui_mwdialog.h"
+#include <QMessageBox>
 
 int mwDialog::selectExec() {
     ui->pushButtonPu->setVisible(true);
@@ -156,6 +157,8 @@ void mwDialog::on_pushButton_2_clicked() {
     roz->setCurId(id);
     roz->setInsertExec(true);
     roz->setFixedSize(roz->size());
-    roz->setWindowTitle("Pobranie z magazynu wolne");
-    roz->exec();
+    roz->setWindowTitle("Pobierz z magazynu wolne");
+    if(roz->exec()== QDialog::Accepted) {
+        QMessageBox::information(this, "ZAKTUALIZOWANO", " <FONT COLOR='#0f00f0'>Utworzono dokument PZ.", QMessageBox::Ok);
+    }
 }

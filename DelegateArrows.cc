@@ -1,8 +1,11 @@
 #include "DelegateArrows.h"
 #include <QLineEdit>
 #include <QApplication>
-DelegateArrows::DelegateArrows(QObject *parent) : QStyledItemDelegate(parent)
-{}
+#include <QDebug>
+#include <QTableView>
+DelegateArrows::DelegateArrows(QObject *parent) : QStyledItemDelegate(parent) {
+    x = false;
+}
 
 bool DelegateArrows::eventFilter(QObject *object, QEvent *event) {
     QWidget *editor = qobject_cast<QWidget *>(object);
@@ -51,6 +54,16 @@ bool DelegateArrows::eventFilter(QObject *object, QEvent *event) {
             event->accept();
             return true;
         }
+    } else if (event->type() == QEvent::FocusIn) {
+        QTableView *view = qobject_cast<QTableView*>(parent());
+        QString x = view->model()->data(view->model()->index(view->currentIndex().row(),22)).toString();
+        if(x == "MAGAZYN TOWARÓW") {
+            qDebug() << "tak";
+            emit closeEditor(editor);
+        } else {
+            qDebug() << "nie";
+        }
+        return false;
     }
     return false;
 }

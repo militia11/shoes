@@ -12,7 +12,7 @@
 #include "handlowceDialog.h"
 #include "mwdialog.h"
 #include <QStandardItemModel>
-
+#include "DelegateArrows.h"
 namespace Ui {
 class noweZamowienieDialog;
 }
@@ -50,8 +50,10 @@ private slots:
 
     void on_pushButtonModel_2_clicked();
 
+
 public slots:
     void  abra(QWidget*);
+    void  ab(QWidget*,QAbstractItemDelegate::EndEditHint);
 
 private:
     bool eventFilter(QObject *object, QEvent *event);
@@ -71,6 +73,7 @@ private:
     QStandardItemModel *zamowienie;
     int ktoraPozycja;
     QString nr;
+    DelegateArrows *delArrow;
     void ustawTabeleHeaders();
     void setPlainTextEnabled(bool aEnable);
 };

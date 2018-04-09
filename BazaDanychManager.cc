@@ -491,7 +491,7 @@ QList<QStandardItem *> BazaDanychManager::zwrocWierszModel() {
     for (int i = 0; i < 16; i++) {
         rzad.append(new QStandardItem(QString("0")));
     }
-    rzad.append(new QStandardItem("NOWE TOWARY"));
+    rzad.append(new QStandardItem("WPROWADZONE"));
     return rzad;
 }
 
@@ -633,7 +633,6 @@ void BazaDanychManager::setmw() {
 
     mw->select();
 }
-
 
 void BazaDanychManager::setRw() {
     if (rw == nullptr) {
@@ -1141,9 +1140,9 @@ void BazaDanychManager::zachowajHandlowca(QString im, QString nz, QString skr,
 
 bool BazaDanychManager::insPz(QList<QStandardItem *> rzad) {
     QSqlQuery qry;
-    qry.prepare("INSERT INTO rw (`modele_id`,`R36`, R37 ,R38, R39,  R40, "
+    qry.prepare("INSERT INTO pz (`modele_id`,`R36`, R37 ,R38, R39,  R40, "
                 "  R41, R42  ,R43   ,R44,  R45, R46 ,  R47,  R48 ,  R49 , R50,suma, wprowadzono, uzytkownik) VALUES (:modele_id, :R36, :R37 ,:R38,:R39, :R40 , :R41, :R42, :R43  ,:R44, :R45 ,  :R46 , :R47  , :R48, :R49,:R50 ,:suma, :wprowadzono, :uzytkownik)");
-    qry.bindValue(":modele_id", idModelu);
+    qry.bindValue(":modele_id",1 );//idModelu
     qry.bindValue(":R36", rzad.at(6)->data(Qt::DisplayRole).toInt());
     qry.bindValue(":R37", rzad.at(7)->data(Qt::DisplayRole).toInt());
     qry.bindValue(":R38", rzad.at(8)->data(Qt::DisplayRole).toInt());
@@ -1365,7 +1364,6 @@ void BazaDanychManager::aktualizujModel(QVector<QImage> images, QString rodzaj_m
     } else {
         mModele->select();
     }
-
 }
 
 bool BazaDanychManager::zamowienie(QDate zam,
@@ -1410,7 +1408,8 @@ bool BazaDanychManager::zamowienie(QDate zam,
         qry.bindValue(":uwagi2", uwagi2);
         qry.bindValue(":wprowadzono", zam);
         qry.bindValue(":realizacja", realizacji);
-        qry.bindValue(":status", rzad.at(20)->data(Qt::DisplayRole).toString());
+        qry.bindValue(":status", rzad.at(22)->data(Qt::DisplayRole).toString());
+        qDebug() << rzad.at(20)->data(Qt::DisplayRole).toString();
         qry.bindValue(":uzytkownik", user);
         qry.bindValue(":modele_id", idModeluL[i]);
         qry.bindValue(":handlowce_id", idHandlowca);

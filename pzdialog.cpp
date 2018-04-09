@@ -91,9 +91,9 @@ void pzDialog::on_pushButton_clicked() {
     ustawIFiltruj();
 }
 
-void pzDialog::on_pushButton_3_clicked() {
-    roz->setInsertExec(true);
-    roz->setFixedSize(roz->size());
-    roz->setWindowTitle("Pobranie z magazynu wolne");
-    roz->exec();
-}
+//void pzDialog::on_pushButton_3_clicked() {
+//    roz->setInsertExec(true);
+//    roz->setFixedSize(roz->size());
+//    roz->setWindowTitle("Pobranie z magazynu wolne");
+//    roz->exec();
+//}
