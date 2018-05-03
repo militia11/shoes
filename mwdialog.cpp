@@ -5,7 +5,6 @@
 int mwDialog::selectExec() {
     ui->pushButtonPu->setVisible(true);
     ui->pushButtonZw->setVisible(true);
-    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     return QDialog::exec();
 }
 
@@ -15,8 +14,10 @@ mwDialog::mwDialog(rozmiaryDialog *roz, BazaDanychManager *db, QWidget *parent) 
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     actualLastId = -1;
     zmagazynu = true;
+    ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
 }
 
 mwDialog::~mwDialog() {
@@ -27,7 +28,6 @@ mwDialog::~mwDialog() {
 int mwDialog::exec() {
     ui->pushButtonPu->setVisible(false);
     ui->pushButtonZw->setVisible(false);
-    ui->tableView->setEditTriggers(QAbstractItemView::DoubleClicked);
     return QDialog::exec();
 }
 
@@ -157,8 +157,8 @@ void mwDialog::on_pushButton_2_clicked() {
     roz->setCurId(id);
     roz->setInsertExec(true);
     roz->setFixedSize(roz->size());
-    roz->setWindowTitle("Pobierz z magazynu wolne");
+    roz->setWindowTitle("Przyjęcie zewnętrzne");
     if(roz->exec()== QDialog::Accepted) {
-        QMessageBox::information(this, "ZAKTUALIZOWANO", " <FONT COLOR='#0f00f0'>Utworzono dokument PZ.", QMessageBox::Ok);
+        QMessageBox::information(this, "ZAKTUALIZOWANO", " <FONT COLOR='#0f00f0'>Dodano do magazynu. Utworzono dokument PZ.", QMessageBox::Ok);
     }
 }

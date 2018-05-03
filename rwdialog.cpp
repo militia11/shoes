@@ -7,6 +7,7 @@ rwDialog::rwDialog(BazaDanychManager *db, QWidget *parent) :
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
 }
 
 rwDialog::~rwDialog() {

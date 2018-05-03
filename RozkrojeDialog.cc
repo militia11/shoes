@@ -1,7 +1,7 @@
 #include "RozkrojeDialog.h"
 #include "ui_RozkrojeDialog.h"
 #include "NaglowkiZamowienia.h"
-
+#include <QKeyEvent>
 RozkrojeDialog::RozkrojeDialog(BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RozkrojeDialog), dbManager(db) {
@@ -13,6 +13,9 @@ RozkrojeDialog::RozkrojeDialog(BazaDanychManager *db, QWidget *parent) :
     ui->lineEditUz->setFixedWidth(120);
     ui->lineEditWpr->setFixedWidth(120);
     this->setWindowFlags(Qt::Window);
+    ui->tableViewSzczegoly->verticalHeader()->setDefaultSectionSize(ui->tableViewSzczegoly->verticalHeader()->minimumSectionSize());
+    ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
+    ui->tableView->installEventFilter(this);
 }
 
 RozkrojeDialog::~RozkrojeDialog() {
@@ -42,8 +45,8 @@ void RozkrojeDialog::ustawIFiltruj() {
 
 void RozkrojeDialog::on_tableView_clicked(const QModelIndex &index) {
     deleteOldModel();
-    QModelIndex  idx = proxy->mapToSource(
-                           ui->tableView->selectionModel()->currentIndex());
+    QModelIndex idx = proxy->mapToSource(
+                          ui->tableView->selectionModel()->currentIndex());
     int id = dbManager->getRozkroje()->data(
                  dbManager->getRozkroje()->index(idx.row(),
                          0)).toInt();
@@ -55,17 +58,9 @@ void RozkrojeDialog::on_tableView_clicked(const QModelIndex &index) {
     }
     ui->tableViewSzczegoly->hideColumn(0);
     ui->tableViewSzczegoly->horizontalHeader()->setMinimumSectionSize(5);
-    QHeaderView *hv = ui->tableViewSzczegoly->horizontalHeader();
-    NaglowkiZamowienia::ustawNaglowki(ui->tableViewSzczegoly, vModel);
-    ui->tableViewSzczegoly->setColumnWidth(35, 80);
-    ui->tableViewSzczegoly->setColumnWidth(36, 80);
 
+    NaglowkiZamowienia::ustawNaglowkiROZ(ui->tableViewSzczegoly, vModel);
 
-    hv->setSectionHidden(37, true);
-    hv->setSectionHidden(38, true);
-    hv->setSectionHidden(39, true);
-    hv->setSectionHidden(40, true);
-    hv->setSectionHidden(41, true);
     connect(
         ui->tableViewSzczegoly->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
@@ -151,6 +146,8 @@ void RozkrojeDialog::SelectionOfTableChanged(const QItemSelection &aSelected, co
 void RozkrojeDialog::SelectionOfTableChangedSzczegoly(const QItemSelection &aSelected, const QItemSelection &aDeselected) {
     bool vIsAnyItemSelected = aSelected.count() > 0;
     ui->pushButtonPrint_2->setEnabled(vIsAnyItemSelected);
+    ui->pushButton->setEnabled(false);
+    ui->pushButtonPrint->setEnabled(false);
 }
 
 void RozkrojeDialog::drukuj() {
@@ -359,6 +356,11 @@ void RozkrojeDialog::oznaczDrukowano() {
     for (int i : idDrukowanychZam) {
         dbManager->oznaczDrukowano(i);
     }
+
+    //  ui->tableView->setFocus();
+    QModelIndex index = ui->tableView->currentIndex();
+    ui->tableView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+    on_tableView_clicked(index);
 }
 
 void RozkrojeDialog::on_pushButtonPrint_2_clicked() {
@@ -383,7 +385,7 @@ void RozkrojeDialog::on_pushButton_clicked() {
 void RozkrojeDialog::csvexport() {
     QAbstractItemModel *model = ui->tableViewSzczegoly->model();
 
-    QString linki =  QFileDialog::getSaveFileName(this, tr("Export do Excela"), "", tr("Zapisz plik CSV (*.csv)"));
+    QString linki =  QFileDialog::getSaveFileName(this, tr("Export do Excela"), QDir::homePath(), tr("Zapisz plik CSV (*.csv)"));
     int x = 0;
     QString exportdata;
 
@@ -405,12 +407,10 @@ void RozkrojeDialog::csvexport() {
                 exportdata.append(";");
             else {
                 exportdata.append("\n");
-
             }
             w++;
         }
         x++;
-
     }
 
     int z = 0;
@@ -448,4 +448,111 @@ void RozkrojeDialog::csvexport() {
     stream << exportdata;
 
     plik.close();
+}
+
+void RozkrojeDialog::on_pushButton_2_clicked() {
+    deleteOldModel();
+
+    QSqlQuery query("select *from vroz where DRUKOWANO=0");
+    vModel = dbManager->getSqlModelForQuery(&query);
+    if (vModel) {
+        ui->tableViewSzczegoly->setModel(vModel);
+    }
+    ui->tableViewSzczegoly->hideColumn(0);
+    ui->tableViewSzczegoly->horizontalHeader()->setMinimumSectionSize(5);
+//   QHeaderView *hv = ui->tableViewSzczegoly->horizontalHeader();
+    NaglowkiZamowienia::ustawNaglowkiROZ(ui->tableViewSzczegoly, vModel);
+//    ui->tableViewSzczegoly->setColumnWidth(35, 80);
+//    ui->tableViewSzczegoly->setColumnWidth(36, 80);
+
+    connect(
+        ui->tableViewSzczegoly->selectionModel(),
+        SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+        SLOT(SelectionOfTableChangedSzczegoly(
+                 const QItemSelection &,
+                 const QItemSelection &)));
+    ui->pushButtonPrint_2->setEnabled(false);
+    ui->pushButtonPrint->setEnabled(false);
+    ui->pushButton->setEnabled(false);
+}
+
+void RozkrojeDialog::upButtonUpdateZdj() {
+    QModelIndex id = getIdUp();
+    updateZdj(id);
+}
+
+void RozkrojeDialog::downButtonUpdateZdj() {
+    QModelIndex id = getIdDown();
+    updateZdj(id);
+}
+
+QModelIndex RozkrojeDialog::getIdUp() {
+    QModelIndex idx =
+        ui->tableView->selectionModel()->currentIndex();
+
+    if(idx.row()==0) {
+        return proxy->mapToSource(ui->tableView->model()->index(idx.row(), 0));
+
+    } else {
+        return proxy->mapToSource(ui->tableView->model()->index(idx.row()-1, 0));
+
+    }
+}
+
+QModelIndex RozkrojeDialog::getIdDown() {
+    QModelIndex idx =
+        ui->tableView->selectionModel()->currentIndex();
+
+    if(idx.row()==ui->tableView->model()->rowCount()-10) {
+        return proxy->mapToSource(ui->tableView->model()->index(idx.row(), 0));
+
+    } else {
+        return proxy->mapToSource(ui->tableView->model()->index(idx.row()+1, 0));
+
+    }
+}
+
+void RozkrojeDialog::updateZdj(QModelIndex idx) {
+    int id = dbManager->getRozkroje()->data(
+                 dbManager->getRozkroje()->index(idx.row(),
+                         0)).toInt();
+    QString q = QString("select *from vroz where rozkroje_id=%1").arg(id);
+    QSqlQuery query(q);
+    vModel = dbManager->getSqlModelForQuery(&query);
+    if (vModel) {
+        ui->tableViewSzczegoly->setModel(vModel);
+    }
+    ui->tableViewSzczegoly->hideColumn(0);
+    ui->tableViewSzczegoly->horizontalHeader()->setMinimumSectionSize(5);
+
+    NaglowkiZamowienia::ustawNaglowkiROZ(ui->tableViewSzczegoly, vModel);
+
+    connect(
+        ui->tableViewSzczegoly->selectionModel(),
+        SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+        SLOT(SelectionOfTableChangedSzczegoly(
+                 const QItemSelection &,
+                 const QItemSelection &)));
+    ui->pushButtonPrint_2->setEnabled(false);
+}
+
+bool RozkrojeDialog::eventFilter(QObject *object, QEvent *event) {
+    if (object == ui->tableView) {
+        if (event->type() == QEvent::KeyPress) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if (keyEvent->key() == Qt::Key_Up) {
+                upButtonUpdateZdj();
+                return   QDialog::eventFilter(object, event);
+            } else if (keyEvent->key() == Qt::Key_Down) {
+                downButtonUpdateZdj();
+                return QDialog::eventFilter(object, event);
+            } else {
+                return QDialog::eventFilter(object, event);
+            }
+        } else {
+            return QDialog::eventFilter(object, event);
+        }
+    } else {
+        return QDialog::eventFilter(object, event);
+    }
 }

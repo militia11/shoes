@@ -113,6 +113,11 @@ private slots:
     void on_actionRozch_d_wewn_trzny_triggered();
 
     void on_actionPrzyj_cie_zewn_trzne_triggered();
+    void on_actionEksport_do_Excela_triggered();
+
+    void on_pushButtondruk1_toggled(bool checked);
+
+    void on_pushButtondruk2_toggled(bool checked);
 
 private:
     bool eventFilter(QObject *object, QEvent *event);
@@ -122,8 +127,8 @@ private:
     void rozciagnijWiersze();
     void podlaczSygnaly();
 
-    void     upButtonUpdateZdj();
-    void     downButtonUpdateZdj();
+    void upButtonUpdateZdj();
+    void downButtonUpdateZdj();
     int getIdUp();
     int getIdDown();
     Ui::MainWindow *ui;
@@ -160,6 +165,10 @@ private:
     logowanieDialog *log;
     rozmiaryDialog *rozmDialo;
     pzDialog *pz;
+    NotEditableDelegate *delNoEdit;
+    QItemDelegate *stadnardDel;
+    void block();
+    void noblock();
     QSortFilterProxyModel *proxy;
 
     int nrkar;
@@ -182,6 +191,7 @@ private:
     bool archiwumMode;
     bool wysylkaMode;
     QString getNrZam(QModelIndex idx);
+    QString getNrZamWl(QModelIndex idx);
     int getiDZam(QModelIndex idx);
     QString prepareRozkroj();
     QString prepareZam();

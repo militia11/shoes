@@ -7,7 +7,6 @@
 #include <QMenu>
 #include <QInputDialog>
 
-
 noweZamowienieDialog::noweZamowienieDialog(mwDialog *roz, handlowceDialog *wybHandlDialog,
         BazaDanychManager *db, modeleDialog *modeleDialog,
         klienciDialog *dialog,
@@ -46,7 +45,7 @@ noweZamowienieDialog::noweZamowienieDialog(mwDialog *roz, handlowceDialog *wybHa
     ui->tableViewZam->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint| Qt::WindowSystemMenuHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
     connect(delArrow, SIGNAL(commitData(QWidget*)), this, SLOT(abra(QWidget*)));
-    //connect(delArrow, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)), this, SLOT(ab(QWidget*,QAbstractItemDelegate::EndEditHint)));
+    ui->tableViewZam->verticalHeader()->setDefaultSectionSize(ui->tableViewZam->verticalHeader()->minimumSectionSize());
 }
 
 bool noweZamowienieDialog::eventFilter(QObject *object, QEvent *event) {
@@ -92,7 +91,8 @@ void noweZamowienieDialog::obliczSume(QStandardItem *it) {
 
 void noweZamowienieDialog::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Escape) {
-        if (QMessageBox::question(this, "WYJŚCIE", "<FONT COLOR='#000082'>Jesteś w trakcie dodawania zamówienia. Czy na pewno wyjść?") == QMessageBox::Yes) {
+        if (QMessageBox::question(this, "WYJŚCIE",
+                                  "<FONT COLOR='#000082'>Jesteś w trakcie dodawania zamówienia. Czy na pewno wyjść?") == QMessageBox::Yes) {
             wyczysc();
             QDialog::keyPressEvent(event);
         } else {
@@ -275,11 +275,10 @@ void noweZamowienieDialog::ShowContextMenu(const QPoint &pos) {
             }
         } else if(selectedItem->text() == QString("KOPIUJ")) {
             bool ok;
-            int ile = QInputDialog::getInt(this,"KOPIOWANIE", "Proszę o podanie ilości kopii.",1,1,1000,1,&ok);
-            if(ok) {
+            int ile = QInputDialog::getInt(this, "KOPIE", "Proszę o podanie ilości kopii.", 1, 1, 1000, 1, &ok);
+            if (ok) {
                 int row = ui->tableViewZam->currentIndex().row();
                 int modelId = dbManager->idModeluL[row];
-
                 for(int i=0; i<ile; i++) {
                     QList<QStandardItem *> list;
                     for (int column = 0; column < zamowienie->columnCount() -1; ++column) {
@@ -295,7 +294,7 @@ void noweZamowienieDialog::ShowContextMenu(const QPoint &pos) {
                 }
             }
             int wszystkie = 0;
-            for (int j = 0; j <  zamowienie->rowCount(); j++) {
+            for (int j = 0; j < zamowienie->rowCount(); j++) {
                 wszystkie += zamowienie->data(zamowienie->index(j, 21), Qt::DisplayRole).toInt();
             }
             ui->lcdNumber->setText(QString::number(wszystkie));
@@ -305,17 +304,6 @@ void noweZamowienieDialog::ShowContextMenu(const QPoint &pos) {
 
 void noweZamowienieDialog::abra(QWidget *) {
     ui->plainTextEditU1->setPlainText(uwagi[ui->tableViewZam->currentIndex().row()]);
-}
-
-void noweZamowienieDialog::ab(QWidget *, QAbstractItemDelegate::EndEditHint) {
-    QString x = ui->tableViewZam->model()->data(ui->tableViewZam->model()->index(ui->tableViewZam->currentIndex().row(),22)).toString();
-    if(x == "MAGAZYN TOWARÓW") {
-        delArrow->x = true;
-        qDebug() << "tak";
-    } else {
-        qDebug() << "nie";
-        delArrow->x = false;
-    }
 }
 
 void noweZamowienieDialog::on_pushButtonModel_2_clicked() {
@@ -333,9 +321,7 @@ void noweZamowienieDialog::on_pushButtonModel_2_clicked() {
                 zamowienie->setHeaderData(i, Qt::Horizontal, listaZamowienia[i]);
             }
             uwagi.append(QString(""));
-
             QModelIndex index = ui->tableViewZam->model()->index(ktoraPozycja, 10);
-
             ui->tableViewZam->selectionModel()->clearSelection();
             ui->tableViewZam->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
             if(ktoraPozycja==0) {
@@ -348,9 +334,9 @@ void noweZamowienieDialog::on_pushButtonModel_2_clicked() {
             ktoraPozycja++;
             ui->plainTextEditU1->clear();
             sumall();
-            dbManager->zachowajRW(rzad);
-            dbManager->odejmijzMW(roz->zwrocWierszModel(), roz->getActualLastId());
-
+            if(dbManager->zachowajRW(rzad)) {
+                dbManager->odejmijzMW(roz->zwrocWierszModel(), roz->getActualLastId());
+            }
             for (int c = 0; c < ui->tableViewZam->horizontalHeader()->count(); ++c) {
                 ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
                         QHeaderView::Fixed);

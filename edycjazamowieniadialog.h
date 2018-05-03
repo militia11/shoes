@@ -18,6 +18,8 @@ public:
     explicit EdycjaZamowieniaDialog(klienciDialog * dialogKlienci, handlowceDialog * dialogHandl, modeleDialog * dialogmodele, BazaDanychManager *db, QWidget *parent = 0);
     ~EdycjaZamowieniaDialog();
     void setNrZam(QString nrZami);
+    void setNrZamWl(QString nrZami);
+
 private slots:
     void refreshTable();
     void updateZamSum(const QModelIndex &topLeft, const QModelIndex &bot,
@@ -41,6 +43,7 @@ private:
     Ui::EdycjaZamowieniaDialog *ui;
     BazaDanychManager *dbManager;
     QString nrZam;
+    QString nrZamwl;
     int idKli;
     QString kliSkrot;
     klienciDialog *dialogKlienci;

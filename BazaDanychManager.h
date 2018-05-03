@@ -52,7 +52,7 @@ public:
     bool zamowienie(QDate zam, QDate realizacji,
                     QStringList uwagi1,
                     QString uwagi2, QString nr_zam, QStandardItemModel *pozycje);
-    void insertPozycjazamowienie(QString nr_zam, int idKlienta, int idHandlowca);
+    void insertPozycjazamowienie(QString nr_zam);
     bool rozkroj(QStandardItemModel *pozycje);
     void ustawAktualnyModelId(const QModelIndex index);
     void ustawAktualnyModelMWId(int id);
@@ -60,6 +60,8 @@ public:
     QList<QStandardItem *> zwrocWierszModel();
     QString getOstatniSelectZam() const;
     int getIdZamowieniaZTabeli(QModelIndex index);
+    QString getNrZamowieniaZTabeli(QModelIndex index);
+    QString getNrOstatniejPozycjiZamowieniaZTabeli(int row);
     QString getNrRozkrojuDoWskazania(QModelIndex index);
     QImage getImage(int id, int ktore, QString tab);
     bool updateImage(int id, int ktore, QImage im, QString tab);
@@ -96,7 +98,9 @@ public:
     void removeZamowienie(int id);
 
     void ustawIdAktualnegoKlienta(const QModelIndex index);
+    int edyzamNrost(int row);
     void ustawIdAktualnegoHandl(const QModelIndex index);
+    void EZustawIdAktualnegoKLiHandl();
     QString pobierzNazweAktualnegoKlienta();
     QString pobierzNazweAktualnegoHandl();
 
@@ -122,6 +126,12 @@ public:
     void zachowajHandlowca(QString im, QString nz, QString skr, QString uwagi);
     bool zachowajRW(QList<QStandardItem *> rzad);
     bool odejmijzMW(QList<QStandardItem *> rzad, int id);
+    bool odejmijZrealizuj(QList<QStandardItem *> rzad, int id);
+    bool caleZrealizuj(QList<QStandardItem *> rzad, QString id, int idpraw);
+    bool cofodejmijZrealizuj(QList<QStandardItem *> rzad, int id);
+    bool dodajZrealizuj(QList<QStandardItem *> rzad, QString nrz);
+    bool cofdodajZrealizuj(QList<QStandardItem *> rzad, QString nrz);
+    bool dodajdoMW(QList<QStandardItem *> rzad, int id);
     bool zachowajModel(QVector<QImage> images, QString rodzaj_montazu,  QString typ,
                        QString  rodzaj_buta,  QString   rodzaj_buta_2,
                        QString  rodzaj_buta_3,  QString rodzaj_buta_4,
