@@ -57,10 +57,13 @@ public slots:
 private:
     bool eventFilter(QObject *object, QEvent *event);
     void keyPressEvent(QKeyEvent *event);
+    void closeEvent(QCloseEvent *e);
     void showEvent(QShowEvent *e);
     void hideEvent(QHideEvent *e);
     void wyczysc();
-
+void anuluj();
+    std::list<int> pojemnikIdMW;
+    QMap<int, int> pojemnikRzad;
     QStringList uwagi;
     mwDialog *roz;
     BazaDanychManager *dbManager;

@@ -6,7 +6,7 @@
 #include <QSortFilterProxyModel>
 #include <QTextDocument>
 #include <QPrinter>
-#include <QPageSetupDialog>
+//#include <QPageSetupDialog>
 #include <QFileDialog>
 
 namespace Ui {
@@ -54,7 +54,7 @@ private:
     void ustawIFiltruj();
     void czysc();
     void drukuj();
-    bool pageSetup(QPrinter *printer);
+    //bool pageSetup(QPrinter *printer);
     void dodajZamowieniaDoHtml(QTextDocument *document);
     void printDocument(QPrinter *printer);
     void stworzListeCaleZamowienie();

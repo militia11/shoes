@@ -118,7 +118,7 @@ void spodyDialog::showEvent(QShowEvent *e) {
     ui->tableView->setModel(proxy);
     for (int c = 0; c < ui->tableView->horizontalHeader()->count(); ++c) {
         ui->tableView->horizontalHeader()->setSectionResizeMode(c,
-                QHeaderView::Fixed);
+                QHeaderView::Stretch);
     }
     aktualizujTabele();
     ustawIFiltruj();

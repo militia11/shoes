@@ -24,7 +24,6 @@ HEADERS += BazaDanychManager.h \
            CSettings.h \
     Delegate.h \
            DelegateArrows.h \
-           DoRozkrojuDialog.h \
            edycjazamowieniadialog.h \
            handlowceDialog.h \
            klienciDialog.h \
@@ -56,14 +55,15 @@ HEADERS += BazaDanychManager.h \
     nowawkladkadialog.h \
     noweociepdialog.h \
     logowaniedialog.h \
-    wait.h \
     delegateKli.h \
     mwdialog.h \
     rozmiarydialog.h \
     rwdialog.h \
-    pzdialog.h
+    pzdialog.h \
+    historiadrukdialog.h \
+    edycjazamdelegat.h
 
-FORMS += DoRozkrojuDialog.ui \
+FORMS += \
          edycjazamowieniadialog.ui \
          handlowceDialog.ui \
          klienciDialog.ui \
@@ -91,18 +91,16 @@ FORMS += DoRozkrojuDialog.ui \
     nowawkladkadialog.ui \
     noweociepdialog.ui \
     logowaniedialog.ui \
-    busydialog.ui \
-    wait.ui \
     mwdialog.ui \
     rozmiarydialog.ui \
     rwdialog.ui \
-    pzdialog.ui
+    pzdialog.ui \
+    historiadrukdialog.ui
 
 SOURCES += BazaDanychManager.cc \
            clickableLabel.cc \
            CSettings.cc \
            DelegateArrows.cc \
-           DoRozkrojuDialog.cc \
            edycjazamowieniadialog.cpp \
            handlowceDialog.cc \
            klienciDialog.cc \
@@ -134,12 +132,13 @@ SOURCES += BazaDanychManager.cc \
     nowawkladkadialog.cpp \
     noweociepdialog.cpp \
     logowaniedialog.cpp \
-    wait.cc \
     delegatekli.cpp \
     mwdialog.cpp \
     rozmiarydialog.cpp \
     rwdialog.cpp \
-    pzdialog.cpp
+    pzdialog.cpp \
+    historiadrukdialog.cpp \
+    edycjazamdelegat.cpp
 
 RESOURCES += zasoby.qrc
 

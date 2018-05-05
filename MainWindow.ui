@@ -73,7 +73,7 @@
           <property name="sizeHint" stdset="0">
            <size>
             <width>31</width>
-            <height>4</height>
+            <height>1</height>
            </size>
           </property>
          </spacer>
@@ -89,7 +89,7 @@
           <property name="minimumSize">
            <size>
             <width>76</width>
-            <height>11</height>
+            <height>24</height>
            </size>
           </property>
           <property name="font">
@@ -98,7 +98,7 @@
            </font>
           </property>
           <property name="text">
-           <string>WIERSZE</string>
+           <string>WIERSZE:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignBottom|Qt::AlignRight|Qt::AlignTrailing</set>
@@ -119,7 +119,7 @@
           <property name="minimumSize">
            <size>
             <width>76</width>
-            <height>11</height>
+            <height>21</height>
            </size>
           </property>
           <property name="font">
@@ -149,7 +149,7 @@
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>167</height>
+            <height>164</height>
            </size>
           </property>
          </spacer>
@@ -202,13 +202,13 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>122</width>
-              <height>18</height>
+              <width>153</width>
+              <height>31</height>
              </size>
             </property>
             <property name="font">
              <font>
-              <pointsize>7</pointsize>
+              <pointsize>11</pointsize>
              </font>
             </property>
             <property name="text">
@@ -241,13 +241,13 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>122</width>
-              <height>18</height>
+              <width>153</width>
+              <height>31</height>
              </size>
             </property>
             <property name="font">
              <font>
-              <pointsize>7</pointsize>
+              <pointsize>11</pointsize>
              </font>
             </property>
             <property name="text">
@@ -283,7 +283,7 @@
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>152</height>
+            <height>129</height>
            </size>
           </property>
          </spacer>
@@ -415,21 +415,6 @@
             <width>18</width>
             <height>16</height>
            </size>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="radioButton_2">
-          <property name="font">
-           <font>
-            <family>MS Shell Dlg 2</family>
-            <pointsize>11</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>ARCHIWUM</string>
           </property>
          </widget>
         </item>
@@ -1330,7 +1315,7 @@
      <x>0</x>
      <y>0</y>
      <width>1738</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPlik">
@@ -1371,6 +1356,8 @@
     <addaction name="actionMagazyn_wolne"/>
     <addaction name="actionRozch_d_wewn_trzny"/>
     <addaction name="actionPrzyj_cie_zewn_trzne"/>
+    <addaction name="separator"/>
+    <addaction name="actionHistoria_wydruk_w"/>
    </widget>
    <addaction name="menuPlik"/>
    <addaction name="menuProdukcja"/>
@@ -1525,6 +1512,11 @@
     <string>Eksport do Excela</string>
    </property>
   </action>
+  <action name="actionHistoria_wydruk_w">
+   <property name="text">
+    <string>Historia wydruków</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
@@ -1558,7 +1550,6 @@
   <tabstop>radioButton_3</tabstop>
   <tabstop>radioButton_5</tabstop>
   <tabstop>radioButton_4</tabstop>
-  <tabstop>radioButton_2</tabstop>
   <tabstop>pushButtonSzukaj</tabstop>
   <tabstop>pushButton</tabstop>
   <tabstop>tableViewZam</tabstop>

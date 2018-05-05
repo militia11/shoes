@@ -116,6 +116,7 @@ void RozkrojeDialog::showEvent(QShowEvent *e) {
         }
         wskazRozkroj = false;
     }
+    ui->labelnIEWYD->hide();
 //    QString q = QString("select * from vroz where rozkroje_id=%1").arg(1);
 //    QSqlQuery query(q);
 //    vModel = dbManager->getSqlModelForQuery(&query);
@@ -136,7 +137,7 @@ void RozkrojeDialog::on_pushButtonPrint_clicked() {
 void RozkrojeDialog::SelectionOfTableChanged(const QItemSelection &aSelected, const QItemSelection &aDeselected) {
     bool vIsAnyItemSelected = aSelected.count() > 0;
     ui->pushButtonPrint->setEnabled(vIsAnyItemSelected);
-    ui->pushButton->setEnabled(vIsAnyItemSelected);
+    ui->pushButton->setEnabled(vIsAnyItemSelected);ui->labelnIEWYD->hide();
     if (!vIsAnyItemSelected) {
         deleteOldModel();
         ui->pushButtonPrint_2->setEnabled(false);
@@ -169,14 +170,14 @@ void RozkrojeDialog::drukuj() {
     idDrukowanychZam.clear();
 }
 
-bool RozkrojeDialog::pageSetup(QPrinter *printer) {
-    QPageSetupDialog psd(printer);
-    if (psd.exec() == QDialog::Accepted) {
-        return true;
-    } else {
-        return false;
-    }
-}
+//bool RozkrojeDialog::pageSetup(QPrinter *printer) {
+//    QPageSetupDialog psd(printer);
+//    if (psd.exec() == QDialog::Accepted) {
+//        return true;
+//    } else {
+//        return false;
+//    }
+//}
 
 void RozkrojeDialog::printDocument(QPrinter *printer) {
     QTextDocument document;
@@ -188,7 +189,6 @@ void RozkrojeDialog::wyczyscListy() {
     zamowieniaDruk.clear();
     idDrukowanychZam.clear();
 }
-
 
 void RozkrojeDialog::stworzListeZamowienSzczegoly() {
     wyczyscListy();
@@ -356,8 +356,8 @@ void RozkrojeDialog::oznaczDrukowano() {
     for (int i : idDrukowanychZam) {
         dbManager->oznaczDrukowano(i);
     }
+    dbManager->getModelZamowienia()->select();
 
-    //  ui->tableView->setFocus();
     QModelIndex index = ui->tableView->currentIndex();
     ui->tableView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
     on_tableView_clicked(index);
@@ -460,10 +460,7 @@ void RozkrojeDialog::on_pushButton_2_clicked() {
     }
     ui->tableViewSzczegoly->hideColumn(0);
     ui->tableViewSzczegoly->horizontalHeader()->setMinimumSectionSize(5);
-//   QHeaderView *hv = ui->tableViewSzczegoly->horizontalHeader();
     NaglowkiZamowienia::ustawNaglowkiROZ(ui->tableViewSzczegoly, vModel);
-//    ui->tableViewSzczegoly->setColumnWidth(35, 80);
-//    ui->tableViewSzczegoly->setColumnWidth(36, 80);
 
     connect(
         ui->tableViewSzczegoly->selectionModel(),
@@ -473,7 +470,7 @@ void RozkrojeDialog::on_pushButton_2_clicked() {
                  const QItemSelection &)));
     ui->pushButtonPrint_2->setEnabled(false);
     ui->pushButtonPrint->setEnabled(false);
-    ui->pushButton->setEnabled(false);
+    ui->pushButton->setEnabled(false);ui->labelnIEWYD->show();
 }
 
 void RozkrojeDialog::upButtonUpdateZdj() {
