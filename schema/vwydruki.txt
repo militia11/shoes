@@ -1,0 +1,46 @@
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `obuwie_db`.`vwydruki` AS
+    SELECT 
+        `k`.`id` AS `id`,
+        `k`.`DATA` AS `DATA`,
+        `h`.`pozycja` AS `pozycja`,
+        `h`.`nr_zamowieniaR` AS `nr_zamowienia`,
+        `kl`.`nazwa_skrot` AS `klnaz`,
+        `kl`.`id` AS `klnr`,
+        `wz`.`nr_wzoru` AS `wzn`,
+        `sp`.`nr` AS `spnum`,
+        `kol`.`KOLOR` AS `kol`,
+        `o`.`rodzaj` AS `ocn`,
+        `ma`.`nazwa` AS `man`,
+        `wk`.`rodzaj` AS `wklr`,
+        `h`.`R36` AS `R36`,
+        `h`.`R37` AS `R37`,
+        `h`.`R38` AS `R38`,
+        `h`.`R39` AS `R39`,
+        `h`.`R40` AS `R40`,
+        `h`.`R41` AS `R41`,
+        `h`.`R42` AS `R42`,
+        `h`.`R43` AS `R43`,
+        `h`.`R44` AS `R44`,
+        `h`.`R45` AS `R45`,
+        `h`.`R46` AS `R46`,
+        `h`.`R47` AS `R47`,
+        `h`.`R48` AS `R48`,
+        `h`.`R49` AS `R49`,
+        `h`.`R50` AS `R50`,
+        `h`.`suma` AS `suma`,
+        `k`.`DRUK` AS `DRUK`
+    FROM
+        (((((((((`obuwie_db`.`wydruki` `k`
+        JOIN `obuwie_db`.`rozkrojezam` `h` ON ((`k`.`idZamRoz` = `h`.`id`)))
+        JOIN `obuwie_db`.`klienci` `kl` ON ((`h`.`klienci_id` = `kl`.`id`)))
+        JOIN `obuwie_db`.`modele` `m` ON ((`h`.`modele_id` = `m`.`id`)))
+        JOIN `obuwie_db`.`wzory` `wz` ON ((`m`.`wzory_id` = `wz`.`id`)))
+        JOIN `obuwie_db`.`ocieplenia` `o` ON ((`m`.`ocieplenie` = `o`.`id`)))
+        JOIN `obuwie_db`.`matryce` `ma` ON ((`m`.`matryce_id` = `ma`.`id`)))
+        JOIN `obuwie_db`.`vkolory` `kol` ON ((`m`.`kolor` = `kol`.`id`)))
+        JOIN `obuwie_db`.`wkladka` `wk` ON ((`m`.`wkladka` = `wk`.`id`)))
+        JOIN `obuwie_db`.`spody` `sp` ON ((`m`.`spody_id` = `sp`.`id`)))

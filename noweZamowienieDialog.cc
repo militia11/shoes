@@ -6,8 +6,8 @@
 #include <QModelIndex>
 #include <QMenu>
 #include <QInputDialog>
-#include <QStyle>
-#include <QDesktopWidget>
+//#include <QStyle>
+//#include <QDesktopWidget>
 
 noweZamowienieDialog::noweZamowienieDialog(mwDialog *roz, handlowceDialog *wybHandlDialog,
         BazaDanychManager *db, modeleDialog *modeleDialog,
@@ -45,7 +45,8 @@ noweZamowienieDialog::noweZamowienieDialog(mwDialog *roz, handlowceDialog *wybHa
     ui->plainTextEditU1->installEventFilter(this);
     ui->plainTextEditU2->installEventFilter(this);
     ui->tableViewZam->setSelectionBehavior(QAbstractItemView::SelectRows);
-    this->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint| Qt::WindowSystemMenuHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
+    this->setWindowFlags(Qt::Window);
+    //this->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint| Qt::WindowSystemMenuHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
     connect(delArrow, SIGNAL(commitData(QWidget*)), this, SLOT(abra(QWidget*)));
     ui->tableViewZam->verticalHeader()->setDefaultSectionSize(ui->tableViewZam->verticalHeader()->minimumSectionSize());
 
@@ -105,10 +106,23 @@ void noweZamowienieDialog::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Escape) {
         if (QMessageBox::question(this, "WYJŚCIE",
                                   "<FONT COLOR='#000082'>Jesteś w trakcie dodawania zamówienia. Czy na pewno wyjść?") == QMessageBox::Yes) {
+            anuluj();
             wyczysc();
             QDialog::keyPressEvent(event);
         } else {
         }
+    }
+}
+
+void noweZamowienieDialog::closeEvent(QCloseEvent *e) {
+    if (QMessageBox::question(this, "WYJŚCIE",
+                              "<FONT COLOR='#000082'>Jesteś w trakcie dodawania zamówienia. Czy na pewno wyjść?") == QMessageBox::Yes) {
+        anuluj();
+
+        wyczysc();
+        e->accept();
+    } else {
+        e->ignore();
     }
 }
 
@@ -134,6 +148,28 @@ void noweZamowienieDialog::wyczysc() {
     uwagi.clear();
     ui->plainTextEditU1->clear();
     ui->plainTextEditU2->clear();
+    pojemnikIdMW.clear();
+    pojemnikRzad.clear();
+}
+
+void noweZamowienieDialog::anuluj() {
+    if(!pojemnikIdMW.empty()) {
+        bool sukces = true;
+        for(int x : pojemnikIdMW) {
+            if(!dbManager->usunMwDok(x)) {
+                sukces = false;
+            }
+        }
+        if(sukces) {
+            QMessageBox::information(this, "PRZYWRÓCONO",
+                                     " <FONT COLOR='#000082'>Przywrócono towar na magazyn. Usunięto dokumenty Rozchód wewnętrzny.",
+                                     QMessageBox::Ok);
+        } else {
+            QMessageBox::information(this, "NIEPOWODZENIE",
+                                     " <FONT COLOR='#000082'>Przywrócenie par na magazyn nie powiodło się. ",
+                                     QMessageBox::Ok);
+        }
+    }
 }
 
 void noweZamowienieDialog::setNr(const QString &value) {
@@ -161,11 +197,15 @@ void noweZamowienieDialog::on_buttonBox_accepted() {
         QMessageBox::warning(this, "NIEPOPRAWNE ZAMÓWIENIE",
                              " <FONT COLOR='#000082'>Uzupełnij numer zamówienia.",
                              QMessageBox::Ok);
-    }     else if (dbManager->sprawdzNr(ui->lineEditPapier->text())) {
+    }  else if (dbManager->sprawdzNr(ui->lineEditPapier->text())) {
         QMessageBox::warning(this, "NIEPOPRAWNE ZAMÓWIENIE",
                              " <FONT COLOR='#000082'>Zamówienie o podanym numerze istnieje w bazie.",
                              QMessageBox::Ok);
-    } else {
+    }  else if (ui->tableViewZam->model()->rowCount() == 0) {
+        QMessageBox::warning(this, "NIEPOPRAWNE ZAMÓWIENIE",
+                             " <FONT COLOR='#000082'>Dodaj pozycje do zamówienia.",
+                             QMessageBox::Ok);
+    }   else {
         if (dbManager->zamowienie(ui->calendarWidget->selectedDate(),
                                   ui->calendarWidgetRealizacja->selectedDate(),
                                   uwagi, ui->plainTextEditU2->toPlainText(), ui->lineEditPapier->text(), zamowienie)) {
@@ -184,6 +224,8 @@ void noweZamowienieDialog::on_buttonBox_accepted() {
 
 void noweZamowienieDialog::on_buttonBox_rejected() {
     if (QMessageBox::question(this, "WYJŚCIE", "<FONT COLOR='#000082'>Jesteś w trakcie dodawania zamówienia. Czy na pewno wyjść?") == QMessageBox::Yes) {
+        anuluj();
+
         wyczysc();
         reject();
     } else {
@@ -270,20 +312,34 @@ void noweZamowienieDialog::ShowContextMenu(const QPoint &pos) {
     if (selectedItem) {
         int row = ui->tableViewZam->selectionModel()->currentIndex().row();
         if(selectedItem->text() == QString("USUŃ")) {
-            //todo usunac tez z
-//            int row = ui->tableViewZam->currentIndex().row();
-//           int modelId = dbManager->idModeluL[row];
             if (QMessageBox::question(this, "USUŃ", "<FONT COLOR='#000082'>Czy napewno usunąć?") == QMessageBox::Yes) {
                 if (zamowienie->rowCount() != 0) {
                     if (ui->tableViewZam->selectionModel()->hasSelection()) {
-                        uwagi.removeAt(row);
-                        zamowienie->removeRow(row);
-                        ktoraPozycja--;
-                        ui->tableViewZam->update();
-                        sumall();
+                        if(zamowienie->data(zamowienie->index(row, 22)).toString() == QString("MAGAZYN TOWARÓW")) {
+                            int modelMWId = pojemnikRzad[row+1];
+                            if(dbManager->usunMwDok(modelMWId)) {
+                                pojemnikIdMW.remove(modelMWId);
+                                uwagi.removeAt(row);
+                                zamowienie->removeRow(row);
+                                ktoraPozycja--;
+
+                                ui->tableViewZam->update();
+                                qDebug() << pojemnikIdMW.empty();
+                                sumall();
+                                QMessageBox::information(this, "ZAKTUALIZOWANO", " <FONT COLOR='#0f00f0'>Przywrócono towar na magazyn. Usunięto dokument Rozchód wewnętrzny.", QMessageBox::Ok);
+                            } else {
+                                QMessageBox::information(this, "NIEPOWODZENIE", " <FONT COLOR='#0f00f0'>Nie udało się usunąć pozycji.", QMessageBox::Ok);
+                            }
+                        } else {
+                            uwagi.removeAt(row);
+                            zamowienie->removeRow(row);
+                            ktoraPozycja--;
+                            ui->tableViewZam->update();
+                            sumall();
+                            QMessageBox::information(this, "ZAKTUALIZOWANO", " <FONT COLOR='#0f00f0'>Usunięto pozycję.", QMessageBox::Ok);
+                        }
                     }
                 }
-                QMessageBox::information(this, "ZAKTUALIZOWANO", " <FONT COLOR='#0f00f0'>Usunięto pozycję.", QMessageBox::Ok);
             }
         } else if(selectedItem->text() == QString("KOPIUJ")) {
             bool ok;
@@ -334,8 +390,9 @@ void noweZamowienieDialog::on_pushButtonModel_2_clicked() {
             }
             uwagi.append(QString(""));
             QModelIndex index = ui->tableViewZam->model()->index(ktoraPozycja, 10);
-            ui->tableViewZam->selectionModel()->clearSelection();
-            ui->tableViewZam->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+//            ui->tableViewZam->selectionModel()->clearSelection();
+            //          ui->tableViewZam->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+
             if(ktoraPozycja==0) {
                 ustawTabeleHeaders();
                 ui->tableViewZam->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -367,7 +424,8 @@ void noweZamowienieDialog::on_pushButtonModel_2_clicked() {
             }
             QHeaderView *hv = ui->tableViewZam->horizontalHeader();
             hv->setStretchLastSection(true);
-
+            pojemnikIdMW.push_back(dbManager->getOstRwID());
+            pojemnikRzad.insert(ktoraPozycja,dbManager->getOstRwID());
         } else {
             QList<QStandardItem *> rzad = dbManager->zwrocWierszModel();
             zamowienie->insertRow(ktoraPozycja, rzad);

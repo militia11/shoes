@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "BazaDanychManager.h"
 #include "rozmiaryDialog.h"
+#include "owyModelDialog.h"
 #include <QSortFilterProxyModel>
 namespace Ui {
 class mwDialog;
@@ -13,7 +14,7 @@ class mwDialog : public QDialog {
     Q_OBJECT
 public:
     int selectExec();
-    explicit mwDialog(rozmiaryDialog *roz, BazaDanychManager *db, QWidget *parent = 0);
+    explicit mwDialog(owyModelDialog* nm,  rozmiaryDialog *roz, BazaDanychManager *db, QWidget *parent = 0);
     ~mwDialog();
     virtual int exec();
     void ustawIFiltruj();
@@ -39,11 +40,13 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_pushButton_3_clicked();
+
 private:
     bool zmagazynu;
     int actualLastId;
     void showEvent(QShowEvent *e);
-    void hideEvent(QHideEvent *e);
+    owyModelDialog *nm;
     BazaDanychManager *dbManager;
     rozmiaryDialog *roz;
     Ui::mwDialog *ui;

@@ -11,14 +11,14 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Formularz dodania zamówienia</string>
+   <string>Nowe zamówienie</string>
   </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
      <x>770</x>
      <y>960</y>
-     <width>351</width>
+     <width>501</width>
      <height>31</height>
     </rect>
    </property>

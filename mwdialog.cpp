@@ -8,8 +8,8 @@ int mwDialog::selectExec() {
     return QDialog::exec();
 }
 
-mwDialog::mwDialog(rozmiaryDialog *roz, BazaDanychManager *db, QWidget *parent) :
-    QDialog(parent), dbManager(db), roz(roz),
+mwDialog::mwDialog(owyModelDialog *nm, rozmiaryDialog *roz, BazaDanychManager *db, QWidget *parent) :
+    QDialog(parent),nm(nm), dbManager(db), roz(roz),
     ui(new Ui::mwDialog) {
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
@@ -89,10 +89,6 @@ void mwDialog::showEvent(QShowEvent *e) {
     dbManager->setPz();
 }
 
-void mwDialog::hideEvent(QHideEvent *e) {
-
-}
-
 void mwDialog::on_pushButtonZw_clicked() {
     QModelIndex idx = proxy->mapToSource(
                           ui->tableView->selectionModel()->currentIndex());
@@ -161,4 +157,10 @@ void mwDialog::on_pushButton_2_clicked() {
     if(roz->exec()== QDialog::Accepted) {
         QMessageBox::information(this, "ZAKTUALIZOWANO", " <FONT COLOR='#0f00f0'>Dodano do magazynu. Utworzono dokument PZ.", QMessageBox::Ok);
     }
+}
+
+void mwDialog::on_pushButton_3_clicked() {
+    dbManager->setModele();
+    nm->setFixedSize(nm->size());
+    nm->exec();
 }

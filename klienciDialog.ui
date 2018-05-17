@@ -16,7 +16,7 @@
   <widget class="QTableView" name="tableViewKlienci">
    <property name="geometry">
     <rect>
-     <x>5</x>
+     <x>3</x>
      <y>98</y>
      <width>1906</width>
      <height>881</height>
@@ -61,7 +61,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>34</width>
+        <width>65</width>
         <height>31</height>
        </size>
       </property>
@@ -77,7 +77,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>63</width>
+        <width>65</width>
         <height>31</height>
        </size>
       </property>
@@ -93,7 +93,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>63</width>
+        <width>65</width>
         <height>31</height>
        </size>
       </property>
@@ -109,7 +109,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>88</width>
+        <width>65</width>
         <height>30</height>
        </size>
       </property>
@@ -125,7 +125,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>63</width>
+        <width>65</width>
         <height>31</height>
        </size>
       </property>
@@ -141,7 +141,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>63</width>
+        <width>65</width>
         <height>31</height>
        </size>
       </property>
@@ -157,7 +157,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>63</width>
+        <width>65</width>
         <height>31</height>
        </size>
       </property>

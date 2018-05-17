@@ -27,19 +27,19 @@
 #include "ZdjecieDialog.h"
 #include "nowyKolorDialog.h"
 #include "nowywzorDialog.h"
-#include "DoRozkrojuDialog.h"
 #include "edycjazamowieniadialog.h"
 #include "RozkrojeDialog.h"
 #include "nowawkladkadialog.h"
 #include "noweociepdialog.h"
 #include "logowaniedialog.h"
-#include "wait.h"
 #include "Delegate.h"
 #include "mwdialog.h"
 #include "rozmiarydialog.h"
 #include "rwdialog.h"
 #include "pzdialog.h"
 #include "zmienparyzamdialog.h"
+#include "historiadrukdialog.h"
+#include "edycjazamdelegat.h"
 
 namespace Ui {
 class MainWindow;
@@ -99,8 +99,6 @@ private slots:
 
     void on_actionRozkroje_triggered();
 
-    void on_radioButton_2_clicked();
-
     void on_actionWyloguj_triggered();
 
     void on_actionEdycja_triggered();
@@ -119,6 +117,8 @@ private slots:
     void on_pushButtondruk1_toggled(bool checked);
 
     void on_pushButtondruk2_toggled(bool checked);
+
+    void on_actionHistoria_wydruk_w_triggered();
 
 private:
     bool eventFilter(QObject *object, QEvent *event);
@@ -161,7 +161,6 @@ private:
     owyModelDialog *dialognowyModel;
     modeleDialog *dialogmodele;
     RozkrojeDialog *rozkroje;
-    DoRozkrojuDialog *dorozkroju;
     EdycjaZamowieniaDialog *dialogEdycjaZam;
     logowanieDialog *log;
     rozmiaryDialog *rozmDialo;
@@ -169,7 +168,9 @@ private:
     zmienParyZamDialog *zmienPary;
     NotEditableDelegate *delNoEdit;
     QItemDelegate *stadnardDel;
+    EdycjaZamDelegat *edycjaZamDel;
     void block();
+    void wszystkieBlock();
     void noblock();
     QSortFilterProxyModel *proxy;
 
@@ -190,13 +191,13 @@ private:
     void ustawCombo(QString tabela, QComboBox *com);
     void createCombos();
     void setSumaZamowien();
-    bool archiwumMode;
     bool wysylkaMode;
     QString getNrZam(QModelIndex idx);
     QString getNrZamWl(QModelIndex idx);
     int getiDZam(QModelIndex idx);
     QString prepareRozkroj();
     QString prepareZam();
+
 };
 
 #endif // MAINWINDOW_H_

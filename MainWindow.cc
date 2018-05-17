@@ -64,15 +64,14 @@ MainWindow::MainWindow(QWidget *parent) :
     dialogmodele = new modeleDialog(dialogzdj, dialognowyModel, dbManager, this);
 
     rozkroje = new RozkrojeDialog(dbManager, this);
-    dorozkroju = new DoRozkrojuDialog(this);
     log = new logowanieDialog(dbManager, this);
     rozmDialo= new    rozmiaryDialog( dbManager, this);
-    mw = new mwDialog(rozmDialo,dbManager,  this);
+    mw = new mwDialog( dialognowyModel, rozmDialo,dbManager,  this);
     pz = new pzDialog(rozmDialo,dbManager,  this);
     zmienPary = new   zmienParyZamDialog(dbManager, this);
     dialogNoweZamowienie = new noweZamowienieDialog(mw, dialogHandl, dbManager, dialogmodele, dialogKlienci, this);
     proxy = new QSortFilterProxyModel(this);
-    archiwumMode = false;
+
     if (!dbManager->polacz()) {
         ustawieniaBazy();
     }
@@ -85,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
     podlaczSygnaly();
     createCombos();
     dbManager->filterZamowien.status = QString("WPROWADZONE");
-    filtruj();
+
     connect(dbManager->getModelZamowienia(), SIGNAL(dataChanged(const QModelIndex &,
             const QModelIndex &, const QVector<int> &)), this,
             SLOT(updateZamSum(const QModelIndex &, const QModelIndex &,
@@ -93,6 +92,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setSumaZamowien();
     delNoEdit = new NotEditableDelegate(this);
     stadnardDel = new QItemDelegate(this);
+
+    edycjaZamDel = new EdycjaZamDelegat(this);
     for (int i = 0; i < 10; i++) {
         ui->tableViewZam->setItemDelegateForColumn(i, delNoEdit);
     }
@@ -100,7 +101,7 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableViewZam->setItemDelegateForColumn(i, delNoEdit);
     }
     ui->tableViewZam->setItemDelegateForColumn(38, delNoEdit);
-    dialogEdycjaZam = new EdycjaZamowieniaDialog(dialogKlienci, dialogHandl, dialogmodele, dbManager, this);
+    dialogEdycjaZam = new EdycjaZamowieniaDialog(rozmDialo, dialogKlienci, dialogHandl, dialogmodele, dbManager, this);
     connect(dialogEdycjaZam, SIGNAL(koniecEdycji()), this, SLOT(ustawIFiltruj()));
     aktualizujTabele();
 
@@ -110,11 +111,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableViewZam->sortByColumn(0, Qt::DescendingOrder);
 
     ui->tableViewZam->installEventFilter(this);
-    ui->labelw->setText(QString::number(ui->tableViewZam->model()->rowCount()));
-    ui->radioButton_2->setEnabled(false);
     ui->tableViewZam->verticalHeader()->setDefaultSectionSize(ui->tableViewZam->verticalHeader()->minimumSectionSize());
     ui->tableViewZam->setEditTriggers(QAbstractItemView::DoubleClicked);
     on_radioButton_clicked();
+    filtruj();
     edytuj();
     edytuj();
 //    QHeaderView *verticalHeader = myTableView->verticalHeader();
@@ -168,7 +168,7 @@ void MainWindow::updateZamSum(const QModelIndex &topLeft, const QModelIndex &bot
 QString MainWindow::getNrZam(QModelIndex idx) {
     QString nr_zam = dbManager->getModelZamowienia()->data(dbManager->getModelZamowienia()->index(idx.row(), 1)).toString();
     int whe = nr_zam.indexOf('/');
-    qDebug() << nr_zam.left(whe);
+
     return nr_zam.left(whe);
 }
 
@@ -211,14 +211,14 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
         }
 //        QIcon icontr(":/zasoby/trash2.png");
 //        myMenu.addAction(icontr,"USUŃ");
-    } else if (dbManager->filterZamowien.status == QString("ZLEC W PRODUKCJI") && ui->actionEdycja->isChecked()) {
+    } else if (dbManager->filterZamowien.status == QString("ZLEC W PRODUKCJI")) {
         if (selection.length() == 1) {
-            myMenu.addAction("POKAŻ ROZKRÓJ");
+            QIcon icon(":/zasoby/cut.png");
+            myMenu.addAction(icon, "POKAŻ ROZKRÓJ");
             myMenu.addSeparator();
         }
         QIcon iconup(":/zasoby/arrow.png");
         myMenu.addAction(iconup, "NA MAGAZYN TOWARÓW");
-
         //  QIcon icontr(":/zasoby/trash2.png");
         //  myMenu.addAction(icontr,"USUŃ");
     } else if (dbManager->filterZamowien.status == QString("MAGAZYN TOWARÓW")) {
@@ -226,10 +226,12 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
             myMenu.addAction("ZREALIZUJ CAŁE");
             myMenu.addAction("ZREALIZUJ KONKRETNĄ ILOŚĆ");
             myMenu.addSeparator();
-            myMenu.addAction("COFNIJ DO ZLEC W PRODUKCJI");
+            QIcon iconup(":/zasoby/reset.png");
+            myMenu.addAction(iconup, "COFNIJ DO ZLEC W PRODUKCJI");
         }
 
     } else if (dbManager->filterZamowien.status == QString("ZREALIZOWANO")) {
+        // nothing
         QIcon iconup(":/zasoby/reset.png");
         myMenu.addAction(iconup, "COFNIJ REALIZACJĘ");
     }
@@ -246,7 +248,7 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
                 zamowienia.push_back(id);
             }
             prepareRozkroj();
-            dbManager->copyZamowienieArch(dbManager->getDoRozkroju(zamowienia));
+
             if (dbManager->rozkroj(dbManager->getDoRozkroju(zamowienia))) {
                 dbManager->getModelZamowienia()->select();
                 rozkroje->setDodanoRozkroj(true);
@@ -399,10 +401,21 @@ void MainWindow::podlaczSygnaly() {
 
 void  MainWindow::edytuj() {
     //todo moze tez gdy archiwum jesli bedzie arch i różny od archiwum
-    if(dbManager->filterZamowien.status != QString("MAGAZYN TOWARÓW") && dbManager->filterZamowien.status != QString("ZREALIZOWANO") ) {
+    if(dbManager->filterZamowien.status != QString("MAGAZYN TOWARÓW") && dbManager->filterZamowien.status
+            != QString("ZREALIZOWANO") && dbManager->filterZamowien.status != QString("ZLEC W PRODUKCJI")) {
         if (ui->actionEdycja->isChecked()) {
             ui->actionEdycja->setIcon(QIcon(":/zasoby/unlock.png")) ;
             noblock();
+            ui->actionEdycja->setToolTip("Zablokuj edycję zamówień");
+        } else {
+            ui->actionEdycja->setIcon(QIcon(":/zasoby/lock.png"));
+            ui->actionEdycja->setToolTip("Odblokuj edycję zamówień");
+            block();
+        }
+    } else if (dbManager->filterZamowien.status == QString("")) {
+        if (ui->actionEdycja->isChecked()) {
+            ui->actionEdycja->setIcon(QIcon(":/zasoby/unlock.png")) ;
+            wszystkieBlock();
             ui->actionEdycja->setToolTip("Zablokuj edycję zamówień");
         } else {
             ui->actionEdycja->setIcon(QIcon(":/zasoby/lock.png"));
@@ -528,26 +541,13 @@ void MainWindow::on_pushButtonSzukaj_clicked() {
 void MainWindow::filtruj() {
     dbManager->setZamowieniaFilter();
     setSumaZamowien();
+    ui->labelw->setText(QString::number(ui->tableViewZam->model()->rowCount()));
+
 }
 
 void MainWindow::on_radioButton_clicked() {
     QHeaderView *hv = ui->tableViewZam->horizontalHeader();
-    if (archiwumMode) {
-        ui->tableViewZam->setVisible(false);
-        ui->centralWidget->layout()->setAlignment(ui->horizontalLayout_2,Qt::AlignTop);
-        dbManager->setTableWidokZamowienia("vzam");
-        archiwumMode = false;
-        wait ww;
-        ww.setWindowTitle("                    Zamykam archiwum ...");
-        ww.show();
-        rozciagnijWiersze();
-        ww.hide();
-        showTable();
-
-        if(ui->actionEdycja->isChecked())
-            noblock();
-
-    } else if(wysylkaMode) {
+    if(wysylkaMode) {
         ui->tableViewZam->setColumnWidth(35, 97);
         hv->setSectionHidden(48, true);
 
@@ -566,25 +566,11 @@ void MainWindow::on_radioButton_clicked() {
     hv->setSectionHidden(49, true);
     ui->pushButtondruk1->setVisible(false);
     ui->pushButtondruk2->setVisible(false);
+
+    ui->tableViewZam->setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
 
 void MainWindow::on_radioButton_3_clicked() {
-    if (archiwumMode) {
-        ui->tableViewZam->setVisible(false);
-        ui->centralWidget->layout()->setAlignment(ui->horizontalLayout_2,Qt::AlignTop);
-
-        dbManager->setTableWidokZamowienia("vzam");
-        archiwumMode = false;
-        wait ww;
-        ww.setWindowTitle("                    Zamykam archiwum ...");
-        ww.show();
-        rozciagnijWiersze();
-        ww.hide();
-        showTable();
-        if(ui->actionEdycja->isChecked())
-            noblock();
-        //todo we wszystkich radiobutton zrobic tez ikona zamek gdy archiwum
-    }
     ui->tableViewZam->setColumnWidth(34, 97);
     ui->tableViewZam->setColumnWidth(35, 97);
     ui->tableViewZam->setColumnWidth(36, 83);
@@ -602,32 +588,23 @@ void MainWindow::on_radioButton_3_clicked() {
     wysylkaMode = true;
     ui->tableViewZam->horizontalHeader()->setSectionHidden(38,true);
     ui->tableViewZam->horizontalHeader()->setSectionHidden(49,false);
-//    dbManager->filterZamowien.druk = -1;
-
+    if(ui->actionEdycja->isChecked()) {
+        ui->actionEdycja->setChecked(false);
+        ui->actionEdycja->setIcon(QIcon(":/zasoby/lock.png"));
+        ui->actionEdycja->setToolTip("Odblokuj edycję zamówień");
+        block();
+    }
+    ui->tableViewZam->setItemDelegateForColumn(48, delNoEdit);
+    ui->tableViewZam->setItemDelegateForColumn(49, delNoEdit);
     ui->pushButtondruk1->setVisible(true);
     ui->pushButtondruk1->setChecked(false);
     ui->pushButtondruk2->setVisible(true);
     ui->pushButtondruk2->setChecked(false);
+    ui->tableViewZam->setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
 void MainWindow::on_radioButton_6_clicked() {
-    if (archiwumMode) {
-        ui->tableViewZam->setVisible(false);
-        ui->centralWidget->layout()->setAlignment(ui->horizontalLayout_2,Qt::AlignTop);
-
-        dbManager->setTableWidokZamowienia("vzam");
-        archiwumMode = false;
-        wait ww;
-        ww.setWindowTitle("                    Zamykam archiwum ...");
-        ww.show();
-        rozciagnijWiersze();
-        ww.hide();
-        showTable();
-        if(ui->actionEdycja->isChecked())
-            noblock();
-    } else if(wysylkaMode) {
-
-
+    if(wysylkaMode) {
         QHeaderView *hv = ui->tableViewZam->horizontalHeader();
         hv->setSectionHidden(48, true);
     }
@@ -651,6 +628,7 @@ void MainWindow::on_radioButton_6_clicked() {
     ui->tableViewZam->horizontalHeader()->setSectionHidden(49,true);
     ui->pushButtondruk1->setVisible(false);
     ui->pushButtondruk2->setVisible(false);
+    ui->tableViewZam->setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
@@ -660,56 +638,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     QMainWindow::keyPressEvent(event);
 }
 
-void MainWindow::on_radioButton_4_clicked() {
-    if (archiwumMode) {
-        ui->tableViewZam->setVisible(false);
-        ui->centralWidget->layout()->setAlignment(ui->horizontalLayout_2,Qt::AlignTop);
-
-        dbManager->setTableWidokZamowienia("vzam");
-        wait ww;
-        ww.setWindowTitle("                    Zamykam archiwum ...");
-        ww.show();
-        rozciagnijWiersze();
-        ww.hide();
-        showTable();
-        archiwumMode = false;
-        if(ui->actionEdycja->isChecked())
-            noblock();
-    } else if(wysylkaMode) {
-        QHeaderView *hv = ui->tableViewZam->horizontalHeader();
-        hv->setSectionHidden(48, true);
-
-    }
-    dbManager->filterZamowien.status = QString("");
-    dbManager->filterZamowien.druk = -1;
-    dbManager->filterZamowien.sumaNot0 = true;
-    ui->labelPodglad->clear();
-    ui->tableViewZam->setColumnWidth(36, 90);
-    ui->tableViewZam->setColumnWidth(37, 90);
-    filtruj();
-    ui->labelw->setText(QString::number(ui->tableViewZam->model()->rowCount()));
-    ui->tableViewZam->horizontalHeader()->setSectionHidden(38,false);
-    ui->tableViewZam->horizontalHeader()->setSectionHidden(49,true);
-    ui->pushButtondruk1->setVisible(false);
-    ui->pushButtondruk2->setVisible(false);
-}
-
 void MainWindow::on_radioButton_5_clicked() {
-    if (archiwumMode) {
-        ui->tableViewZam->setVisible(false);
-        ui->centralWidget->layout()->setAlignment(ui->horizontalLayout_2,Qt::AlignTop);
-
-        dbManager->setTableWidokZamowienia("vzam");
-        archiwumMode = false;
-        wait ww;
-        ww.setWindowTitle("                    Zamykam archiwum ...");
-        ww.show();
-        rozciagnijWiersze();
-        ww.hide();
-        showTable();
-        if(ui->actionEdycja->isChecked())
-            noblock();
-    } else if(wysylkaMode) {
+    if(wysylkaMode) {
         ui->tableViewZam->setColumnWidth(35, 97);
         QHeaderView *hv = ui->tableViewZam->horizontalHeader();
         hv->setSectionHidden(48, true);
@@ -732,6 +662,29 @@ void MainWindow::on_radioButton_5_clicked() {
     ui->tableViewZam->horizontalHeader()->setSectionHidden(49,true);
     ui->pushButtondruk1->setVisible(false);
     ui->pushButtondruk2->setVisible(false);
+    ui->tableViewZam->setSelectionMode(QAbstractItemView::SingleSelection);
+}
+
+void MainWindow::on_radioButton_4_clicked() {
+    if(wysylkaMode) {
+        QHeaderView *hv = ui->tableViewZam->horizontalHeader();
+        hv->setSectionHidden(48, true);
+
+    }
+    dbManager->filterZamowien.status = QString("");
+    dbManager->filterZamowien.druk = -1;
+    dbManager->filterZamowien.sumaNot0 = true;
+    ui->labelPodglad->clear();
+    ui->tableViewZam->setColumnWidth(36, 90);
+    ui->tableViewZam->setColumnWidth(37, 90);
+    filtruj();
+    ui->labelw->setText(QString::number(ui->tableViewZam->model()->rowCount()));
+    ui->tableViewZam->horizontalHeader()->setSectionHidden(38,false);
+    ui->tableViewZam->horizontalHeader()->setSectionHidden(49,true);
+    ui->pushButtondruk1->setVisible(false);
+    ui->pushButtondruk2->setVisible(false);
+    ui->tableViewZam->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableViewZam->horizontalHeader()->setStretchLastSection(true);
 }
 
 void MainWindow::on_actionWzory_triggered() {
@@ -843,6 +796,7 @@ void MainWindow::on_pushButton_clicked() {
     ui->comboBoxb6->setCurrentIndex(0);
     ustawIFiltruj();
     ui->tableViewZam->sortByColumn(0, Qt::DescendingOrder);
+    ui->labelw->setText(QString::number(ui->tableViewZam->model()->rowCount()));
 }
 
 void MainWindow::on_actionOcieplenia_triggered() {
@@ -948,40 +902,7 @@ void MainWindow::ustawIFiltruj() {
     filtruj();
 }
 
-void MainWindow::on_radioButton_2_clicked() {
-    if(wysylkaMode) {
-        ui->tableViewZam->setColumnWidth(35, 97);
-        QHeaderView *hv = ui->tableViewZam->horizontalHeader();
-        hv->setSectionHidden(48, true);
-
-    }
-
-    wait ww;
-    ww.setWindowTitle("                    Wczytuję archiwum ...");
-    ww.show();
-
-    dbManager->setTableWidokZamowienia("vZamArch");
-    ui->tableViewZam->setVisible(false);
-    ui->centralWidget->layout()->setAlignment(ui->horizontalLayout_2,Qt::AlignTop);
-    rozciagnijWiersze();
-
-    ww.hide();
-
-    ui->tableViewZam->setVisible(true);
-    archiwumMode = true;
-    dbManager->filterZamowien.status = QString("");
-    dbManager->filterZamowien.druk = -1;
-    dbManager->filterZamowien.sumaNot0 = false;
-    filtruj();
-    block();
-    ui->labelPodglad->clear();
-    ui->labelw->setText(QString::number(ui->tableViewZam->model()->rowCount()));
-    ui->tableViewZam->horizontalHeader()->setSectionHidden(49,true);
-    ui->pushButtondruk1->setVisible(false);
-    ui->pushButtondruk2->setVisible(false);
-
-}
-
+<<<>>>> kolPraca
 void MainWindow::on_actionWyloguj_triggered() {
     logowanie();
 }
@@ -1037,6 +958,12 @@ int MainWindow::getIdDown() {
 void MainWindow::block() {
     for (int i = 10; i < 25; i++) {
         ui->tableViewZam->setItemDelegateForColumn(i, delNoEdit);
+    }
+}
+
+void MainWindow::wszystkieBlock() {
+    for (int i = 10; i < 25; i++) {
+        ui->tableViewZam->setItemDelegateForColumn(i, edycjaZamDel);
     }
 }
 
@@ -1251,4 +1178,10 @@ void MainWindow::on_pushButtondruk2_toggled(bool checked) {
         dbManager->filterZamowien.druk = -1;
         filtruj();
     }
+}
+
+void MainWindow::on_actionHistoria_wydruk_w_triggered() {
+    historiaDrukDialog dialog(dbManager, this);
+    dialog.setFixedSize(dialog.size());
+    dialog.exec();
 }

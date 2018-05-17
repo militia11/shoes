@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1491</width>
-    <height>953</height>
+    <width>989</width>
+    <height>971</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,10 +16,10 @@
   <widget class="QTableView" name="tableView">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>280</y>
-     <width>1481</width>
-     <height>671</height>
+     <x>14</x>
+     <y>281</y>
+     <width>961</width>
+     <height>684</height>
     </rect>
    </property>
    <property name="alternatingRowColors">
@@ -343,8 +343,8 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>810</x>
-     <y>235</y>
+     <x>944</x>
+     <y>190</y>
      <width>41</width>
      <height>41</height>
     </rect>
@@ -378,8 +378,8 @@
   <widget class="QPushButton" name="pushButtonSzukaj">
    <property name="geometry">
     <rect>
-     <x>762</x>
-     <y>235</y>
+     <x>900</x>
+     <y>190</y>
      <width>41</width>
      <height>41</height>
     </rect>
@@ -416,12 +416,12 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>14</x>
      <y>240</y>
-     <width>741</width>
+     <width>962</width>
      <height>33</height>
     </rect>
    </property>
@@ -439,7 +439,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>0</width>
+        <width>160</width>
         <height>31</height>
        </size>
       </property>
@@ -455,7 +455,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>0</width>
+        <width>160</width>
         <height>31</height>
        </size>
       </property>
@@ -471,7 +471,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>0</width>
+        <width>160</width>
         <height>31</height>
        </size>
       </property>
@@ -487,7 +487,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>0</width>
+        <width>160</width>
         <height>31</height>
        </size>
       </property>
@@ -503,7 +503,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>0</width>
+        <width>160</width>
         <height>31</height>
        </size>
       </property>
@@ -519,7 +519,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>0</width>
+        <width>160</width>
         <height>31</height>
        </size>
       </property>

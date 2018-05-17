@@ -4,7 +4,7 @@
 #include <QTableView>
 
 DelegateArrows::DelegateArrows(QObject *parent) : QStyledItemDelegate(parent) {
-    x = false;
+
 }
 
 bool DelegateArrows::eventFilter(QObject *object, QEvent *event) {

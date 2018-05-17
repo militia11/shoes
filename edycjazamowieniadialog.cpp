@@ -4,9 +4,9 @@
 #include "NaglowkiZamowienia.h"
 #include "Delegate.h"
 
-EdycjaZamowieniaDialog::EdycjaZamowieniaDialog(klienciDialog * dialogKlienci, handlowceDialog * dialogHandl, modeleDialog * dialogmodele, BazaDanychManager *db, QWidget *parent) :
+EdycjaZamowieniaDialog::EdycjaZamowieniaDialog(rozmiaryDialog *rz, klienciDialog * dialogKlienci, handlowceDialog * dialogHandl, modeleDialog * dialogmodele, BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::EdycjaZamowieniaDialog), dbManager(db), dialogKlienci(dialogKlienci), dialogHandl(dialogHandl), dialogmodele(dialogmodele) {
+    ui(new Ui::EdycjaZamowieniaDialog), dbManager(db), dialogKlienci(dialogKlienci), dialogHandl(dialogHandl), dialogmodele(dialogmodele), roz(rz) {
     ui->setupUi(this);
     ui->pushButton_10->setEnabled(false);
 
@@ -15,24 +15,12 @@ EdycjaZamowieniaDialog::EdycjaZamowieniaDialog(klienciDialog * dialogKlienci, ha
             const QModelIndex &, const QVector<int> &)), this,
             SLOT(updateZamSum(const QModelIndex &, const QModelIndex &,
                               const QVector<int> &)));
-    connect(
-        ui->tableViewZam->selectionModel(),
-        SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
-        SLOT(SelectionOfTableChanged(
-                 const QItemSelection &,
-                 const QItemSelection &)));
-    NotEditableDelegate *del = new NotEditableDelegate(this);
-    for (int i = 0; i < 10; i++) {
-        ui->tableViewZam->setItemDelegateForColumn(i, del);
-    }
-    for (int i = 25; i < 33; i++) {
-        ui->tableViewZam->setItemDelegateForColumn(i, del);
-    }
 
-    ui->tableViewZam->setItemDelegateForColumn(37, del);
     idKli = -1;
     this->setWindowFlags(Qt::Window);
     ui->tableViewZam->verticalHeader()->setDefaultSectionSize(ui->tableViewZam->verticalHeader()->minimumSectionSize());
+    delNoEdit = new NotEditableDelegate(ui->tableViewZam);
+    delArrow = new EdycjaZamDelegat(ui->tableViewZam);
 }
 
 EdycjaZamowieniaDialog::~EdycjaZamowieniaDialog() {
@@ -42,9 +30,8 @@ EdycjaZamowieniaDialog::~EdycjaZamowieniaDialog() {
 void EdycjaZamowieniaDialog::setNrZam(QString nrZami) {
     nrZam = nrZami;
     ui->lineEditPapier->setText(nrZam);
-    QString nrzkres = nrZam;
-    nrzkres +="/";
-    dbManager->setZamowieniaSzczegolyFilter(nrzkres);
+
+    dbManager->setZamowieniaSzczegolyFilter(nrZam);
 }
 
 void EdycjaZamowieniaDialog::setNrZamWl(QString nrZami) {
@@ -65,6 +52,10 @@ void EdycjaZamowieniaDialog::updateZamSum(const QModelIndex &topLeft, const QMod
 void EdycjaZamowieniaDialog::on_pushButtonModel_clicked() {
     dialogmodele->setFixedSize(dialogmodele->size());
     if (dialogmodele->selectExec() == QDialog::Accepted) {
+        QModelIndex index = ui->tableViewZam->model()->index(0, 3);
+        // int kli = ui->tableViewZam->model()->data(index, Qt::DisplayRole).toInt();
+        QModelIndex index2 = ui->tableViewZam->model()->index(0, 46);
+        //  int handl =  ui->tableViewZam->model()->data(index2, Qt::DisplayRole).toInt();
         int ileWierszyMinJeden = ui->tableViewZam->model()->rowCount() - 1;
         QString pozycjaOst = dbManager->getNrOstatniejPozycjiZamowieniaZTabeli(ileWierszyMinJeden);
 
@@ -108,7 +99,27 @@ void EdycjaZamowieniaDialog::showEvent(QShowEvent *e) {
     ui->tableViewZam->horizontalHeader()->setMinimumSectionSize(5);
     NaglowkiZamowienia::ustawNaglowki(ui->tableViewZam, dbManager->getModelZamowienia());
     ui->tableViewZam->sortByColumn(0, Qt::AscendingOrder);
+    ui->tableViewZam->horizontalHeader()->setSectionHidden(38,false);
     dbManager->EZustawIdAktualnegoKLiHandl();
+    connect(
+        ui->tableViewZam->selectionModel(),
+        SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+        SLOT(SelectionOfTableChanged(
+                 const QItemSelection &,
+                 const QItemSelection &)));
+    ui->tableViewZam->setItemDelegateForColumn(37, delNoEdit);
+    ui->tableViewZam->setItemDelegateForColumn(38, delNoEdit);
+
+    for (int i = 0; i < 10; i++) {
+        ui->tableViewZam->setItemDelegateForColumn(i, delNoEdit);
+    }
+    for (int i = 25; i < 33; i++) {
+        ui->tableViewZam->setItemDelegateForColumn(i, delNoEdit);
+    }
+
+    for (int i = 10; i < 25; i++) {
+        ui->tableViewZam->setItemDelegateForColumn(i, delArrow);
+    }
 }
 
 void EdycjaZamowieniaDialog::hideEvent(QHideEvent *e) {
@@ -132,6 +143,7 @@ void EdycjaZamowieniaDialog::SelectionOfTableChanged(const QItemSelection &aSele
     Q_UNUSED(aDeselected);
     bool vIsAnyItemSelected = aSelected.count() > 0;
     ui->pushButton_10->setEnabled(vIsAnyItemSelected);
+    ui->pushButton_6->setEnabled(vIsAnyItemSelected);
 }
 
 void EdycjaZamowieniaDialog::czysc() {
@@ -140,4 +152,16 @@ void EdycjaZamowieniaDialog::czysc() {
 
 void EdycjaZamowieniaDialog::setSumaZamowien() {
     ui->lcdNumber->setText(QString::number(dbManager->zwrocSumeZamowien()));
+}
+
+void EdycjaZamowieniaDialog::on_pushButtonModel_2_clicked() {
+    QModelIndex idx = ui->tableViewZam->selectionModel()->currentIndex();
+    int id = dbManager->zwrocAktualnyModelIdMw(idx);
+    // actualLastId = id;
+    roz->setCurId(id);
+    roz->setFixedSize(roz->size());
+    roz->setWindowTitle("Pobierz z magazynu wolne");
+    if(roz->exec()==QDialog::Accepted) {
+
+    }
 }

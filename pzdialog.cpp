@@ -8,7 +8,6 @@ pzDialog::pzDialog(rozmiaryDialog *roz, BazaDanychManager *db, QWidget *parent) 
     actualLastId = -1;
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
-    ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
     this->setGeometry(
         QStyle::alignedRect(
             Qt::LeftToRight,

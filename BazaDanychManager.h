@@ -162,7 +162,7 @@ public:
     QSqlTableModel *getModelHandlowce();
     QSqlTableModel *getModelHandlowceWybieranie();
     QSqlTableModel *getWkladki() const;
-
+int getOstRwID();
     QSqlQueryModel *getSqlModelForQuery(QSqlQuery *aQuery);
     QAbstractItemModel *getModelForQuery(QSqlQuery *aQuery);
     QStandardItemModel *getDoRozkroju(const std::vector<int> &value);
@@ -186,7 +186,7 @@ public:
     void setmw();
     void updateHandl(int idHan, int idKL);
     void setTableWidokZamowienia(QString tabela);
-    bool copyZamowienieArch(QStandardItemModel *pozycje);
+   // bool copyZamowienieArch(QStandardItemModel *pozycje);
     void setIdKoloru(int value);
 
     void setIdSpodu(int value);
@@ -217,6 +217,9 @@ public:
     void setPz();
     bool insPz(QList<QStandardItem *> rzad);
 
+    QSqlTableModel *getWydruki() const;
+    void setWydruki();
+bool usunMwDok(int id);
 private:
     QVariant GetFirstValueForQuery(QSqlQuery *aQuery);
     QSqlRecord getSqlRecordZModelu(const QAbstractItemModel *aItemModel);
@@ -244,6 +247,7 @@ private:
     QSqlTableModel *mw;
     QSqlTableModel *rw;
     QSqlTableModel *pz;
+    QSqlTableModel *mWydruki;
 
     int idKlienta;
     int idHandlowca;
