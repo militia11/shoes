@@ -15,7 +15,6 @@ EdycjaZamowieniaDialog::EdycjaZamowieniaDialog(klienciDialog * dialogKlienci, ha
             const QModelIndex &, const QVector<int> &)), this,
             SLOT(updateZamSum(const QModelIndex &, const QModelIndex &,
                               const QVector<int> &)));
-
     connect(
         ui->tableViewZam->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
@@ -33,6 +32,7 @@ EdycjaZamowieniaDialog::EdycjaZamowieniaDialog(klienciDialog * dialogKlienci, ha
     ui->tableViewZam->setItemDelegateForColumn(37, del);
     idKli = -1;
     this->setWindowFlags(Qt::Window);
+    ui->tableViewZam->verticalHeader()->setDefaultSectionSize(ui->tableViewZam->verticalHeader()->minimumSectionSize());
 }
 
 EdycjaZamowieniaDialog::~EdycjaZamowieniaDialog() {
@@ -42,8 +42,13 @@ EdycjaZamowieniaDialog::~EdycjaZamowieniaDialog() {
 void EdycjaZamowieniaDialog::setNrZam(QString nrZami) {
     nrZam = nrZami;
     ui->lineEditPapier->setText(nrZam);
-    dbManager->setZamowieniaSzczegolyFilter(nrZam);
+    QString nrzkres = nrZam;
+    nrzkres +="/";
+    dbManager->setZamowieniaSzczegolyFilter(nrzkres);
+}
 
+void EdycjaZamowieniaDialog::setNrZamWl(QString nrZami) {
+    nrZamwl = nrZami;
 }
 
 void EdycjaZamowieniaDialog::refreshTable() {
@@ -60,39 +65,50 @@ void EdycjaZamowieniaDialog::updateZamSum(const QModelIndex &topLeft, const QMod
 void EdycjaZamowieniaDialog::on_pushButtonModel_clicked() {
     dialogmodele->setFixedSize(dialogmodele->size());
     if (dialogmodele->selectExec() == QDialog::Accepted) {
-        QModelIndex index = ui->tableViewZam->model()->index(0, 3);
-        int kli = ui->tableViewZam->model()->data(index, Qt::DisplayRole).toInt();
-        QModelIndex index2 = ui->tableViewZam->model()->index(0, 46);
-        int handl =  ui->tableViewZam->model()->data(index2, Qt::DisplayRole).toInt();
-        dbManager->insertPozycjazamowienie(nrZam, kli, handl);
+        int ileWierszyMinJeden = ui->tableViewZam->model()->rowCount() - 1;
+        QString pozycjaOst = dbManager->getNrOstatniejPozycjiZamowieniaZTabeli(ileWierszyMinJeden);
+
+        int whe = pozycjaOst.indexOf('/');
+        QString poz = pozycjaOst.mid(whe+1, (pozycjaOst.length()-1)- whe);
+
+        int aPos = poz.toInt();
+        int nextPos = aPos+1;
+        QString nrZZam = nrZam;
+        nrZZam += "/";
+        QString alfa =                  QString::number(nextPos);
+        nrZZam += alfa;
+        dbManager->insertPozycjazamowienie(nrZZam);
         dbManager->getModelZamowienia()->select();
         ui->tableViewZam->sortByColumn(0, Qt::AscendingOrder);
     }
 }
 
 void EdycjaZamowieniaDialog::on_pushButton_10_clicked() {
-    if (ui->tableViewZam->model()->rowCount() != 0) {
-        if (ui->tableViewZam->selectionModel()->hasSelection()) {
-            int row = ui->tableViewZam->selectionModel()->currentIndex().row();
-            QModelIndex index = ui->tableViewZam->model()->index(row, 0);
-            int id = ui->tableViewZam->model()->data(index, Qt::DisplayRole).toInt();
-            dbManager->removeZamowienie(id);
-            dbManager->getModelZamowienia()->select();
+    if (QMessageBox::question(this, "USUŃ", "<FONT COLOR='#000080'>Czy napewno usunąć?") == QMessageBox::Yes) {
+        if (ui->tableViewZam->model()->rowCount() != 0) {
+            if (ui->tableViewZam->selectionModel()->hasSelection()) {
+                int row = ui->tableViewZam->selectionModel()->currentIndex().row();
+                QModelIndex index = ui->tableViewZam->model()->index(row, 0);
+                int id = ui->tableViewZam->model()->data(index, Qt::DisplayRole).toInt();
+                dbManager->removeZamowienie(id);
+                dbManager->getModelZamowienia()->select();
+            }
         }
     }
 }
 
 void EdycjaZamowieniaDialog::showEvent(QShowEvent *e) {
-    ui->tableViewZam->horizontalHeader()->setMinimumSectionSize(5);
-    NaglowkiZamowienia::ustawNaglowki(ui->tableViewZam, dbManager->getModelZamowienia());
-    ui->tableViewZam->sortByColumn(0, Qt::AscendingOrder);
     setSumaZamowien();
     ui->tableViewZam->hideColumn(2);
     ui->tableViewZam->hideColumn(3);
     ui->tableViewZam->hideColumn(48);
     ui->tableViewZam->hideColumn(49);
-    ui->labelKlient->setText(dbManager->getKlientSkrot(nrZam));
-    ui->tableViewZam->sortByColumn(0);
+    ui->labelKlient->setText(dbManager->getKlientSkrot(nrZamwl));
+    ui->labelHandlowiec->setText(dbManager->getHanlSkrot(nrZamwl));
+    ui->tableViewZam->horizontalHeader()->setMinimumSectionSize(5);
+    NaglowkiZamowienia::ustawNaglowki(ui->tableViewZam, dbManager->getModelZamowienia());
+    ui->tableViewZam->sortByColumn(0, Qt::AscendingOrder);
+    dbManager->EZustawIdAktualnegoKLiHandl();
 }
 
 void EdycjaZamowieniaDialog::hideEvent(QHideEvent *e) {
@@ -105,8 +121,10 @@ void EdycjaZamowieniaDialog::on_pushButton_6_clicked() {
     if (dialogKlienci->selectExec() == QDialog::Accepted) {
         dbManager->zmienKlientaZam(nrZam);
         ui->labelKlient->setText(dialogKlienci->getAktualnyKlientNazwa());
-        int idHa  =dbManager->zwrocIdHandlKlienta();
+        int idHa = dbManager->zwrocIdHandlKlienta();
         dbManager->zmienHandlZam(nrZam, idHa);
+
+        ui->labelHandlowiec->setText(dbManager->zwrocNazweHandlKlienta());
     }
 }
 

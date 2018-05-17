@@ -1,5 +1,7 @@
 #include "klienciDialog.h"
 #include "ui_klienciDialog.h"
+#include <QStyle>
+#include <QDesktopWidget>
 
 klienciDialog::klienciDialog(nowyKlientDialog *nowyKliDialog,
                              BazaDanychManager *db, QWidget *parent) :
@@ -11,6 +13,15 @@ klienciDialog::klienciDialog(nowyKlientDialog *nowyKliDialog,
     myDelegate = new Delegate(dbManager, this);
     ui->tableViewKlienci->setItemDelegate(myDelegate);
     connect(myDelegate, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)), this, SLOT(abra(QWidget*,QAbstractItemDelegate::EndEditHint)));
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
+
 }
 
 klienciDialog::~klienciDialog() {

@@ -51,6 +51,12 @@ private slots:
     void on_pushButtonSzukaj_clicked();
 
 private:
+    void updateModel(int id);
+    int getIdUp();
+    int getIdDown();
+    void upButtonUpdateZdj();
+    void downButtonUpdateZdj();
+    bool eventFilter(QObject *object, QEvent *event);
     void showEvent(QShowEvent *e);
     void hideEvent(QHideEvent *e);
     QString aktualnySpodNazwa;

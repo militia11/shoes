@@ -1,6 +1,9 @@
 #include "skoryDialog.h"
 #include "ui_skoryDialog.h"
 #include <QSqlQuery>
+#include <QStyle>
+#include <QDesktopWidget>
+
 skoryDialog::skoryDialog(nowaSkoraDialog *ns, BazaDanychManager *db,
                          QWidget *parent) :
     QDialog(parent),
@@ -9,6 +12,14 @@ skoryDialog::skoryDialog(nowaSkoraDialog *ns, BazaDanychManager *db,
     idsk = -1;
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
 }
 
 skoryDialog::~skoryDialog() {

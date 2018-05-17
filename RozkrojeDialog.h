@@ -42,7 +42,15 @@ private slots:
     void on_pushButton_clicked();
     void csvexport();
 
+    void on_pushButton_2_clicked();
+
 private:
+    void upButtonUpdateZdj();
+    void downButtonUpdateZdj();
+    QModelIndex getIdUp();
+    QModelIndex getIdDown();
+    void updateZdj(QModelIndex idx);
+    bool eventFilter(QObject *object, QEvent *event);
     void ustawIFiltruj();
     void czysc();
     void drukuj();

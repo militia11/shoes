@@ -15,6 +15,7 @@ public:
     rozmiaryDialog(BazaDanychManager *db,QWidget *parent = 0);
     ~rozmiaryDialog();
     void updateCurrentRow();
+    void updateCurrentRowZreal();
     void showEvent(QShowEvent *e);
     void hideEvent(QHideEvent *e);
     QList<QStandardItem *> zwrocWierszModel();
@@ -24,13 +25,18 @@ public:
 
     void setInsertExec(bool value);
 
+    void setZrealExec(bool value);
+
+    void setZrealCofExec(bool value);
+
 private slots:
-    int insertexec();
     void acceptRoz();
 
 private:
     QVector<QString>rozmiaryx;
     bool insertExec;
+    bool zrealExec;
+    bool zrealCofExec;
     void wyczyscPola();
     void obliczSume();
     void obliczSumeGora();

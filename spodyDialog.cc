@@ -2,6 +2,8 @@
 #include "ui_spodyDialog.h"
 #include "BazaDanychManager.h"
 #include "ManagerZdjec.h"
+#include <QStyle>
+#include <QDesktopWidget>
 
 spodyDialog::spodyDialog(ZdjecieDialog *zdj, nowySpodDialog *dialogNSpod,
                          BazaDanychManager *db,
@@ -29,7 +31,16 @@ spodyDialog::spodyDialog(ZdjecieDialog *zdj, nowySpodDialog *dialogNSpod,
     connect(label4, &clickableLabel::clicked, this, &spodyDialog::zdj4);
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
+    ui->tableView->installEventFilter(this);
     //ui->comboBoxb3->setFixedWidth(124);
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
 }
 
 spodyDialog::~spodyDialog() {
@@ -224,6 +235,8 @@ void spodyDialog::on_tableView_clicked(const QModelIndex &index) {
     label3->clear();
     label4->clear();
     int id = getId();
+    qDebug() << id;
+
     image1 = dbManager->getImage(id, 1, QString("spody"));
     image2 = dbManager->getImage(id, 2, QString("spody"));
     image3 = dbManager->getImage(id, 3, QString("spody"));
@@ -247,4 +260,86 @@ void spodyDialog::on_pushButton_clicked() {
 
 void spodyDialog::on_pushButtonSzukaj_clicked() {
     ustawIFiltruj();
+}
+
+void spodyDialog::updateModel(int id) {
+    label1->clear();
+    label2->clear();
+    label3->clear();
+    label4->clear();
+    qDebug() << id;
+    image1 = dbManager->getImage(id, 1, QString("spody"));
+    image2 = dbManager->getImage(id, 2, QString("spody"));
+    image3 = dbManager->getImage(id, 3, QString("spody"));
+    image4 = dbManager->getImage(id, 4, QString("spody"));
+
+    label1->setPixmap(QPixmap::fromImage(image1));
+    label2->setPixmap(QPixmap::fromImage(image2));
+    label3->setPixmap(QPixmap::fromImage(image3));
+    label4->setPixmap(QPixmap::fromImage(image4));
+}
+
+int spodyDialog::getIdUp() {
+    QModelIndex  idx =
+        ui->tableView->selectionModel()->currentIndex();
+
+    if(idx.row()==0) {
+        QModelIndex idxProxy = proxy->mapToSource(ui->tableView->model()->index(idx.row(), 0));
+        return dbManager->getSpody()->data(
+                   dbManager->getSpody()->index(idxProxy.row(),
+                                                0)).toInt();
+    } else {
+        QModelIndex idxProxy = proxy->mapToSource(ui->tableView->model()->index(idx.row()-1, 0));
+        return dbManager->getSpody()->data(
+                   dbManager->getSpody()->index(idxProxy.row(),
+                                                0)).toInt();
+    }
+}
+
+int spodyDialog::getIdDown() {
+    QModelIndex  idx =
+        ui->tableView->selectionModel()->currentIndex();
+
+    if(idx.row()==ui->tableView->model()->rowCount()-1) {
+        QModelIndex idxProxy = proxy->mapToSource(ui->tableView->model()->index(idx.row(), 0));
+        return dbManager->getSpody()->data(
+                   dbManager->getSpody()->index(idxProxy.row(),
+                                                0)).toInt();
+    } else {
+        QModelIndex idxProxy = proxy->mapToSource(ui->tableView->model()->index(idx.row()+1, 0));
+        return dbManager->getSpody()->data(
+                   dbManager->getSpody()->index(idxProxy.row(),
+                                                0)).toInt();
+    }
+}
+
+void spodyDialog::upButtonUpdateZdj() {
+    int id = getIdUp();
+    updateModel(id);
+}
+
+void spodyDialog::downButtonUpdateZdj() {
+    int id = getIdDown();
+    updateModel(id);
+}
+
+bool spodyDialog::eventFilter(QObject *object, QEvent *event) {
+    if (object == ui->tableView) {
+        if (event->type() == QEvent::KeyPress) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if (keyEvent->key() == Qt::Key_Up) {
+                upButtonUpdateZdj();
+                return QDialog::eventFilter(object, event);
+            } else if (keyEvent->key() == Qt::Key_Down) {
+                downButtonUpdateZdj();
+                return QDialog::eventFilter(object, event);
+            } else {
+                return QDialog::eventFilter(object, event);
+            }
+        } else {
+            return QDialog::eventFilter(object, event);
+        }
+    } else {
+        return QDialog::eventFilter(object, event);
+    }
 }

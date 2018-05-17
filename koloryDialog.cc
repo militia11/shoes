@@ -1,5 +1,7 @@
 #include "koloryDialog.h"
 #include "ui_koloryDialog.h"
+#include <QStyle>
+#include <QDesktopWidget>
 
 koloryDialog::koloryDialog(nowyKolorDialog *dilogNowyKolor,
                            BazaDanychManager *db, QWidget *parent) :
@@ -9,6 +11,14 @@ koloryDialog::koloryDialog(nowyKolorDialog *dilogNowyKolor,
     proxy = new QSortFilterProxyModel(this);
     aktualnyKolor = -1;
     this->setWindowFlags(Qt::Window);
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
 }
 
 koloryDialog::~koloryDialog() {

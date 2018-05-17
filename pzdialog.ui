@@ -54,7 +54,7 @@
   <widget class="QPushButton" name="pushButtonSzukaj">
    <property name="geometry">
     <rect>
-     <x>772</x>
+     <x>765</x>
      <y>2</y>
      <width>41</width>
      <height>41</height>
@@ -222,7 +222,7 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>820</x>
+     <x>811</x>
      <y>2</y>
      <width>41</width>
      <height>41</height>
@@ -263,8 +263,13 @@
      <height>941</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="editTriggers">
-    <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+    <set>QAbstractItemView::NoEditTriggers</set>
    </property>
    <property name="alternatingRowColors">
     <bool>true</bool>
@@ -280,6 +285,9 @@
    </property>
    <attribute name="verticalHeaderVisible">
     <bool>false</bool>
+   </attribute>
+   <attribute name="verticalHeaderMinimumSectionSize">
+    <number>23</number>
    </attribute>
   </widget>
  </widget>

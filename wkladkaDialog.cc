@@ -1,12 +1,22 @@
 #include "wkladkaDialog.h"
 #include "ui_wkladkaDialog.h"
 #include <QMessageBox>
+#include <QStyle>
+#include <QDesktopWidget>
 wkladkaDialog::wkladkaDialog(NowaWkladkaDialog *dialogNowaWkl,BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),dialogNowaWkl(dialogNowaWkl), dbManager(db),
     ui(new Ui::wkladkaDialog) {
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
 }
 
 wkladkaDialog::~wkladkaDialog() {

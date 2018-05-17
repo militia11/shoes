@@ -22,6 +22,11 @@
      <height>891</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="editTriggers">
     <set>QAbstractItemView::NoEditTriggers</set>
    </property>
@@ -39,6 +44,9 @@
    </property>
    <attribute name="verticalHeaderVisible">
     <bool>false</bool>
+   </attribute>
+   <attribute name="verticalHeaderMinimumSectionSize">
+    <number>23</number>
    </attribute>
   </widget>
   <widget class="QPushButton" name="pushButton_2">
@@ -82,7 +90,7 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>820</x>
+     <x>812</x>
      <y>53</y>
      <width>41</width>
      <height>41</height>
@@ -117,7 +125,7 @@
   <widget class="QPushButton" name="pushButtonSzukaj">
    <property name="geometry">
     <rect>
-     <x>772</x>
+     <x>766</x>
      <y>53</y>
      <width>41</width>
      <height>41</height>

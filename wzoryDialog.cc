@@ -1,5 +1,7 @@
 #include "wzoryDialog.h"
 #include "ui_wzoryDialog.h"
+#include <QStyle>
+#include <QDesktopWidget>
 
 wzoryDialog::wzoryDialog(nowywzorDialog * nw,BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),
@@ -8,6 +10,15 @@ wzoryDialog::wzoryDialog(nowywzorDialog * nw,BazaDanychManager *db, QWidget *par
     proxy = new QSortFilterProxyModel(this);
     aktualnyWzorNr = -1;
     this->setWindowFlags(Qt::Window);
+
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
 }
 
 wzoryDialog::~wzoryDialog() {

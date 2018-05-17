@@ -37,7 +37,7 @@ private slots:
 
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
-    //void on_pushButtonModel_clicked();
+
     void on_checkBox_stateChanged(int arg1);
     void on_tableViewZam_clicked(const QModelIndex &index);
 
@@ -53,7 +53,6 @@ private slots:
 
 public slots:
     void  abra(QWidget*);
-    void  ab(QWidget*,QAbstractItemDelegate::EndEditHint);
 
 private:
     bool eventFilter(QObject *object, QEvent *event);

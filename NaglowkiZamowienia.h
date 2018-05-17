@@ -8,6 +8,7 @@
 class NaglowkiZamowienia {
 public:
     static void ustawNaglowki(QTableView *tableView, QAbstractItemModel *model);
+    static void ustawNaglowkiROZ(QTableView *tableView, QAbstractItemModel *model);
 };
 
 #endif // NAGLOWKIZAMOWIENIA_H

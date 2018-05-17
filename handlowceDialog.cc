@@ -1,5 +1,7 @@
 #include "handlowceDialog.h"
 #include "ui_handlowceDialog.h"
+#include <QStyle>
+#include <QDesktopWidget>
 
 handlowceDialog::handlowceDialog(NowyHandlowiecDialog *nowyKliDialog,
                                  BazaDanychManager *db, QWidget *parent) :
@@ -8,6 +10,14 @@ handlowceDialog::handlowceDialog(NowyHandlowiecDialog *nowyKliDialog,
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
 }
 
 handlowceDialog::~handlowceDialog() {

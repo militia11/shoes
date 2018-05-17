@@ -18,5 +18,6 @@
         <file>zasoby/cut.png</file>
         <file>zasoby/Excel.png</file>
         <file>zasoby/de.png</file>
+        <file>zasoby/arrow.png</file>
     </qresource>
 </RCC>

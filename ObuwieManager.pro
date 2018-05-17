@@ -61,7 +61,8 @@ HEADERS += BazaDanychManager.h \
     mwdialog.h \
     rozmiarydialog.h \
     rwdialog.h \
-    pzdialog.h
+    pzdialog.h \
+    zmienparyzamdialog.h
 
 FORMS += DoRozkrojuDialog.ui \
          edycjazamowieniadialog.ui \
@@ -96,7 +97,8 @@ FORMS += DoRozkrojuDialog.ui \
     mwdialog.ui \
     rozmiarydialog.ui \
     rwdialog.ui \
-    pzdialog.ui
+    pzdialog.ui \
+    zmienparyzamdialog.ui
 
 SOURCES += BazaDanychManager.cc \
            clickableLabel.cc \
@@ -139,7 +141,8 @@ SOURCES += BazaDanychManager.cc \
     mwdialog.cpp \
     rozmiarydialog.cpp \
     rwdialog.cpp \
-    pzdialog.cpp
+    pzdialog.cpp \
+    zmienparyzamdialog.cpp
 
 RESOURCES += zasoby.qrc
 

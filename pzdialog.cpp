@@ -8,6 +8,15 @@ pzDialog::pzDialog(rozmiaryDialog *roz, BazaDanychManager *db, QWidget *parent) 
     actualLastId = -1;
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
 }
 
 pzDialog::~pzDialog() {
@@ -67,7 +76,7 @@ void pzDialog::showEvent(QShowEvent *e) {
     hv->setStretchLastSection(true);
     hv->setDefaultAlignment(Qt::AlignLeft);
     ui->tableView->setColumnWidth(23,59);
-    ui->tableView->sortByColumn(0, Qt::AscendingOrder);
+    ui->tableView->sortByColumn(0, Qt::DescendingOrder);
     czysc();
     ustawIFiltruj();
 //        connect(

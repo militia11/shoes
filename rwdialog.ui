@@ -22,6 +22,11 @@
      <height>941</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="editTriggers">
     <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
    </property>
@@ -39,6 +44,9 @@
    </property>
    <attribute name="verticalHeaderVisible">
     <bool>false</bool>
+   </attribute>
+   <attribute name="verticalHeaderMinimumSectionSize">
+    <number>23</number>
    </attribute>
   </widget>
   <widget class="QPushButton" name="pushButton">

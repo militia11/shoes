@@ -190,31 +190,35 @@ int modeleDialog::getId() {
 }
 
 int modeleDialog::getIdUp() {
-    QModelIndex  idx = proxy->mapToSource(
-                           ui->tableView->selectionModel()->currentIndex());
+    QModelIndex  idx =
+        ui->tableView->selectionModel()->currentIndex();
 
     if(idx.row()==0) {
+        QModelIndex idxProxy = proxy->mapToSource(ui->tableView->model()->index(idx.row(), 0));
         return dbManager->getModele()->data(
-                   dbManager->getModele()->index(idx.row(),
+                   dbManager->getModele()->index(idxProxy.row(),
                            0)).toInt();
     } else {
+        QModelIndex idxProxy = proxy->mapToSource(ui->tableView->model()->index(idx.row()-1, 0));
         return dbManager->getModele()->data(
-                   dbManager->getModele()->index(idx.row()-1,
+                   dbManager->getModele()->index(idxProxy.row(),
                            0)).toInt();
     }
 }
 
 int modeleDialog::getIdDown() {
-    QModelIndex  idx = proxy->mapToSource(
-                           ui->tableView->selectionModel()->currentIndex());
+    QModelIndex  idx =
+        ui->tableView->selectionModel()->currentIndex();
 
     if(idx.row()==ui->tableView->model()->rowCount()-1) {
+        QModelIndex idxProxy = proxy->mapToSource(ui->tableView->model()->index(idx.row(), 0));
         return dbManager->getModele()->data(
-                   dbManager->getModele()->index(idx.row(),
+                   dbManager->getModele()->index(idxProxy.row(),
                            0)).toInt();
     } else {
+        QModelIndex idxProxy = proxy->mapToSource(ui->tableView->model()->index(idx.row()+1, 0));
         return dbManager->getModele()->data(
-                   dbManager->getModele()->index(idx.row()+1,
+                   dbManager->getModele()->index(idxProxy.row(),
                            0)).toInt();
     }
 }
@@ -273,6 +277,12 @@ void modeleDialog::wyczyscPola() {
     image2 = QImage();
     image3 = QImage();
     image4 = QImage();
+    ui->lineEditkol->clear();
+    ui->lineEditma->clear();
+    ui->lineEditoc->clear();
+    ui->lineEditspna->clear();
+    ui->lineEditwkl->clear();
+    ui->lineEditwz->clear();
     ui->checkBox1->setChecked(true);
 }
 
