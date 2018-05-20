@@ -9,7 +9,7 @@
 #include "Delegate.h"
 #include "DelegateArrows.h"
 #include "edycjazamdelegat.h"
-#include "rozmiarydialog.h"
+#include "mwdialog.h"
 namespace Ui {
 class EdycjaZamowieniaDialog;
 }
@@ -18,7 +18,7 @@ class EdycjaZamowieniaDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit EdycjaZamowieniaDialog(rozmiaryDialog *rz, klienciDialog * dialogKlienci, handlowceDialog * dialogHandl, modeleDialog * dialogmodele, BazaDanychManager *db, QWidget *parent = 0);
+    explicit EdycjaZamowieniaDialog(mwDialog *rz, klienciDialog * dialogKlienci, handlowceDialog * dialogHandl, modeleDialog * dialogmodele, BazaDanychManager *db, QWidget *parent = 0);
     ~EdycjaZamowieniaDialog();
     void setNrZam(QString nrZami);
     void setNrZamWl(QString nrZami);
@@ -28,7 +28,6 @@ private slots:
     void refreshTable();
     void updateZamSum(const QModelIndex &topLeft, const QModelIndex &bot,
                       const QVector<int> &);
-    void on_pushButtonModel_clicked();
 
     void on_pushButton_10_clicked();
 
@@ -38,6 +37,8 @@ private slots:
         const QItemSelection &aSelected,
         const QItemSelection &aDeselected);
     void on_pushButtonModel_2_clicked();
+
+    void on_pushButtondruk1_clicked();
 
 signals:
     void koniecEdycji();
@@ -56,7 +57,7 @@ private:
     handlowceDialog *dialogHandl;
     modeleDialog *dialogmodele;   NotEditableDelegate *delNoEdit;
      EdycjaZamDelegat *delArrow;
-     rozmiaryDialog *roz;
+     mwDialog *roz;
 };
 
 #endif // EDYCJAZAMOWIENIADIALOG_H

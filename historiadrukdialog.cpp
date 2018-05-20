@@ -1,18 +1,20 @@
 #include "historiadrukdialog.h"
 #include "ui_historiadrukdialog.h"
 #include "NaglowkiZamowienia.h"
+
 historiaDrukDialog::historiaDrukDialog(BazaDanychManager * dbManager,QWidget *parent) :
     QDialog(parent),dbManager(dbManager),
-    ui(new Ui::historiaDrukDialog)
-{
-    ui->setupUi(this); proxy = new QSortFilterProxyModel(this);   this->setWindowFlags(Qt::Window);
+    ui(new Ui::historiaDrukDialog) {
+    ui->setupUi(this);
+    proxy = new QSortFilterProxyModel(this);
+    this->setWindowFlags(Qt::Window);
     ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
 
 }
 
-historiaDrukDialog::~historiaDrukDialog()
-{
-    delete ui; delete proxy;
+historiaDrukDialog::~historiaDrukDialog() {
+    delete ui;
+    delete proxy;
 }
 
 void historiaDrukDialog::showEvent(QShowEvent *e) {
@@ -52,8 +54,8 @@ void historiaDrukDialog::showEvent(QShowEvent *e) {
 }
 
 
-void historiaDrukDialog::czysc()
-{ui->lineEditroz->clear();
+void historiaDrukDialog::czysc() {
+    ui->lineEditroz->clear();
     ui->lineEditnr->clear();
     ui->lineEditKlnr->clear();
     ui->lineEditKlSk->clear();
@@ -65,23 +67,20 @@ void historiaDrukDialog::czysc()
     ui->lineEditwkl->clear();
 }
 
-void historiaDrukDialog::ustawIFiltruj()
-{
+void historiaDrukDialog::ustawIFiltruj() {
     QString f = QString("wzn LIKE '%1%' AND spnum LIKE '%2%' AND kol LIKE '%3%' AND ocn LIKE '%4%'"
                         "AND man LIKE '%5%' AND wklr LIKE '%6%' and pozycja like '%7%' and nr_zamowienia like '%8%' and klnaz like '%9%' ").arg(
                     ui->lineEditwz->text(),ui->lineEditsp->text(), ui->lineEditkol->text(), ui->lineEditoc->text(),ui->lineEditma->text(),
                     ui->lineEditwkl->text(),ui->lineEditroz->text(),ui->lineEditnr->text(),ui->lineEditKlSk->text());
-f += QString(" and klnr like '%1%'").arg(ui->lineEditKlnr->text());
+    f += QString(" and klnr like '%1%'").arg(ui->lineEditKlnr->text());
     dbManager->getWydruki()->setFilter(f);
 }
 
-void historiaDrukDialog::on_pushButtonSzukaj_clicked()
-{
+void historiaDrukDialog::on_pushButtonSzukaj_clicked() {
     ustawIFiltruj();
 }
 
-void historiaDrukDialog::on_pushButton_clicked()
-{
+void historiaDrukDialog::on_pushButton_clicked() {
     czysc();
     ustawIFiltruj();
 }

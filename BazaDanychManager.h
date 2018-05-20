@@ -61,6 +61,7 @@ public:
     QString getOstatniSelectZam() const;
     int getIdZamowieniaZTabeli(QModelIndex index);
     QString getNrZamowieniaZTabeli(QModelIndex index);
+    bool czyZMagazynuZamowienieZTabeli(QModelIndex index);
     QString getNrOstatniejPozycjiZamowieniaZTabeli(int row);
     QString getNrRozkrojuDoWskazania(QModelIndex index);
     QImage getImage(int id, int ktore, QString tab);
@@ -126,10 +127,18 @@ public:
     void zachowajHandlowca(QString im, QString nz, QString skr, QString uwagi);
     bool zachowajRW(QList<QStandardItem *> rzad);
     bool odejmijzMW(QList<QStandardItem *> rzad, int id);
-    bool odejmijZrealizuj(QList<QStandardItem *> rzad, int id);
+    bool odejmijOdZamowienia(QList<QStandardItem *> rzad, int id);
     bool caleZrealizuj(QList<QStandardItem *> rzad, QString id, int idpraw);
+    bool caleOdrealizuj(QList<QStandardItem *> rzad, QString id, int idpraw);
+    bool caleZamNaMagTow(QList<QStandardItem *> rzad, QString id, int idpraw);
+    bool caleOdMagTowDOZLEC(QList<QStandardItem *> rzad, QString nrZam, int idpraw);
+
+
     bool cofodejmijZrealizuj(QList<QStandardItem *> rzad, int id);
-    bool dodajZrealizuj(QList<QStandardItem *> rzad, QString nrz);
+    bool dodajDoZrealizowanego(QList<QStandardItem *> rzad, QString nrz);
+    bool dodajDoZamMagTowarow(QList<QStandardItem *> rzad, QString nrz);
+
+
     bool cofdodajZrealizuj(QList<QStandardItem *> rzad, QString nrz);
     bool dodajdoMW(QList<QStandardItem *> rzad, int id);
     bool zachowajModel(QVector<QImage> images, QString rodzaj_montazu,  QString typ,
@@ -162,7 +171,7 @@ public:
     QSqlTableModel *getModelHandlowce();
     QSqlTableModel *getModelHandlowceWybieranie();
     QSqlTableModel *getWkladki() const;
-int getOstRwID();
+    int getOstRwID();
     QSqlQueryModel *getSqlModelForQuery(QSqlQuery *aQuery);
     QAbstractItemModel *getModelForQuery(QSqlQuery *aQuery);
     QStandardItemModel *getDoRozkroju(const std::vector<int> &value);
@@ -177,6 +186,7 @@ int getOstRwID();
     QVector<QString> zwrocListeModel(int id);
     QVector<int> zwrocListeIdSkladowychModelu(int id);
     void setZamowieniaSzczegolyFilter(QString f);
+    void setZamowieniaSzczegolyFilterZZerami(QString f);
     bool sprawdzNr(QString nr);
 
     QSqlTableModel *getRozkroje() const;
@@ -186,7 +196,7 @@ int getOstRwID();
     void setmw();
     void updateHandl(int idHan, int idKL);
     void setTableWidokZamowienia(QString tabela);
-   // bool copyZamowienieArch(QStandardItemModel *pozycje);
+    // bool copyZamowienieArch(QStandardItemModel *pozycje);
     void setIdKoloru(int value);
 
     void setIdSpodu(int value);
@@ -219,7 +229,7 @@ int getOstRwID();
 
     QSqlTableModel *getWydruki() const;
     void setWydruki();
-bool usunMwDok(int id);
+    bool usunMwDok(int id);
 private:
     QVariant GetFirstValueForQuery(QSqlQuery *aQuery);
     QSqlRecord getSqlRecordZModelu(const QAbstractItemModel *aItemModel);

@@ -6,8 +6,8 @@
 #include <QModelIndex>
 #include <QMenu>
 #include <QInputDialog>
-//#include <QStyle>
-//#include <QDesktopWidget>
+#include <QStyle>
+#include <QDesktopWidget>
 
 noweZamowienieDialog::noweZamowienieDialog(mwDialog *roz, handlowceDialog *wybHandlDialog,
         BazaDanychManager *db, modeleDialog *modeleDialog,

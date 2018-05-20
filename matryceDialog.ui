@@ -65,6 +65,11 @@
    </item>
    <item>
     <widget class="QTableView" name="tableView">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="alternatingRowColors">
       <bool>true</bool>
      </property>
@@ -77,6 +82,9 @@
      <property name="sortingEnabled">
       <bool>true</bool>
      </property>
+     <attribute name="verticalHeaderMinimumSectionSize">
+      <number>23</number>
+     </attribute>
     </widget>
    </item>
   </layout>

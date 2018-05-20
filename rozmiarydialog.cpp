@@ -28,6 +28,7 @@ rozmiaryDialog::rozmiaryDialog(BazaDanychManager *db, QWidget *parent) :
     zrealExec = false;
     zrealCofExec = false;
     connect(ui->buttonBox, SIGNAL(accepted()),this, SLOT(acceptRoz()));
+    ui->tableViewZam->verticalHeader()->setDefaultSectionSize(ui->tableViewZam->verticalHeader()->minimumSectionSize());
 }
 
 rozmiaryDialog::~rozmiaryDialog() {
@@ -75,6 +76,8 @@ void rozmiaryDialog::updateCurrentRow() {
         }
         ui->horizontalLayout->update();
     }
+    ui->tableViewZam->verticalHeader()->setDefaultSectionSize(ui->tableViewZam->verticalHeader()->minimumSectionSize());
+
     ui->tableViewZam->update();
 }
 

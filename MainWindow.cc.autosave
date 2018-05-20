@@ -490,6 +490,7 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
         }  else if (selectedItem->text() == QString("COFNIJ DO ZLEC W PRODUKCJI CAŁE")) {
             int id = 0;
             int cofnieto = 0;
+            int nieudalo = 0;
             QList<QStandardItem *> rzad;
             bool sukces = true;
             for (int i = 0; i < selection.count(); i++) {
@@ -506,12 +507,12 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
                     }
                     if(!dbManager->caleOdMagTowDOZLEC(rzad, zam, id)) {
                         sukces = false;
+                        nieudalo++;
                     }
                     rzad.clear();
                     delete abmodel;
                 }
             }
-
             if(cofnieto==0) {
                 QMessageBox::information(this, "NIE COFNIĘTO", QString(" <FONT COLOR='#0f00f0'>Wybrane zamówienia nie były zleceniami w produkcji. Nie można cofnąć.")
                                          , QMessageBox::Ok);
@@ -521,7 +522,7 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
                     QMessageBox::information(this, "COFNIĘTO", QString(" <FONT COLOR='#0f00f0'>Cofnięto do zleceń w produkcji %1 pozycje.").arg(
                                                  QString::number(cofnieto)), QMessageBox::Ok);
                 } else {
-                    QMessageBox::information(this, "NIE COFNIĘTO", QString(" <FONT COLOR='#0f00f0'>Nie udało się cofnąć.")
+                    QMessageBox::information(this, "NIE COFNIĘTO", QString(" <FONT COLOR='#0f00f0'>Nie udało się cofnąć %1 pozycji. Cofnięto %2 pozycje.").arg(QString::number(nieudalo), QString::number(cofnieto)))
                                              , QMessageBox::Ok);
                 }
             }

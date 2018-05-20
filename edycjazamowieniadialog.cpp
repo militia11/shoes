@@ -4,7 +4,7 @@
 #include "NaglowkiZamowienia.h"
 #include "Delegate.h"
 
-EdycjaZamowieniaDialog::EdycjaZamowieniaDialog(rozmiaryDialog *rz, klienciDialog * dialogKlienci, handlowceDialog * dialogHandl, modeleDialog * dialogmodele, BazaDanychManager *db, QWidget *parent) :
+EdycjaZamowieniaDialog::EdycjaZamowieniaDialog(mwDialog *rz, klienciDialog * dialogKlienci, handlowceDialog * dialogHandl, modeleDialog * dialogmodele, BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::EdycjaZamowieniaDialog), dbManager(db), dialogKlienci(dialogKlienci), dialogHandl(dialogHandl), dialogmodele(dialogmodele), roz(rz) {
     ui->setupUi(this);
@@ -30,7 +30,6 @@ EdycjaZamowieniaDialog::~EdycjaZamowieniaDialog() {
 void EdycjaZamowieniaDialog::setNrZam(QString nrZami) {
     nrZam = nrZami;
     ui->lineEditPapier->setText(nrZam);
-
     dbManager->setZamowieniaSzczegolyFilter(nrZam);
 }
 
@@ -46,31 +45,6 @@ void EdycjaZamowieniaDialog::refreshTable() {
 void EdycjaZamowieniaDialog::updateZamSum(const QModelIndex &topLeft, const QModelIndex &bot, const QVector<int> &) {
     if (bot.column() != 46) {
         QTimer::singleShot(100, this, SLOT(refreshTable()));
-    }
-}
-
-void EdycjaZamowieniaDialog::on_pushButtonModel_clicked() {
-    dialogmodele->setFixedSize(dialogmodele->size());
-    if (dialogmodele->selectExec() == QDialog::Accepted) {
-        QModelIndex index = ui->tableViewZam->model()->index(0, 3);
-        // int kli = ui->tableViewZam->model()->data(index, Qt::DisplayRole).toInt();
-        QModelIndex index2 = ui->tableViewZam->model()->index(0, 46);
-        //  int handl =  ui->tableViewZam->model()->data(index2, Qt::DisplayRole).toInt();
-        int ileWierszyMinJeden = ui->tableViewZam->model()->rowCount() - 1;
-        QString pozycjaOst = dbManager->getNrOstatniejPozycjiZamowieniaZTabeli(ileWierszyMinJeden);
-
-        int whe = pozycjaOst.indexOf('/');
-        QString poz = pozycjaOst.mid(whe+1, (pozycjaOst.length()-1)- whe);
-
-        int aPos = poz.toInt();
-        int nextPos = aPos+1;
-        QString nrZZam = nrZam;
-        nrZZam += "/";
-        QString alfa =                  QString::number(nextPos);
-        nrZZam += alfa;
-        dbManager->insertPozycjazamowienie(nrZZam);
-        dbManager->getModelZamowienia()->select();
-        ui->tableViewZam->sortByColumn(0, Qt::AscendingOrder);
     }
 }
 
@@ -99,7 +73,7 @@ void EdycjaZamowieniaDialog::showEvent(QShowEvent *e) {
     ui->tableViewZam->horizontalHeader()->setMinimumSectionSize(5);
     NaglowkiZamowienia::ustawNaglowki(ui->tableViewZam, dbManager->getModelZamowienia());
     ui->tableViewZam->sortByColumn(0, Qt::AscendingOrder);
-    ui->tableViewZam->horizontalHeader()->setSectionHidden(38,false);
+        ui->tableViewZam->horizontalHeader()->setSectionHidden(38,false);
     dbManager->EZustawIdAktualnegoKLiHandl();
     connect(
         ui->tableViewZam->selectionModel(),
@@ -120,6 +94,7 @@ void EdycjaZamowieniaDialog::showEvent(QShowEvent *e) {
     for (int i = 10; i < 25; i++) {
         ui->tableViewZam->setItemDelegateForColumn(i, delArrow);
     }
+    ui->tableViewZam->hideColumn(50);
 }
 
 void EdycjaZamowieniaDialog::hideEvent(QHideEvent *e) {
@@ -134,7 +109,6 @@ void EdycjaZamowieniaDialog::on_pushButton_6_clicked() {
         ui->labelKlient->setText(dialogKlienci->getAktualnyKlientNazwa());
         int idHa = dbManager->zwrocIdHandlKlienta();
         dbManager->zmienHandlZam(nrZam, idHa);
-
         ui->labelHandlowiec->setText(dbManager->zwrocNazweHandlKlienta());
     }
 }
@@ -155,13 +129,80 @@ void EdycjaZamowieniaDialog::setSumaZamowien() {
 }
 
 void EdycjaZamowieniaDialog::on_pushButtonModel_2_clicked() {
-    QModelIndex idx = ui->tableViewZam->selectionModel()->currentIndex();
-    int id = dbManager->zwrocAktualnyModelIdMw(idx);
-    // actualLastId = id;
-    roz->setCurId(id);
     roz->setFixedSize(roz->size());
-    roz->setWindowTitle("Pobierz z magazynu wolne");
-    if(roz->exec()==QDialog::Accepted) {
+    if(roz->selectExec() == QDialog::Accepted) {
+        if(roz->getZmagazynu()) {
+//            QList<QStandardItem *> rzad = roz->zwrocWierszModel();
+//            dbManager->ustawAktualnyModelMWId(roz->getActualLastId());
+//            zamowienie->insertRow(ktoraPozycja, rzad);
+//            ustawTabeleHeaders();
+//            QStringList listaZamowienia;
+//            listaZamowienia << "WZÓR" << "SPÓD" << "KOLOR" << "MATRYCA " << "OCIEPLEN" << "WKŁADKA" << "36" << "37" << "38" << "39" << "40" << "41" << "42" << "43"  << "44"
+//                            << "45" << "46" << "47"  << "48" << "49" << "50" << "SUMA" << "STATUS" ;
+//            for (int i = 0; i < zamowienie->columnCount(); ++i) {
+//                zamowienie->setHeaderData(i, Qt::Horizontal, listaZamowienia[i]);
+//            }
+//            uwagi.append(QString(""));
+//            QModelIndex index = ui->tableViewZam->model()->index(ktoraPozycja, 10);
 
+//            if(ktoraPozycja==0) {
+//                ustawTabeleHeaders();
+//                ui->tableViewZam->setContextMenuPolicy(Qt::CustomContextMenu);
+//                connect(ui->tableViewZam, SIGNAL(customContextMenuRequested(const QPoint &)),
+//                        this,
+//                        SLOT(ShowContextMenu(const QPoint &)));
+//            }
+//            ktoraPozycja++;
+//            ui->plainTextEditU1->clear();
+//            sumall();
+//            if(dbManager->zachowajRW(rzad)) {
+//                dbManager->odejmijzMW(roz->zwrocWierszModel(), roz->getActualLastId());
+//            }
+//            for (int c = 0; c < ui->tableViewZam->horizontalHeader()->count(); ++c) {
+//                ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
+//                        QHeaderView::Fixed);
+//            }
+
+//            ui->tableViewZam->setColumnWidth(0, 82);
+//            ui->tableViewZam->setColumnWidth(1, 82);
+//            ui->tableViewZam->setColumnWidth(2, 82);
+//            ui->tableViewZam->setColumnWidth(3, 82);
+//            ui->tableViewZam->setColumnWidth(4, 82);
+//            ui->tableViewZam->setColumnWidth(5, 82);
+//            for (int c = 6; c < 21;  c++) {
+//                ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
+//                        QHeaderView::Fixed);
+//                ui->tableViewZam->setColumnWidth(c, 30);
+//            }
+//            QHeaderView *hv = ui->tableViewZam->horizontalHeader();
+//            hv->setStretchLastSection(true);
+//            pojemnikIdMW.push_back(dbManager->getOstRwID());
+//            pojemnikRzad.insert(ktoraPozycja,dbManager->getOstRwID());
+        } else {
+            dbManager->setZamowieniaSzczegolyFilterZZerami(nrZam);
+            int ileWierszyMinJeden = ui->tableViewZam->model()->rowCount() - 1;
+            QString pozycjaOst = dbManager->getNrOstatniejPozycjiZamowieniaZTabeli(ileWierszyMinJeden);
+            int whe = pozycjaOst.indexOf('/');
+            QString poz = pozycjaOst.mid(whe+1, (pozycjaOst.length()-1)- whe);
+
+            int aPos = poz.toInt();
+            int nextPos = aPos+1;
+            QString nrZZam = nrZam;
+            nrZZam += "/";
+            QString alfa = QString::number(nextPos);
+            nrZZam += alfa;
+            dbManager->insertPozycjazamowienie(nrZZam);
+            dbManager->getModelZamowienia()->select();
+            ui->tableViewZam->sortByColumn(0, Qt::AscendingOrder);
+            ui->pushButtondruk1->setChecked(true);
+        }
+    }
+}
+
+void EdycjaZamowieniaDialog::on_pushButtondruk1_clicked() {
+    if(ui->pushButtondruk1->isChecked()) {
+        dbManager->setZamowieniaSzczegolyFilterZZerami(nrZam);
+    } else {
+        dbManager->setZamowieniaSzczegolyFilter(nrZam);
     }
 }

@@ -9,6 +9,7 @@ handlowceDialog::handlowceDialog(NowyHandlowiecDialog *nowyKliDialog,
     ui(new Ui::handlowceDialog), dbManager(db), nowyKliDialog(nowyKliDialog) {
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
+    ui->tableViewHandlowce->verticalHeader()->setDefaultSectionSize(ui->tableViewHandlowce->verticalHeader()->minimumSectionSize());
     this->setWindowFlags(Qt::Window);
     this->setGeometry(
         QStyle::alignedRect(

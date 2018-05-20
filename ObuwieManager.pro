@@ -60,7 +60,7 @@ HEADERS += BazaDanychManager.h \
     rozmiarydialog.h \
     rwdialog.h \
     pzdialog.h \
-    zmienparyzamdialog.h
+    zmienparyzamdialog.h \
     historiadrukdialog.h \
     edycjazamdelegat.h
 
@@ -96,7 +96,7 @@ FORMS += \
     rozmiarydialog.ui \
     rwdialog.ui \
     pzdialog.ui \
-    zmienparyzamdialog.ui
+    zmienparyzamdialog.ui \
     historiadrukdialog.ui
 
 SOURCES += BazaDanychManager.cc \
@@ -139,7 +139,7 @@ SOURCES += BazaDanychManager.cc \
     rozmiarydialog.cpp \
     rwdialog.cpp \
     pzdialog.cpp \
-    zmienparyzamdialog.cpp
+    zmienparyzamdialog.cpp \
     historiadrukdialog.cpp \
     edycjazamdelegat.cpp
 

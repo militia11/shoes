@@ -1,6 +1,7 @@
 #include "pzdialog.h"
 #include "ui_pzdialog.h"
-
+#include <QStyle>
+#include <QDesktopWidget>
 pzDialog::pzDialog(rozmiaryDialog *roz, BazaDanychManager *db, QWidget *parent) :
     QDialog(parent), dbManager(db),roz(roz),
     ui(new Ui::pzDialog) {
