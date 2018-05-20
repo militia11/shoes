@@ -2,6 +2,9 @@
 #include "ui_RozkrojeDialog.h"
 #include "NaglowkiZamowienia.h"
 #include <QKeyEvent>
+#include <QStyle>
+#include <QDesktopWidget>
+
 RozkrojeDialog::RozkrojeDialog(BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RozkrojeDialog), dbManager(db) {
@@ -16,6 +19,14 @@ RozkrojeDialog::RozkrojeDialog(BazaDanychManager *db, QWidget *parent) :
     ui->tableViewSzczegoly->verticalHeader()->setDefaultSectionSize(ui->tableViewSzczegoly->verticalHeader()->minimumSectionSize());
     ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
     ui->tableView->installEventFilter(this);
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
 }
 
 RozkrojeDialog::~RozkrojeDialog() {

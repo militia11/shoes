@@ -1,6 +1,8 @@
 #include "historiadrukdialog.h"
 #include "ui_historiadrukdialog.h"
 #include "NaglowkiZamowienia.h"
+#include <QStyle>
+#include <QDesktopWidget>
 
 historiaDrukDialog::historiaDrukDialog(BazaDanychManager * dbManager,QWidget *parent) :
     QDialog(parent),dbManager(dbManager),
@@ -9,7 +11,14 @@ historiaDrukDialog::historiaDrukDialog(BazaDanychManager * dbManager,QWidget *pa
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
     ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
-
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
 }
 
 historiaDrukDialog::~historiaDrukDialog() {

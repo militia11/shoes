@@ -3,6 +3,8 @@
 #include <QTimer>
 #include "NaglowkiZamowienia.h"
 #include "Delegate.h"
+#include <QStyle>
+#include <QDesktopWidget>
 
 EdycjaZamowieniaDialog::EdycjaZamowieniaDialog(mwDialog *rz, klienciDialog * dialogKlienci, handlowceDialog * dialogHandl, modeleDialog * dialogmodele, BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),
@@ -21,6 +23,15 @@ EdycjaZamowieniaDialog::EdycjaZamowieniaDialog(mwDialog *rz, klienciDialog * dia
     ui->tableViewZam->verticalHeader()->setDefaultSectionSize(ui->tableViewZam->verticalHeader()->minimumSectionSize());
     delNoEdit = new NotEditableDelegate(ui->tableViewZam);
     delArrow = new EdycjaZamDelegat(ui->tableViewZam);
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
+
 }
 
 EdycjaZamowieniaDialog::~EdycjaZamowieniaDialog() {
@@ -30,7 +41,9 @@ EdycjaZamowieniaDialog::~EdycjaZamowieniaDialog() {
 void EdycjaZamowieniaDialog::setNrZam(QString nrZami) {
     nrZam = nrZami;
     ui->lineEditPapier->setText(nrZam);
-    dbManager->setZamowieniaSzczegolyFilter(nrZam);
+    QString nrzkres = nrZam;
+    nrzkres +="/";
+    dbManager->setZamowieniaSzczegolyFilter(nrzkres);
 }
 
 void EdycjaZamowieniaDialog::setNrZamWl(QString nrZami) {
@@ -73,7 +86,7 @@ void EdycjaZamowieniaDialog::showEvent(QShowEvent *e) {
     ui->tableViewZam->horizontalHeader()->setMinimumSectionSize(5);
     NaglowkiZamowienia::ustawNaglowki(ui->tableViewZam, dbManager->getModelZamowienia());
     ui->tableViewZam->sortByColumn(0, Qt::AscendingOrder);
-        ui->tableViewZam->horizontalHeader()->setSectionHidden(38,false);
+    ui->tableViewZam->horizontalHeader()->setSectionHidden(38,false);
     dbManager->EZustawIdAktualnegoKLiHandl();
     connect(
         ui->tableViewZam->selectionModel(),

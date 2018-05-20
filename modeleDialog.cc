@@ -1,5 +1,7 @@
 #include "modeleDialog.h"
 #include "ui_modeleDialog.h"
+#include <QStyle>
+#include <QDesktopWidget>
 
 void modeleDialog::resetRodzaje() {
     filtrRodzaje.r1 = QString("");
@@ -61,6 +63,16 @@ modeleDialog::modeleDialog(ZdjecieDialog *zdj,
     resetRodzaje();
     this->setWindowFlags(Qt::Window);
     ui->tableView->installEventFilter(this);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
+
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
 }
 
 modeleDialog::~modeleDialog() {

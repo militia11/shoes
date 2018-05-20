@@ -1,5 +1,7 @@
 #include "rwdialog.h"
 #include "ui_rwdialog.h"
+#include <QStyle>
+#include <QDesktopWidget>
 
 rwDialog::rwDialog(BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),
@@ -8,6 +10,14 @@ rwDialog::rwDialog(BazaDanychManager *db, QWidget *parent) :
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
     ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
 }
 
 rwDialog::~rwDialog() {
