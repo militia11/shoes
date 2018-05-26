@@ -17,6 +17,7 @@ pzDialog::pzDialog(rozmiaryDialog *roz, BazaDanychManager *db, QWidget *parent) 
             qApp->desktop()->availableGeometry()
         )
     );
+    ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
 }
 
 pzDialog::~pzDialog() {

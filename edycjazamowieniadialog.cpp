@@ -145,52 +145,48 @@ void EdycjaZamowieniaDialog::on_pushButtonModel_2_clicked() {
     roz->setFixedSize(roz->size());
     if(roz->selectExec() == QDialog::Accepted) {
         if(roz->getZmagazynu()) {
-//            QList<QStandardItem *> rzad = roz->zwrocWierszModel();
-//            dbManager->ustawAktualnyModelMWId(roz->getActualLastId());
-//            zamowienie->insertRow(ktoraPozycja, rzad);
-//            ustawTabeleHeaders();
-//            QStringList listaZamowienia;
-//            listaZamowienia << "WZÓR" << "SPÓD" << "KOLOR" << "MATRYCA " << "OCIEPLEN" << "WKŁADKA" << "36" << "37" << "38" << "39" << "40" << "41" << "42" << "43"  << "44"
-//                            << "45" << "46" << "47"  << "48" << "49" << "50" << "SUMA" << "STATUS" ;
-//            for (int i = 0; i < zamowienie->columnCount(); ++i) {
-//                zamowienie->setHeaderData(i, Qt::Horizontal, listaZamowienia[i]);
-//            }
-//            uwagi.append(QString(""));
-//            QModelIndex index = ui->tableViewZam->model()->index(ktoraPozycja, 10);
+            QList<QStandardItem *> rzad = roz->zwrocWierszModel();
+            int idWMwModelu = roz->getActualLastId();
 
-//            if(ktoraPozycja==0) {
-//                ustawTabeleHeaders();
-//                ui->tableViewZam->setContextMenuPolicy(Qt::CustomContextMenu);
-//                connect(ui->tableViewZam, SIGNAL(customContextMenuRequested(const QPoint &)),
-//                        this,
-//                        SLOT(ShowContextMenu(const QPoint &)));
-//            }
-//            ktoraPozycja++;
-//            ui->plainTextEditU1->clear();
-//            sumall();
-//            if(dbManager->zachowajRW(rzad)) {
-//                dbManager->odejmijzMW(roz->zwrocWierszModel(), roz->getActualLastId());
-//            }
-//            for (int c = 0; c < ui->tableViewZam->horizontalHeader()->count(); ++c) {
-//                ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
-//                        QHeaderView::Fixed);
-//            }
+            dbManager->setZamowieniaSzczegolyFilterZZerami(nrZam);
+            int ileWierszyMinJeden = ui->tableViewZam->model()->rowCount() - 1;
+            QString pozycjaOst = dbManager->getNrOstatniejPozycjiZamowieniaZTabeli(ileWierszyMinJeden);
+            int whe = pozycjaOst.indexOf('/');
+            QString poz = pozycjaOst.mid(whe+1, (pozycjaOst.length()-1)- whe);
 
-//            ui->tableViewZam->setColumnWidth(0, 82);
-//            ui->tableViewZam->setColumnWidth(1, 82);
-//            ui->tableViewZam->setColumnWidth(2, 82);
-//            ui->tableViewZam->setColumnWidth(3, 82);
-//            ui->tableViewZam->setColumnWidth(4, 82);
-//            ui->tableViewZam->setColumnWidth(5, 82);
-//            for (int c = 6; c < 21;  c++) {
-//                ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
-//                        QHeaderView::Fixed);
-//                ui->tableViewZam->setColumnWidth(c, 30);
-//            }
-//            QHeaderView *hv = ui->tableViewZam->horizontalHeader();
-//            hv->setStretchLastSection(true);
-//            pojemnikIdMW.push_back(dbManager->getOstRwID());
-//            pojemnikRzad.insert(ktoraPozycja,dbManager->getOstRwID());
+            int aPos = poz.toInt();
+            int nextPos = aPos+1;
+            QString nrZZam = nrZam;
+            nrZZam += "/";
+            QString alfa = QString::number(nextPos);
+            nrZZam += alfa;
+            dbManager->ustawAktualnyModelMWId(idWMwModelu);
+            dbManager->utworzZamowienieZMagPobrane(rzad, idWMwModelu, nrZZam);
+
+            if(dbManager->zachowajRW(rzad)) {
+                dbManager->odejmijzMW(roz->zwrocWierszModel(), roz->getActualLastId());
+            }
+            for (int c = 0; c < ui->tableViewZam->horizontalHeader()->count(); ++c) {
+                ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
+                        QHeaderView::Fixed);
+            }
+
+            ui->tableViewZam->setColumnWidth(0, 82);
+            ui->tableViewZam->setColumnWidth(1, 82);
+            ui->tableViewZam->setColumnWidth(2, 82);
+            ui->tableViewZam->setColumnWidth(3, 82);
+            ui->tableViewZam->setColumnWidth(4, 82);
+            ui->tableViewZam->setColumnWidth(5, 82);
+            for (int c = 6; c < 21;  c++) {
+                ui->tableViewZam->horizontalHeader()->setSectionResizeMode(c,
+                        QHeaderView::Fixed);
+                ui->tableViewZam->setColumnWidth(c, 30);
+            }
+            QHeaderView *hv = ui->tableViewZam->horizontalHeader();
+            hv->setStretchLastSection(true);
+            dbManager->getModelZamowienia()->select();
+            ui->tableViewZam->sortByColumn(0, Qt::AscendingOrder);
+            ui->pushButtondruk1->setChecked(true);
         } else {
             dbManager->setZamowieniaSzczegolyFilterZZerami(nrZam);
             int ileWierszyMinJeden = ui->tableViewZam->model()->rowCount() - 1;

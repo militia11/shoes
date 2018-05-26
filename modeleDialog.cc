@@ -172,27 +172,6 @@ void modeleDialog::hideEvent(QHideEvent *e) {
                SLOT(wybranoModel(const QModelIndex)));
 }
 
-bool modeleDialog::eventFilter(QObject *object, QEvent *event) {
-    if (object == ui->tableView) {
-        if (event->type() == QEvent::KeyPress) {
-            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            if (keyEvent->key() == Qt::Key_Up) {
-                upButtonUpdateZdj();
-                return QDialog::eventFilter(object, event);
-            } else if (keyEvent->key() == Qt::Key_Down) {
-                downButtonUpdateZdj();
-                return QDialog::eventFilter(object, event);
-            } else {
-                return QDialog::eventFilter(object, event);
-            }
-        } else {
-            return QDialog::eventFilter(object, event);
-        }
-    } else {
-        return QDialog::eventFilter(object, event);
-    }
-}
-
 int modeleDialog::getId() {
     QModelIndex  idx = proxy->mapToSource(
                            ui->tableView->selectionModel()->currentIndex());
@@ -400,13 +379,11 @@ void modeleDialog::on_comboBoxb3_activated(int index) {
 void modeleDialog::on_comboBoxb4_activated(int index) {
     filtrRodzaje.r4 = ui->comboBoxb4->currentText();
     ustawIFiltruj();
-
 }
 
 void modeleDialog::on_comboBoxb5_activated(int index) {
     filtrRodzaje.r5 = ui->comboBoxb5->currentText();
     ustawIFiltruj();
-
 }
 
 void modeleDialog::on_comboBoxb6_activated(int index) {

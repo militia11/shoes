@@ -36,7 +36,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>110</width>
+        <width>94</width>
         <height>31</height>
        </size>
       </property>
@@ -52,7 +52,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>110</width>
+        <width>94</width>
         <height>31</height>
        </size>
       </property>
@@ -68,7 +68,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>110</width>
+        <width>94</width>
         <height>31</height>
        </size>
       </property>
@@ -84,7 +84,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>110</width>
+        <width>94</width>
         <height>31</height>
        </size>
       </property>
@@ -100,7 +100,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>110</width>
+        <width>94</width>
         <height>31</height>
        </size>
       </property>
@@ -116,7 +116,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>110</width>
+        <width>94</width>
         <height>31</height>
        </size>
       </property>
@@ -132,7 +132,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>110</width>
+        <width>94</width>
         <height>31</height>
        </size>
       </property>
@@ -148,7 +148,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>110</width>
+        <width>94</width>
         <height>31</height>
        </size>
       </property>
@@ -164,7 +164,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>110</width>
+        <width>94</width>
         <height>31</height>
        </size>
       </property>
@@ -180,7 +180,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>110</width>
+        <width>94</width>
         <height>31</height>
        </size>
       </property>
@@ -267,7 +267,7 @@
   <widget class="QTableView" name="tableView">
    <property name="geometry">
     <rect>
-     <x>7</x>
+     <x>-10</x>
      <y>50</y>
      <width>1901</width>
      <height>941</height>

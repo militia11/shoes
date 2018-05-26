@@ -1,6 +1,8 @@
 #include "matryceDialog.h"
 #include "ui_matryceDialog.h"
 #include <QInputDialog>
+#include <QStyle>
+#include <QDesktopWidget>
 
 
 matryceDialog::matryceDialog(NowaMatrycaDialog *nowamat, BazaDanychManager *db,
@@ -10,6 +12,17 @@ matryceDialog::matryceDialog(NowaMatrycaDialog *nowamat, BazaDanychManager *db,
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
+
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
+
 }
 
 matryceDialog::~matryceDialog() {

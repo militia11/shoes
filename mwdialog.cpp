@@ -1,6 +1,8 @@
 #include "mwdialog.h"
 #include "ui_mwdialog.h"
 #include <QMessageBox>
+#include <QStyle>
+#include <QDesktopWidget>
 
 int mwDialog::selectExec() {
     ui->pushButtonPu->setVisible(true);
@@ -18,6 +20,14 @@ mwDialog::mwDialog(owyModelDialog *nm, rozmiaryDialog *roz, BazaDanychManager *d
     actualLastId = -1;
     zmagazynu = true;
     ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
 }
 
 mwDialog::~mwDialog() {

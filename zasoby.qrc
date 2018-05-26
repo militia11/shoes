@@ -19,5 +19,6 @@
         <file>zasoby/Excel.png</file>
         <file>zasoby/de.png</file>
         <file>zasoby/arrow.png</file>
+        <file>zasoby/chclient.png</file>
     </qresource>
 </RCC>

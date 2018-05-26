@@ -1,5 +1,7 @@
 #include "ocieplenieDialog.h"
 #include "ui_ocieplenieDialog.h"
+#include <QStyle>
+#include <QDesktopWidget>
 
 ocieplenieDialog::ocieplenieDialog(noweociepdialog *dno, BazaDanychManager *db, QWidget *parent) :
     QDialog(parent),
@@ -7,6 +9,17 @@ ocieplenieDialog::ocieplenieDialog(noweociepdialog *dno, BazaDanychManager *db, 
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
+
+    this->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            this->size(),
+            qApp->desktop()->availableGeometry()
+        )
+    );
+
 }
 
 ocieplenieDialog::~ocieplenieDialog() {

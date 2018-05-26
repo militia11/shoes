@@ -5,6 +5,7 @@
 #include <QStyle>
 #include <QDesktopWidget>
 
+
 spodyDialog::spodyDialog(ZdjecieDialog *zdj, nowySpodDialog *dialogNSpod,
                          BazaDanychManager *db,
                          QWidget *parent) :
@@ -32,7 +33,7 @@ spodyDialog::spodyDialog(ZdjecieDialog *zdj, nowySpodDialog *dialogNSpod,
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
     ui->tableView->installEventFilter(this);
-    //ui->comboBoxb3->setFixedWidth(124);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
     this->setGeometry(
         QStyle::alignedRect(
             Qt::LeftToRight,
@@ -41,6 +42,7 @@ spodyDialog::spodyDialog(ZdjecieDialog *zdj, nowySpodDialog *dialogNSpod,
             qApp->desktop()->availableGeometry()
         )
     );
+    //ui->comboBoxb3->setFixedWidth(124);
 }
 
 spodyDialog::~spodyDialog() {
@@ -235,7 +237,7 @@ void spodyDialog::on_tableView_clicked(const QModelIndex &index) {
     label3->clear();
     label4->clear();
     int id = getId();
-    qDebug() << id;
+
 
     image1 = dbManager->getImage(id, 1, QString("spody"));
     image2 = dbManager->getImage(id, 2, QString("spody"));
@@ -267,7 +269,7 @@ void spodyDialog::updateModel(int id) {
     label2->clear();
     label3->clear();
     label4->clear();
-    qDebug() << id;
+
     image1 = dbManager->getImage(id, 1, QString("spody"));
     image2 = dbManager->getImage(id, 2, QString("spody"));
     image3 = dbManager->getImage(id, 3, QString("spody"));

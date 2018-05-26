@@ -10,6 +10,7 @@
 #include "DelegateArrows.h"
 #include "edycjazamdelegat.h"
 #include "mwdialog.h"
+
 namespace Ui {
 class EdycjaZamowieniaDialog;
 }
@@ -55,9 +56,10 @@ private:
     QString kliSkrot;
     klienciDialog *dialogKlienci;
     handlowceDialog *dialogHandl;
-    modeleDialog *dialogmodele;   NotEditableDelegate *delNoEdit;
-     EdycjaZamDelegat *delArrow;
-     mwDialog *roz;
+    modeleDialog *dialogmodele;
+    NotEditableDelegate *delNoEdit;
+    EdycjaZamDelegat *delArrow;
+    mwDialog *roz;
 };
 
 #endif // EDYCJAZAMOWIENIADIALOG_H

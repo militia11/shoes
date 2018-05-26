@@ -10,6 +10,7 @@ wzoryDialog::wzoryDialog(nowywzorDialog * nw,BazaDanychManager *db, QWidget *par
     proxy = new QSortFilterProxyModel(this);
     aktualnyWzorNr = -1;
     this->setWindowFlags(Qt::Window);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
 
     this->setGeometry(
         QStyle::alignedRect(

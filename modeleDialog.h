@@ -61,7 +61,6 @@ private:
     void showPhoto(QImage im);
     void showEvent(QShowEvent *e);
     void hideEvent(QHideEvent *e);
-    bool eventFilter(QObject *object, QEvent *event);
     clickableLabel *label1;
     clickableLabel *label2;
     clickableLabel *label3;

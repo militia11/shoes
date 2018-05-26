@@ -240,6 +240,64 @@ QImage BazaDanychManager::getImageZamowienia(int id) {
     return image;
 }
 
+QString BazaDanychManager::getZamModelU1(int id) {
+    QSqlQuery qry2;
+    qry2.prepare("select zamowienia.modele_id from zamowienia join modele on zamowienia.modele_id=modele.id where zamowienia.id=:id");
+    qry2.bindValue(":id", id);
+    qry2.exec();
+    int  idMod = -1;
+    if (qry2.next()) {
+        idMod = qry2.value(0).toInt();
+    }
+    QSqlQuery qry;
+    QString str = QString("select opis1 from modele where id=:idMod");
+    qry.prepare(str);
+    qry.bindValue(":idMod", idMod);
+    if (!qry.exec()) {
+        qDebug() << "Błąd przy pobraniu opis1";
+    }
+    if (!qry.next()) {
+        return QString();
+    }
+
+    return qry.value(0).toString();
+}
+
+QString BazaDanychManager::getZamModelU2(int id) {
+    QSqlQuery qry2;
+    qry2.prepare("select zamowienia.modele_id from zamowienia join modele on zamowienia.modele_id=modele.id where zamowienia.id=:id");
+    qry2.bindValue(":id", id);
+    qry2.exec();
+    int  idMod = -1;
+    if (qry2.next()) {
+        idMod = qry2.value(0).toInt();
+    }
+    QSqlQuery qry;
+    QString str = QString("select opis2 from modele where id=:idMod");
+    qry.prepare(str);
+    qry.bindValue(":idMod", idMod);
+    if (!qry.exec()) {
+        qDebug() << "Błąd przy pobraniu opis1";
+    }
+    if (!qry.next()) {
+        return QString();
+    }
+
+    return qry.value(0).toString();
+}
+
+int BazaDanychManager::getZamModeleID(int id) {
+    QSqlQuery qry2;
+    qry2.prepare("select modele_id from vzam where zamowienia_id=:id;");
+    qry2.bindValue(":id", id);
+    qry2.exec();
+    if (qry2.next()) {
+        return qry2.value(0).toInt();
+    } else {
+        return -1;
+    }
+}
+
 QString BazaDanychManager::getKlientSkrot(QString nr_zam) {
     QSqlQuery vQuery(db);
     QString res;
@@ -249,7 +307,7 @@ QString BazaDanychManager::getKlientSkrot(QString nr_zam) {
         vQuery.next();
         res =  vQuery.value(0).toString();
     }
-    qDebug() << res;
+
     return res;
 }
 
@@ -1049,6 +1107,47 @@ QString BazaDanychManager::poberzOpis2(int id) {
     }
 }
 
+bool BazaDanychManager::utworzZamowienieZMagPobrane(QList<QStandardItem *> rzad, int id, QString nrz) {
+    QSqlQuery qry;
+    qry.prepare("INSERT INTO `obuwie_db`.`zamowienia` (nr_zamowienia, id_klienta, wprowadzono, realizacja, status, uzytkownik, modele_id, handlowce_id, `R36`, R37 ,R38, R39,  R40, "
+                "  R41, R42  ,R43   ,R44,  R45, R46 ,  R47,  R48 ,  R49 , R50,suma) VALUES ("
+                ":nr_zamowienia,:id_klienta, :wprowadzono ,:realizacja, :status, :uzytkownik, :modele_id, :handlowce_id, :R36, :R37 ,:R38,:R39, :R40 , :R41, :R42, :R43  ,:R44, :R45 ,  :R46 , :R47  , :R48, :R49,:R50 ,:suma)");
+    qry.bindValue(":nr_zamowienia", nrz);
+    qry.bindValue(":id_klienta", idKlienta);
+    qry.bindValue(":wprowadzono", QDate::currentDate());
+    qry.bindValue(":realizacja", QDate::currentDate().addDays(14));
+    qry.bindValue(":status", QString("MAG TOWARÓW"));
+    qry.bindValue(":uzytkownik", user);
+    qry.bindValue(":modele_id", id);
+    int iidHandlowca = zwrocIdHandlKlienta();
+    qry.bindValue(":handlowce_id", iidHandlowca);
+    qry.bindValue(":R36", rzad.at(6)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R37", rzad.at(7)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R38", rzad.at(8)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R39", rzad.at(9)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R40", rzad.at(10)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R41", rzad.at(11)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R42", rzad.at(12)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R43", rzad.at(13)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R44", rzad.at(14)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R45", rzad.at(15)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R46", rzad.at(16)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R47", rzad.at(17)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R48", rzad.at(18)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R49", rzad.at(19)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R50", rzad.at(20)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":suma", rzad.at(21)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":wprowadzono", QDate::currentDate());
+    qry.bindValue(":uzytkownik", user);
+    if (!qry.exec()) {
+        qDebug() << "Bląd przy insert zam";
+        qDebug() << qry.lastError();
+        return false;
+    } else {
+        return true;
+    }
+}
+
 QString BazaDanychManager::pobierzAktualnaSkore(const QModelIndex index) {
     return  mSkory->data(mSkory->index(index.row(),
                                        1)).toString();
@@ -1687,6 +1786,189 @@ bool BazaDanychManager::cofodejmijZrealizuj(QList<QStandardItem *> rzad, int id)
     }
 }
 
+bool BazaDanychManager::cofodejmijZlecWProdukcji(QList<QStandardItem *> rzad, int id) {
+    QSqlQuery qry;
+    QString qryString = QString("update `obuwie_db`.`zamowienia` set R36 = R36 - :mR36, R37 = R37 - :mR37, R38 = R38 - :mR38, R39 = R39 - :mR39, R40 = R40 - :mR40, R41 = R41 - :mR41, R42 = R42 - :mR42, R43 = R43 - :mR43, R44 = R44 - :mR44, R45 = R45 - :mR45, R46 = R46 - :mR46, R47 = R47 - :mR47, R48 = R48 - :mR48, R49 = R49 - :mR49, R50 = R50 - :mR50, suma = suma - :msuma where id=%1").arg(id);
+
+    qry.prepare(qryString);
+    qry.bindValue(":mR36", rzad.at(6)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR37", rzad.at(7)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR38", rzad.at(8)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR39", rzad.at(9)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR40", rzad.at(10)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR41", rzad.at(11)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR42", rzad.at(12)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR43", rzad.at(13)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR44", rzad.at(14)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR45", rzad.at(15)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR46", rzad.at(16)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR47", rzad.at(17)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR48", rzad.at(18)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR49", rzad.at(19)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR50", rzad.at(20)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":msuma", rzad.at(21)->data(Qt::DisplayRole).toInt());
+
+    if (!qry.exec()) {
+        qDebug() << "Bląd przy odejmij zlecWProdukcji czyli z MagTow" ;
+        qDebug() << qry.lastError();
+        return false;
+    } else {
+        return true;
+    }
+}
+
+bool BazaDanychManager::utworzZamowieniePrzeniesNaInnyKL(QList<QStandardItem *> rzad, QString nr, int idMod, QString status) {
+    db.transaction();
+    bool vSuccess = true;
+    QString nrz = nr;
+    QSqlQuery vIdQuery;
+    QString vStrQue = QString("SELECT nr_zamowienia FROM zamowienia where nr_zamowienia LIKE '%1%' ORDER BY id DESC LIMIT 1;").arg(nrz);
+    vIdQuery.exec(vStrQue);
+
+    QVariant vIdAsVariant = GetFirstValueForQuery(&vIdQuery);
+    QString nrZamOst = vIdAsVariant.toString();
+
+    int whe = nrZamOst.indexOf('-');
+    if(whe == -1) {
+        nrz += "-1";
+    } else {
+        QString poz = nrZamOst.mid(whe+1,nrZamOst.length()-1);
+        int aPos = poz.toInt();
+        int nextPos = aPos+1;
+        nrz +="-";
+        nrz += QString::number(nextPos);
+    }
+
+    QSqlQuery qry;
+    qry.prepare("INSERT INTO `obuwie_db`.`zamowienia` (nr_zamowienia, id_klienta, wprowadzono, realizacja, status, uzytkownik, modele_id, handlowce_id, `R36`, R37 ,R38, R39,  R40, "
+                "  R41, R42  ,R43   ,R44,  R45, R46 ,  R47,  R48 ,  R49 , R50,suma, ROZKROJ) VALUES ("
+                ":nr_zamowienia,:id_klienta, :wprowadzono ,:realizacja, :status, :uzytkownik, :modele_id, :handlowce_id, :R36, :R37 ,:R38,:R39, :R40 , :R41, :R42, :R43  ,:R44, :R45 ,  :R46 , :R47  , :R48, :R49,:R50 ,:suma, :ROZKROJ)");
+    qry.bindValue(":nr_zamowienia", nrz);
+    qry.bindValue(":id_klienta", idKlienta);
+    qry.bindValue(":wprowadzono", QDate::currentDate());
+    qry.bindValue(":realizacja", QDate::currentDate().addDays(14));
+    qry.bindValue(":status", status);
+    qry.bindValue(":uzytkownik", user);
+    qry.bindValue(":modele_id", idMod);
+    int iidHandlowca = zwrocIdHandlKlienta();
+    qry.bindValue(":handlowce_id", iidHandlowca);
+    qry.bindValue(":R36", rzad.at(6)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R37", rzad.at(7)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R38", rzad.at(8)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R39", rzad.at(9)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R40", rzad.at(10)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R41", rzad.at(11)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R42", rzad.at(12)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R43", rzad.at(13)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R44", rzad.at(14)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R45", rzad.at(15)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R46", rzad.at(16)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R47", rzad.at(17)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R48", rzad.at(18)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R49", rzad.at(19)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":R50", rzad.at(20)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":suma", rzad.at(21)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":ROZKROJ", rzad.at(23)->data(Qt::DisplayRole).toString());
+    qry.bindValue(":uzytkownik", user);
+    if (!qry.exec()) {
+        qDebug() << "Bląd przy insert zam przenies klienta";
+        qDebug() << qry.lastError();
+        vSuccess = false;
+    }
+
+    QSqlQuery qrySub;
+    qrySub.prepare("INSERT INTO `obuwie_db`.`zamowienia` (nr_zamowienia, id_klienta, R36, R37 ,R38, R39,  R40, "
+                   "  R41, R42  ,R43   ,R44,  R45, R46 ,  R47,  R48 ,  R49 , R50,suma,wprowadzono, realizacja, status, uzytkownik, modele_id, handlowce_id, zmagazynu, ROZKROJ) VALUES ("
+                   ":nr_zamowienia,:id_klienta, :R36, :R37 ,:R38,:R39, :R40 ,  :R41 ,  :R42 , :R43  ,:R44, :R45 ,  :R46 , :R47  , :R48, :R49,:R50 ,:suma, :wprowadzono ,"
+                   " :realizacja, :status, :uzytkownik, :modele_id, :handlowce_id, :zmagazynu, :ROZKROJ)");
+    qrySub.bindValue(":nr_zamowienia", nrz);
+    qrySub.bindValue(":id_klienta", idKlienta);
+    qrySub.bindValue(":wprowadzono", QDate::currentDate());
+    qrySub.bindValue(":realizacja", QDate::currentDate().addDays(14));
+    qrySub.bindValue(":uzytkownik", user);
+    qrySub.bindValue(":modele_id", idMod);
+    qrySub.bindValue(":handlowce_id", iidHandlowca);
+    qrySub.bindValue(":R36", 0);
+    qrySub.bindValue(":R37", 0);
+    qrySub.bindValue(":R38", 0);
+    qrySub.bindValue(":R39", 0);
+    qrySub.bindValue(":R40", 0);
+    qrySub.bindValue(":R41", 0);
+    qrySub.bindValue(":R42", 0);
+    qrySub.bindValue(":R43", 0);
+    qrySub.bindValue(":R44", 0);
+    qrySub.bindValue(":R45", 0);
+    qrySub.bindValue(":R46", 0);
+    qrySub.bindValue(":R47", 0);
+    qrySub.bindValue(":R48", 0);
+    qrySub.bindValue(":R49", 0);
+    qrySub.bindValue(":R50", 0);
+    qrySub.bindValue(":suma", 0);
+    qDebug() << "rzad.at(22)->data(Qt::DisplayRole).toString()"<<rzad.at(22)->data(Qt::DisplayRole).toString();
+    qrySub.bindValue(":ROZKROJ", rzad.at(23)->data(Qt::DisplayRole).toString());
+    if(status== QString("MAGAZYN TOWARÓW")) {
+        qrySub.bindValue(":status", "ZLEC W PRODUKCJI");
+    } else {
+        qrySub.bindValue(":status", "MAGAZYN TOWARÓW");
+    }
+    qrySub.bindValue(":uzytkownik", user);
+    qrySub.bindValue(":zmagazynu", "NIE");
+    if (!qrySub.exec()) {
+        qDebug() << "Bląd przy zapisie pozycji rozkroj SUB" ;
+        qDebug() << qrySub.lastError().text();
+        vSuccess = false;
+    }
+
+    QSqlQuery qrySub2;
+    qrySub2.prepare("INSERT INTO `obuwie_db`.`zamowienia` (nr_zamowienia, id_klienta, R36, R37 ,R38, R39,  R40, "
+                    "  R41, R42  ,R43   ,R44,  R45, R46 ,  R47,  R48 ,  R49 , R50,suma, wprowadzono, realizacja, status, uzytkownik, modele_id, handlowce_id, zmagazynu) VALUES ("
+                    ":nr_zamowienia, :id_klienta, :R36, :R37 ,:R38,:R39, :R40 ,  :R41 ,  :R42 , :R43  ,:R44, :R45 ,  :R46 , :R47  , :R48, :R49,:R50 ,:suma, :wprowadzono ,"
+                    " :realizacja, :status, :uzytkownik, :modele_id, :handlowce_id, :zmagazynu)");
+
+    qrySub2.bindValue(":nr_zamowienia", nrz);
+    qrySub2.bindValue(":id_klienta", idKlienta);
+    qrySub2.bindValue(":wprowadzono", QDate::currentDate());
+    qrySub2.bindValue(":realizacja", QDate::currentDate().addDays(14));
+    qrySub2.bindValue(":status", status);
+    qrySub2.bindValue(":uzytkownik", user);
+    qrySub2.bindValue(":modele_id", idMod);
+    qrySub2.bindValue(":handlowce_id", iidHandlowca);
+    qrySub2.bindValue(":R36", 0);
+    qrySub2.bindValue(":R37", 0);
+    qrySub2.bindValue(":R38", 0);
+    qrySub2.bindValue(":R39", 0);
+    qrySub2.bindValue(":R40", 0);
+    qrySub2.bindValue(":R41", 0);
+    qrySub2.bindValue(":R42", 0);
+    qrySub2.bindValue(":R43", 0);
+    qrySub2.bindValue(":R44", 0);
+    qrySub2.bindValue(":R45", 0);
+    qrySub2.bindValue(":R46", 0);
+    qrySub2.bindValue(":R47", 0);
+    qrySub2.bindValue(":R48", 0);
+    qrySub2.bindValue(":R49", 0);
+    qrySub2.bindValue(":R50", 0);
+    qrySub2.bindValue(":suma", 0);
+    qrySub2.bindValue(":zmagazynu", "NIE");
+    qrySub2.bindValue(":status", "ZREALIZOWANO");
+    qrySub2.bindValue(":uzytkownik", user);
+
+    if (!qrySub2.exec()) {
+        qDebug() << "Bląd przy zapisie pozycji ZM KLI SUB zreal" ;
+        qDebug() << qrySub2.lastError().text();
+        vSuccess = false;
+    }
+
+    if (vSuccess == true) {
+        db.commit();
+        mZamowienia->select();
+        return true;
+    } else {
+        db.rollback();
+        return false;
+    }
+}
+
 bool BazaDanychManager::dodajDoZrealizowanego(QList<QStandardItem *> rzad, QString nrz) {
     QSqlQuery qry;
     QString qryString = QString("update `obuwie_db`.`zamowienia` set R36 = R36 + :mR36, R37 = R37 + :mR37, R38 = R38 + :mR38, R39 = R39 + :mR39, R40 = R40 + :mR40, R41 = R41 + :mR41, R42 = R42 + :mR42, R43 = R43 + :mR43, R44 = R44 + :mR44, R45 = R45 + :mR45, R46 = R46 + :mR46, R47 = R47 + :mR47, R48 = R48 + :mR48, R49 = R49 + :mR49, R50 = R50 + :mR50, suma = suma + :msuma where nr_zamowienia='%1' and status='ZREALIZOWANO'").arg(nrz);
@@ -1770,6 +2052,36 @@ bool BazaDanychManager::cofdodajZrealizuj(QList<QStandardItem *> rzad, QString n
 
     if (!qry.exec()) {
         qDebug() << "Bląd przy dodaj do zreal" ;
+        qDebug() << qry.lastError();
+        return false;
+    } else {
+        return true;
+    }
+}
+
+bool BazaDanychManager::cofdodajZlecWProdukcji(QList<QStandardItem *> rzad, QString nrz) {
+    QSqlQuery qry;
+    QString qryString = QString("update `obuwie_db`.`zamowienia` set R36 = R36 + :mR36, R37 = R37 + :mR37, R38 = R38 + :mR38, R39 = R39 + :mR39, R40 = R40 + :mR40, R41 = R41 + :mR41, R42 = R42 + :mR42, R43 = R43 + :mR43, R44 = R44 + :mR44, R45 = R45 + :mR45, R46 = R46 + :mR46, R47 = R47 + :mR47, R48 = R48 + :mR48, R49 = R49 + :mR49, R50 = R50 + :mR50, suma = suma + :msuma where nr_zamowienia='%1' and status='ZLEC W PRODUKCJI'").arg(nrz);
+    qry.prepare(qryString);
+    qry.bindValue(":mR36", rzad.at(6)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR37", rzad.at(7)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR38", rzad.at(8)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR39", rzad.at(9)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR40", rzad.at(10)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR41", rzad.at(11)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR42", rzad.at(12)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR43", rzad.at(13)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR44", rzad.at(14)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR45", rzad.at(15)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR46", rzad.at(16)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR47", rzad.at(17)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR48", rzad.at(18)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR49", rzad.at(19)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":mR50", rzad.at(20)->data(Qt::DisplayRole).toInt());
+    qry.bindValue(":msuma", rzad.at(21)->data(Qt::DisplayRole).toInt());
+
+    if (!qry.exec()) {
+        qDebug() << "Bląd przy dodaj do ZLEC W PRODUKCJI" ;
         qDebug() << qry.lastError();
         return false;
     } else {
@@ -2113,7 +2425,6 @@ bool BazaDanychManager::rozkroj(QStandardItemModel *pozycje) {
                        "  R41, R42  ,R43   ,R44,  R45, R46 ,  R47,  R48 ,  R49 , R50,suma, uwagi,wprowadzono, realizacja, status, uzytkownik, modele_id, handlowce_id,  uwagi2, zmagazynu) VALUES ("
                        ":nr_zamowienia,:id_klienta, :R36, :R37 ,:R38,:R39, :R40 ,  :R41 ,  :R42 , :R43  ,:R44, :R45 ,  :R46 , :R47  , :R48, :R49,:R50 ,:suma,:uwagi, :wprowadzono ,"
                        " :realizacja, :status, :uzytkownik, :modele_id, :handlowce_id, :uwagi2, :zmagazynu)");
-
         qrySub.bindValue(":nr_zamowienia", rzad.at(1)->data(Qt::DisplayRole).toString());
         qrySub.bindValue(":id_klienta", rzad.at(3)->data(Qt::DisplayRole).toInt());
         qrySub.bindValue(":R36", 0);

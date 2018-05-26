@@ -9,6 +9,8 @@ wkladkaDialog::wkladkaDialog(NowaWkladkaDialog *dialogNowaWkl,BazaDanychManager 
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
+
     this->setGeometry(
         QStyle::alignedRect(
             Qt::LeftToRight,
@@ -17,6 +19,7 @@ wkladkaDialog::wkladkaDialog(NowaWkladkaDialog *dialogNowaWkl,BazaDanychManager 
             qApp->desktop()->availableGeometry()
         )
     );
+
 }
 
 wkladkaDialog::~wkladkaDialog() {

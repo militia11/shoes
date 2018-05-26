@@ -11,11 +11,12 @@
 #include <unistd.h>
 #include <QTimer>
 #include <deque>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    nrkar = 65;
+    nrkar = 73;
     kl = 62;
     klnr = 52;
     wz = 52;
@@ -68,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
     rozmDialo= new    rozmiaryDialog( dbManager, this);
     mw = new mwDialog( dialognowyModel, rozmDialo,dbManager,  this);
     pz = new pzDialog(rozmDialo,dbManager,  this);
-    zmienPary = new   zmienParyZamDialog(dbManager, this);
+    zmienPary = new   zmienParyZamDialog(dialogKlienci, dbManager, this);
     dialogNoweZamowienie = new noweZamowienieDialog(mw, dialogHandl, dbManager, dialogmodele, dialogKlienci, this);
     proxy = new QSortFilterProxyModel(this);
 
@@ -210,11 +211,19 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
             QIcon icon(":/zasoby/cut.png");
             myMenu.addAction(icon, "POKAŻ ROZKRÓJ");
             myMenu.addSeparator();
-        }
-        QIcon iconup(":/zasoby/arrow.png");
-        myMenu.addAction(iconup, "NA MAGAZYN TOWARÓW CAŁE");
-        if (selection.length() == 1) {
-            myMenu.addAction(iconup, "NA MAGAZYN TOWARÓW KONKRETNA ILOŚĆ");
+            QIcon iconup(":/zasoby/arrow.png");
+            myMenu.addAction(iconup, "PRZENIEŚ NA MAGAZYN TOWARÓW CAŁE");
+            myMenu.addAction(iconup, "PRZENIEŚ NA MAGAZYN TOWARÓW KONKRETNA ILOŚĆ");
+            myMenu.addSeparator();
+            QIcon iconcl(":/zasoby/chclient.png");
+            myMenu.addAction(iconcl, "PRZENIEŚ NA INNEGO KLIENTA CAŁE");
+            myMenu.addAction(iconcl, "PRZENIEŚ NA INNEGO KLIENTA KONKRETNĄ ILOŚĆ");
+        } else {
+            QIcon iconup(":/zasoby/arrow.png");
+            myMenu.addAction(iconup, "PRZENIEŚ NA MAGAZYN TOWARÓW CAŁE");
+            myMenu.addSeparator();
+//            QIcon iconcl(":/zasoby/chclient.png");
+//            myMenu.addAction(iconcl, "PRZENIEŚ NA INNEGO KLIENTA CAŁE");
         }
     } else if (dbManager->filterZamowien.status == QString("MAGAZYN TOWARÓW")) {
         if (selection.length() == 1) {
@@ -225,15 +234,28 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
             QIcon iconup(":/zasoby/reset.png");
             myMenu.addAction(iconup, "COFNIJ DO ZLEC W PRODUKCJI CAŁE");
             myMenu.addAction(iconup, "COFNIJ DO ZLEC W PRODUKCJI KONKRETNĄ ILOŚĆ");
+            myMenu.addSeparator();
+            QIcon iconcl(":/zasoby/chclient.png");
+            myMenu.addAction(iconcl, "PRZENIEŚ NA INNEGO KLIENTA CAŁE");
+            myMenu.addAction(iconcl, "PRZENIEŚ NA INNEGO KLIENTA KONKRETNĄ ILOŚĆ");
+            myMenu.addSeparator();
+            QIcon iconnawolne(":/zasoby/de.png");
+            myMenu.addAction(iconnawolne, "PRZENIEŚ NA MAGAZYN WOLNE CAŁE");
+            myMenu.addAction(iconnawolne, "PRZENIEŚ NA MAGAZYN WOLNE KONKRETNĄ ILOŚĆ");
         } else {
             QIcon iconupx(":/zasoby/update.png");
             myMenu.addAction(iconupx,"ZREALIZUJ CAŁE");
             myMenu.addSeparator();
             QIcon iconup(":/zasoby/reset.png");
             myMenu.addAction(iconup, "COFNIJ DO ZLEC W PRODUKCJI CAŁE");
+            myMenu.addSeparator();
+//            QIcon iconcl(":/zasoby/chclient.png");
+//            myMenu.addAction(iconcl, "PRZENIEŚ NA INNEGO KLIENTA CAŁE");
+//            myMenu.addSeparator();
+            QIcon iconnawolne(":/zasoby/de.png");
+            myMenu.addAction(iconnawolne, "PRZENIEŚ NA MAGAZYN WOLNE CAŁE");
         }
     } else if (dbManager->filterZamowien.status == QString("ZREALIZOWANO")) {
-        // nothing
         QIcon iconup(":/zasoby/reset.png");
         myMenu.addAction(iconup, "COFNIJ REALIZACJĘ CAŁE");
         if (selection.length() == 1) {
@@ -279,21 +301,7 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
             rozkroje->setWskazRozkroj(true);
             rozkroje->setNrRozkrojuWskaz(dbManager->getNrRozkrojuDoWskazania(idx));
             rozkroje->exec();
-        } /*else if (selectedItem->text() == QString("USUŃ")) {
-            if (QMessageBox::question(this, "USUŃ", "<FONT COLOR='#000080'>Czy napewno usunąć?") == QMessageBox::Yes) {
-                int id = 0;
-                for (int i = 0; i < selection.count(); i++) {
-                    QModelIndex index = selection.at(i);
-
-                    id = dbManager->getIdZamowieniaZTabeli(index);
-                    dbManager->removeZamowienie(id);
-                }
-
-                dbManager->getModelZamowienia()->select();
-                QMessageBox::information(this, "ZAKTUALIZOWANO", QString(" <FONT COLOR='#0f00f0'>Usunięto %1 pozycje.").arg(
-                                             QString::number(selection.count())), QMessageBox::Ok);
-            }
-        }*/ else if (selectedItem->text() == QString("COFNIJ REALIZACJĘ KONKRETNEJ ILOŚCI")) {
+        } else if (selectedItem->text() == QString("COFNIJ REALIZACJĘ KONKRETNEJ ILOŚCI")) {
             int id = 0;
             id = dbManager->getIdZamowieniaZTabeli(idx);
             rozmDialo->setCurId(id);
@@ -419,7 +427,7 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
                 QMessageBox::information(this, "NIE ZREALIZOWANO", QString(" <FONT COLOR='#0f00f0'>Nie udało się zrealizować.")
                                          , QMessageBox::Ok);
             }
-        } else if (selectedItem->text() == QString("NA MAGAZYN TOWARÓW CAŁE")) {
+        } else if (selectedItem->text() == QString("PRZENIEŚ NA MAGAZYN TOWARÓW CAŁE")) {
             std::vector <int> zamID;
             std::vector <QString> zamNr;
             int id = 0;
@@ -458,7 +466,7 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
                                          , QMessageBox::Ok);
             }
 
-        } else if (selectedItem->text() == QString("NA MAGAZYN TOWARÓW KONKRETNA ILOŚĆ")) {
+        } else if (selectedItem->text() == QString("PRZENIEŚ NA MAGAZYN TOWARÓW KONKRETNA ILOŚĆ")) {
             int id = 0;
             id = dbManager->getIdZamowieniaZTabeli(idx);
             rozmDialo->setCurId(id);
@@ -482,12 +490,106 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
                                              , QMessageBox::Ok);
                 }
             }
+        } else if (selectedItem->text() == QString("PRZENIEŚ NA INNEGO KLIENTA CAŁE")) {
+            int id = 0;
+            id = dbManager->getIdZamowieniaZTabeli(idx);
+            if (dialogKlienci->selectExec() == QDialog::Accepted) {
+                if(dbManager->odejmijOdZamowienia(zmienPary->zwrocWierszModel(), id)) {
+                    QString zam= dbManager->getNrZamowieniaZTabeli(idx);
+                    if(dbManager->utworzZamowieniePrzeniesNaInnyKL(zmienPary->zwrocWierszModel(), zam, zmienPary->getIdModelu(), dbManager->filterZamowien.status)) {
+                        sukces = true;
+                    }
+                }
+                if(sukces) {
+                    QMessageBox::information(this, "PRZENIESIONO", QString(" <FONT COLOR='#0f00f0'>Przeniesiono na innego klienta wskazane pary.")
+                                             , QMessageBox::Ok);
+                    dbManager->getModelZamowienia()->select();
+                } else {
+                    QMessageBox::information(this, "NIE PRZENIESIONO", QString(" <FONT COLOR='#0f00f0'>Nie udało się przenieść.")
+                                             , QMessageBox::Ok);
+                }
+            }
+        }  else if (selectedItem->text() == QString("PRZENIEŚ NA INNEGO KLIENTA KONKRETNĄ ILOŚĆ")) {
+            int id = 0;
+            id = dbManager->getIdZamowieniaZTabeli(idx);
+            zmienPary->setCurId(id);
+            zmienPary->setFixedSize(zmienPary->size());
+            bool sukces = false;
+            if(zmienPary->exec()==QDialog::Accepted) {
+                if(dbManager->odejmijOdZamowienia(zmienPary->zwrocWierszModel(), id)) {
+                    QString zam= dbManager->getNrZamowieniaZTabeli(idx);
+                    if(dbManager->utworzZamowieniePrzeniesNaInnyKL(zmienPary->zwrocWierszModel(), zam, zmienPary->getIdModelu(), dbManager->filterZamowien.status)) {
+                        sukces = true;
+                    }
+                }
+                if(sukces) {
+                    QMessageBox::information(this, "PRZENIESIONO", QString(" <FONT COLOR='#0f00f0'>Przeniesiono na innego klienta wskazane pary.")
+                                             , QMessageBox::Ok);
+                    dbManager->getModelZamowienia()->select();
+                } else {
+                    QMessageBox::information(this, "NIE PRZENIESIONO", QString(" <FONT COLOR='#0f00f0'>Nie udało się przenieść.")
+                                             , QMessageBox::Ok);
+                }
+            }
+        } else if (selectedItem->text() == QString("PRZENIEŚ NA MAGAZYN WOLNE CAŁE")) {
+
+
+        } else if (selectedItem->text() == QString("PRZENIEŚ NA MAGAZYN WOLNE KONKRETNĄ ILOŚĆ")) {
+            int id = 0;
+            id = dbManager->getIdZamowieniaZTabeli(idx);
+            rozmDialo->setCurId(id);
+            rozmDialo->setFixedSize(rozmDialo->size());
+            rozmDialo->setZrealExec(true);
+            rozmDialo->setWindowTitle("PRZENIEŚ NA MAGAZYN WOLNE");
+            bool sukces = false;
+            if(rozmDialo->exec()==QDialog::Accepted) {
+                if(dbManager->odejmijOdZamowienia(rozmDialo->zwrocWierszModel(), id)) {
+                    QString zam= dbManager->getNrZamowieniaZTabeli(idx);
+
+
+                    if(dbManager->dodajDoZamMagTowarow(rozmDialo->zwrocWierszModel(), zam)) {
+                        sukces = true;
+                    }
+                }
+                if(sukces) {
+                    QMessageBox::information(this, "PRZENIESIONO", QString(" <FONT COLOR='#0f00f0'>Przeniesiono na magazyn wolne wskazane pary.")
+                                             , QMessageBox::Ok);
+                    dbManager->getModelZamowienia()->select();
+                } else {
+                    QMessageBox::information(this, "NIE PRZENIESIONO", QString(" <FONT COLOR='#0f00f0'>Nie udało się przenieść na magazyn.")
+                                             , QMessageBox::Ok);
+                }
+            }
         } else if (selectedItem->text() == QString("COFNIJ DO ZLEC W PRODUKCJI KONKRETNĄ ILOŚĆ")) {
-//            QMessageBox::information(this, "ZAKTUALIZOWANO", QString(" <FONT COLOR='#0f00f0'>Usunięto %1 pozycje.").arg(
-//                                         QString::number(selection.count())), QMessageBox::Ok);
+            if(!dbManager->czyZMagazynuZamowienieZTabeli(idx)) {
+                int id = dbManager->getIdZamowieniaZTabeli(idx);
+                rozmDialo->setCurId(id);
+                rozmDialo->setFixedSize(rozmDialo->size());
+                rozmDialo->setZrealExec(true);
+                rozmDialo->setWindowTitle("COFNIJ DO ZLEC W PRODUKCJI");
+                bool sukces = false;
+                if(rozmDialo->exec()==QDialog::Accepted) {
+                    if(dbManager->cofodejmijZlecWProdukcji(rozmDialo->zwrocWierszModel(), id)) {
+                        QString zam= dbManager->getNrZamowieniaZTabeli(idx);
 
-
-        }  else if (selectedItem->text() == QString("COFNIJ DO ZLEC W PRODUKCJI CAŁE")) {
+                        if(dbManager->cofdodajZlecWProdukcji(rozmDialo->zwrocWierszModel(), zam)) {
+                            sukces = true;
+                        }
+                    }
+                    if(sukces) {
+                        QMessageBox::information(this, "REALIZACJA", QString(" <FONT COLOR='#0f00f0'>Cofnięto realizację wskazanych par.")
+                                                 , QMessageBox::Ok);
+                        dbManager->getModelZamowienia()->select();
+                    } else {
+                        QMessageBox::information(this, "NIE ZREALIZOWANO", QString(" <FONT COLOR='#0f00f0'>Nie udało się cofnąć realizacji.")
+                                                 , QMessageBox::Ok);
+                    }
+                }
+            } else {
+                QMessageBox::information(this, "NIE COFNIĘTO", QString(" <FONT COLOR='#0f00f0'>Wybrane zamówienie nie było w produkcji. Nie można cofnąć.")
+                                         , QMessageBox::Ok);
+            }
+        } else if (selectedItem->text() == QString("COFNIJ DO ZLEC W PRODUKCJI CAŁE")) {
             int id = 0;
             int cofnieto = 0;
             QList<QStandardItem *> rzad;
@@ -513,7 +615,7 @@ void MainWindow::ShowContextMenu(const QPoint &pos) {
             }
 
             if(cofnieto==0) {
-                QMessageBox::information(this, "NIE COFNIĘTO", QString(" <FONT COLOR='#0f00f0'>Wybrane zamówienia nie były zleceniami w produkcji. Nie można cofnąć.")
+                QMessageBox::information(this, "NIE COFNIĘTO", QString(" <FONT COLOR='#0f00f0'>Wybrane zamówienia nie były w produkcji. Nie można cofnąć.")
                                          , QMessageBox::Ok);
             } else {
                 if(sukces) {
@@ -607,6 +709,8 @@ void MainWindow::on_tableViewZam_clicked(const QModelIndex &index) {
     ui->labelPodglad->setFixedHeight(196);
     ui->labelPodglad->setFixedWidth(274);
     ui->labelPodglad->setScaledContents(true);
+    ui->plainTextEdit_U1->setPlainText(dbManager->getZamModelU1(id));
+    ui->plainTextEdit_U2->setPlainText(dbManager->getZamModelU2(id));
 }
 
 void MainWindow::dodajKlienta() {
@@ -712,6 +816,8 @@ void MainWindow::on_radioButton_clicked() {
     hv->setSectionHidden(49, true);
     ui->pushButtondruk1->setVisible(false);
     ui->pushButtondruk2->setVisible(false);
+    ui->plainTextEdit_U1->clear();
+    ui->plainTextEdit_U2->clear();
 }
 
 void MainWindow::on_radioButton_3_clicked() {
@@ -745,6 +851,8 @@ void MainWindow::on_radioButton_3_clicked() {
     ui->pushButtondruk1->setChecked(false);
     ui->pushButtondruk2->setVisible(true);
     ui->pushButtondruk2->setChecked(false);
+    ui->plainTextEdit_U1->clear();
+    ui->plainTextEdit_U2->clear();
 }
 
 void MainWindow::on_radioButton_6_clicked() {
@@ -774,6 +882,8 @@ void MainWindow::on_radioButton_6_clicked() {
     ui->tableViewZam->horizontalHeader()->setSectionHidden(49,true);
     ui->pushButtondruk1->setVisible(false);
     ui->pushButtondruk2->setVisible(false);
+    ui->plainTextEdit_U1->clear();
+    ui->plainTextEdit_U2->clear();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
@@ -812,6 +922,8 @@ void MainWindow::on_radioButton_5_clicked() {
     ui->pushButtondruk1->setVisible(false);
     ui->pushButtondruk2->setVisible(false);
     ui->tableViewZam->horizontalHeader()->setSectionHidden(50,true);
+    ui->plainTextEdit_U1->clear();
+    ui->plainTextEdit_U2->clear();
 }
 
 void MainWindow::on_radioButton_4_clicked() {
@@ -840,6 +952,8 @@ void MainWindow::on_radioButton_4_clicked() {
     ui->pushButtondruk2->setVisible(false);
     ui->tableViewZam->horizontalHeader()->setStretchLastSection(true);
     ui->tableViewZam->horizontalHeader()->setSectionHidden(50,true);
+    ui->plainTextEdit_U1->clear();
+    ui->plainTextEdit_U2->clear();
 }
 
 void MainWindow::on_actionWzory_triggered() {
@@ -952,6 +1066,8 @@ void MainWindow::on_pushButton_clicked() {
     ustawIFiltruj();
     ui->tableViewZam->sortByColumn(0, Qt::DescendingOrder);
     ui->labelw->setText(QString::number(ui->tableViewZam->model()->rowCount()));
+    ui->plainTextEdit_U1->clear();
+    ui->plainTextEdit_U2->clear();
 }
 
 void MainWindow::on_actionOcieplenia_triggered() {

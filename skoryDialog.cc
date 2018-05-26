@@ -3,7 +3,6 @@
 #include <QSqlQuery>
 #include <QStyle>
 #include <QDesktopWidget>
-
 skoryDialog::skoryDialog(nowaSkoraDialog *ns, BazaDanychManager *db,
                          QWidget *parent) :
     QDialog(parent),
@@ -12,6 +11,9 @@ skoryDialog::skoryDialog(nowaSkoraDialog *ns, BazaDanychManager *db,
     idsk = -1;
     proxy = new QSortFilterProxyModel(this);
     this->setWindowFlags(Qt::Window);
+    ui->tableViewCeny->verticalHeader()->setDefaultSectionSize(ui->tableViewCeny->verticalHeader()->minimumSectionSize());
+    ui->tableViewKlienci->verticalHeader()->setDefaultSectionSize(ui->tableViewKlienci->verticalHeader()->minimumSectionSize());
+
     this->setGeometry(
         QStyle::alignedRect(
             Qt::LeftToRight,
@@ -20,6 +22,7 @@ skoryDialog::skoryDialog(nowaSkoraDialog *ns, BazaDanychManager *db,
             qApp->desktop()->availableGeometry()
         )
     );
+
 }
 
 skoryDialog::~skoryDialog() {

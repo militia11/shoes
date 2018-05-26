@@ -58,7 +58,6 @@ noweZamowienieDialog::noweZamowienieDialog(mwDialog *roz, handlowceDialog *wybHa
             qApp->desktop()->availableGeometry()
         )
     );
-
 }
 
 bool noweZamowienieDialog::eventFilter(QObject *object, QEvent *event) {
@@ -389,10 +388,6 @@ void noweZamowienieDialog::on_pushButtonModel_2_clicked() {
                 zamowienie->setHeaderData(i, Qt::Horizontal, listaZamowienia[i]);
             }
             uwagi.append(QString(""));
-            QModelIndex index = ui->tableViewZam->model()->index(ktoraPozycja, 10);
-//            ui->tableViewZam->selectionModel()->clearSelection();
-            //          ui->tableViewZam->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
-
             if(ktoraPozycja==0) {
                 ustawTabeleHeaders();
                 ui->tableViewZam->setContextMenuPolicy(Qt::CustomContextMenu);

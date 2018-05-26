@@ -67,6 +67,9 @@ public:
     QImage getImage(int id, int ktore, QString tab);
     bool updateImage(int id, int ktore, QImage im, QString tab);
     QImage getImageZamowienia(int id);
+    QString getZamModelU1(int id);
+    QString getZamModelU2(int id);
+    int getZamModeleID(int id);
 
     QString getKlientSkrot(QString nr_zam);
     QString getHanlSkrot(QString nr_zam);
@@ -118,6 +121,8 @@ public:
     QString poberzOpis1(int id);
     QString poberzOpis2(int id);
 
+    bool utworzZamowienieZMagPobrane(QList<QStandardItem *> rzad, int id, QString nrz);
+
     void zachowajKolor(int kolor, QString s1d,
                        QString s2d, QString s3d, QString sdomi);
     void zachowajSkore(QString naz, QString dost, double cena);
@@ -135,11 +140,17 @@ public:
 
 
     bool cofodejmijZrealizuj(QList<QStandardItem *> rzad, int id);
+    bool cofdodajZrealizuj(QList<QStandardItem *> rzad, QString nrz);
+
     bool dodajDoZrealizowanego(QList<QStandardItem *> rzad, QString nrz);
     bool dodajDoZamMagTowarow(QList<QStandardItem *> rzad, QString nrz);
 
 
-    bool cofdodajZrealizuj(QList<QStandardItem *> rzad, QString nrz);
+    bool cofodejmijZlecWProdukcji(QList<QStandardItem *> rzad, int id);
+    bool utworzZamowieniePrzeniesNaInnyKL(QList<QStandardItem *> rzad, QString nr, int idMod, QString status);
+
+    bool cofdodajZlecWProdukcji(QList<QStandardItem *> rzad, QString nrz);
+
     bool dodajdoMW(QList<QStandardItem *> rzad, int id);
     bool zachowajModel(QVector<QImage> images, QString rodzaj_montazu,  QString typ,
                        QString  rodzaj_buta,  QString   rodzaj_buta_2,

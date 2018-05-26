@@ -43,25 +43,24 @@ void historiaDrukDialog::showEvent(QShowEvent *e) {
                 QHeaderView::Fixed);
     }
 
-    ui->tableView->setColumnWidth(1, 110);
-    ui->tableView->setColumnWidth(2, 110);
-    ui->tableView->setColumnWidth(3, 110);
-    ui->tableView->setColumnWidth(4, 110);
-    ui->tableView->setColumnWidth(5, 110);
-    ui->tableView->setColumnWidth(6, 110);
-    ui->tableView->setColumnWidth(7, 110);
-    ui->tableView->setColumnWidth(8, 110);
-    ui->tableView->setColumnWidth(9, 110);
-    ui->tableView->setColumnWidth(10, 110);
+    ui->tableView->setColumnWidth(1, 94);
+    ui->tableView->setColumnWidth(2, 94);
+    ui->tableView->setColumnWidth(3, 94);
+    ui->tableView->setColumnWidth(4, 94);
+    ui->tableView->setColumnWidth(5, 94);
+    ui->tableView->setColumnWidth(6, 94);
+    ui->tableView->setColumnWidth(7, 94);
+    ui->tableView->setColumnWidth(8, 94);
+    ui->tableView->setColumnWidth(9, 94);
+    ui->tableView->setColumnWidth(10, 94);
     for (int c = 11; c < 26;     c++) {
         ui->tableView->horizontalHeader()->setSectionResizeMode(c,
                 QHeaderView::Fixed);
-        ui->tableView->setColumnWidth(c, 28);
+        ui->tableView->setColumnWidth(c, 24);
     }
     czysc();
     ustawIFiltruj();
 }
-
 
 void historiaDrukDialog::czysc() {
     ui->lineEditroz->clear();

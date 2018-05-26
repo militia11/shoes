@@ -11,8 +11,8 @@ owyModelDialog::owyModelDialog(wkladkaDialog *w, ocieplenieDialog *oc, wzoryDial
     k(k), sp(sp), oc(oc), wz(wz) {
     ui->setupUi(this);
     editExecc = false;
-    ui->plainTextEdit1->installEventFilter(this);
-    ui->plainTextEdit2->installEventFilter(this);
+//    ui->plainTextEdit1->installEventFilter(this);
+//    ui->plainTextEdit2->installEventFilter(this);
     this->setWindowFlags(Qt::Window);
 }
 

@@ -19,6 +19,7 @@ koloryDialog::koloryDialog(nowyKolorDialog *dilogNowyKolor,
             qApp->desktop()->availableGeometry()
         )
     );
+    ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
 }
 
 koloryDialog::~koloryDialog() {

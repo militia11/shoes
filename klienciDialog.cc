@@ -3,6 +3,7 @@
 #include <QStyle>
 #include <QDesktopWidget>
 
+
 klienciDialog::klienciDialog(nowyKlientDialog *nowyKliDialog,
                              BazaDanychManager *db, QWidget *parent) :
     QDialog(parent), ui(new Ui::klienciDialog), dbManager(db),
@@ -13,6 +14,7 @@ klienciDialog::klienciDialog(nowyKlientDialog *nowyKliDialog,
     myDelegate = new Delegate(dbManager, this);
     ui->tableViewKlienci->setItemDelegate(myDelegate);
     connect(myDelegate, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)), this, SLOT(abra(QWidget*,QAbstractItemDelegate::EndEditHint)));
+    ui->tableViewKlienci->verticalHeader()->setDefaultSectionSize(ui->tableViewKlienci->verticalHeader()->minimumSectionSize());
     this->setGeometry(
         QStyle::alignedRect(
             Qt::LeftToRight,
@@ -21,7 +23,6 @@ klienciDialog::klienciDialog(nowyKlientDialog *nowyKliDialog,
             qApp->desktop()->availableGeometry()
         )
     );
-
 }
 
 klienciDialog::~klienciDialog() {
